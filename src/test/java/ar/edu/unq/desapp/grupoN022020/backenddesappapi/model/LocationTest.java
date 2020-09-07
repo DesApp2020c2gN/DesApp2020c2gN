@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class LocationTest {
 
     @Test
-    public void test_LocationName() {
+    public void testLocationName() {
         String name = "Piedras";
         Location location = aLocation().withName(name).build();
 
@@ -16,7 +16,7 @@ class LocationTest {
     }
 
     @Test
-    public void test_LocationProvince() {
+    public void testLocationProvince() {
         String province = "Catamarca";
         Location location = aLocation().withProvince(province).build();
 
@@ -24,7 +24,7 @@ class LocationTest {
     }
 
     @Test
-    public void test_LocationPopulation() {
+    public void testLocationPopulation() {
         int population = 1250;
         Location location = aLocation().withPopulation(population).build();
 
@@ -32,7 +32,7 @@ class LocationTest {
     }
 
     @Test
-    public void test_LocationState() {
+    public void testLocationState() {
         String state = "Conectado";
         Location location = aLocation().withState(state).build();
 
