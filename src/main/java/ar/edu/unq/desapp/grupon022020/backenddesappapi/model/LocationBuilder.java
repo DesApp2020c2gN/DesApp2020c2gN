@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoN022020.backenddesappapi.model;
+package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 public class LocationBuilder {
 

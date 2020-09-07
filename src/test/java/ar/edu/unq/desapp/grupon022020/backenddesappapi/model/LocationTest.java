@@ -1,8 +1,7 @@
-package ar.edu.unq.desapp.grupoN022020.backenddesappapi.model;
+package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import org.junit.jupiter.api.Test;
 
-import static ar.edu.unq.desapp.grupoN022020.backenddesappapi.model.LocationBuilder.aLocation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LocationTest {
@@ -10,7 +9,7 @@ class LocationTest {
     @Test
     public void testLocationName() {
         String name = "Piedras";
-        Location location = aLocation().withName(name).build();
+        Location location = LocationBuilder.aLocation().withName(name).build();
 
         assertEquals(location.getName(), name);
     }
@@ -18,7 +17,7 @@ class LocationTest {
     @Test
     public void testLocationProvince() {
         String province = "Catamarca";
-        Location location = aLocation().withProvince(province).build();
+        Location location = LocationBuilder.aLocation().withProvince(province).build();
 
         assertEquals(location.getProvince(), province);
     }
@@ -26,7 +25,7 @@ class LocationTest {
     @Test
     public void testLocationPopulation() {
         int population = 1250;
-        Location location = aLocation().withPopulation(population).build();
+        Location location = LocationBuilder.aLocation().withPopulation(population).build();
 
         assertEquals(location.getPopulation(), population);
     }
@@ -34,7 +33,7 @@ class LocationTest {
     @Test
     public void testLocationState() {
         String state = "Conectado";
-        Location location = aLocation().withState(state).build();
+        Location location = LocationBuilder.aLocation().withState(state).build();
 
         assertEquals(location.getState(), state);
     }
