@@ -13,4 +13,20 @@ public class Location {
         this.population = population;
         this.state = state;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public String getState() {
+        return state;
+    }
 }
