@@ -7,7 +7,7 @@ public class Location {
     private int population;
     private String state;
 
-    public Location(String name, String province, int population, String state){
+    public Location(String name, String province, int population, String state) {
         this.name = name;
         this.province = province;
         this.population = population;
