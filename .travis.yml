@@ -1,14 +1,19 @@
 language: java
 install: skip
 jdk: openjdk8
-
 before_install:
-  - sudo apt-get install jq
-  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
-
+- sudo apt-get install jq
+- wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest
+  | jq -r .assets[0].browser_download_url)
 after_success:
-  - java -jar ~/codacy-coverage-reporter-assembly-latest.jar report -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
-  - bash <(curl -Ls https://coverage.codacy.com/get.sh)
-
+- java -jar ~/codacy-coverage-reporter-assembly-latest.jar report -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
+- bash <(curl -Ls https://coverage.codacy.com/get.sh)
 script:
-  - ./gradlew build
+- "./gradlew build"
+deploy:
+  provider: heroku
+  api_key:
+    secure: XSZ/piUzvtydhfk3Kiu0k93DjV35gTTaMAkXNWnCCM1Xue7oCzFRTctBgQL9rIhL6iypxV4SInh1OhP7rhDbvgtPNG/GbEELPgHBEUh77WLlXTtlqhnGofLe8QNP+YJ3WstxHdfTdkDH1BsjGNo+PwFCB+z2vj7kH/D9ULeocNhSqFyg9mga+iQ6wkfjk3lm0Tq6hG9mYA2PWS0kKuZeKCm6s+iOXfaTyYbtjLN5nQAFP1BFgi6ssznrgwZ0ApMusJ9mbC05Q+3ux1m5JWkSUuIdq84KNznnEfy17PRO3EtDYE544EBh8x8kn2Qx7wOtm5AaFE6BYyXA28Taq5sJj0u/IZXGDu2HppP6Lh5dHIHp4ERROkFPCRnUYkbsmchJlPLrVKUBoAJA/sLb03rIDk/OP7qoHc6QCLDZMme0bCUw2CruydtWJVpTK9Cg/170n9c6z8pcTpiGx591i7ATRjWZiZ+ebsJkVdizNHwCeNY1ksLz+KpirskaMTiLW08zSumFFTd0N4K0kNgPluzVD9oQrZBuEQ4LQLOPQM9CSySZATlvpYKdel8D+Kvp/68fhmaUoXNIAxQj32nFc8pxWxzIp6PFsEop7aymMD8kXoDSti5tHifUyv64dE84IymcZJZB/cnjCWqqjc8KJeyoGXzgWxh1Lte2VAdEpDToe6A=
+  app: desapp2020c2n-webapi
+  on:
+    repo: DesApp2020c2gN/DesApp2020c2gN
