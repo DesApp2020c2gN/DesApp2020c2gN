@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 	id 'idea'
 	id 'eclipse'
+	id 'jacoco'
 }
 
 compileJava.options.encoding = 'utf-8'
@@ -33,4 +34,20 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.enabled true
+		csv.enabled true
+		html.enabled = true
+		html.destination file("${buildDir}/jacocoHtml")
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.5"
+	reportsDir = file("$buildDir/reports/jacoco")
 }
