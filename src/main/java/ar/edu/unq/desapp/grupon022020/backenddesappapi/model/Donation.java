@@ -1,17 +1,16 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 
 public class Donation {
 
-    private User user;
-    private Project project;
-    private Integer amount;
-    private String comment;
-    private LocalDate date;
+    private final User user;
+    private final Project project;
+    private final int amount;
+    private final String comment;
+    private final LocalDate date;
 
-    public Donation(User user, Project project, Integer amount, String comment, LocalDate date) {
+    public Donation(User user, Project project, int amount, String comment, LocalDate date) {
         this.user = user;
         this.project = project;
         this.amount = amount;
@@ -28,7 +27,7 @@ public class Donation {
         return project;
     }
 
-    public Integer getAmount() {
+    public int getAmount() {
         return amount;
     }
 
