@@ -8,6 +8,10 @@ class BackendDesappApiApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//This is only for test coverage
+		String [] args = new String[1];
+		args[0] = "arg";
+		BackendDesappApiApplication.main(args);
 	}
 
 }
