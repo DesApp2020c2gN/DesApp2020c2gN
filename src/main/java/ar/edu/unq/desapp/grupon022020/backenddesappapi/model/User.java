@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class User {
@@ -37,5 +38,12 @@ public class User {
 
     public List<Donation> getDonations() {
         return donations;
+    }
+
+    public void donate(int amount, String comment, Project project){
+        Donation donation = DonationBuilder.aDonation().withUser(this).withProject(project)
+                .withAmount(amount).withComment(comment).withDate(LocalDate.now()).build();
+        this.donations.add(donation);
+        project.receiveDonation(donation);
     }
 }
