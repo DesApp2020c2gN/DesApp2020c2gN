@@ -12,6 +12,34 @@ import static org.mockito.Mockito.when;
 class SystemTest {
 
     @Test
+    public void testSystemProjects() {
+        Project project_1 = ProjectBuilder.aProject().build();
+        Project project_2 = ProjectBuilder.aProject().build();
+        List<Project> projects = new ArrayList<>();
+        projects.add(project_1);
+        projects.add(project_2);
+        System system = SystemBuilder.aSystem().withProjects(projects).build();
+
+        assertTrue(system.getProjects().size() == 2);
+        assertTrue(system.getProjects().contains(project_1));
+        assertTrue(system.getProjects().contains(project_2));
+    }
+
+    @Test
+    public void testSystemUsers() {
+        User user_1 = UserBuilder.aUser().build();
+        User user_2 = UserBuilder.aUser().build();
+        List<User> users = new ArrayList<>();
+        users.add(user_1);
+        users.add(user_2);
+        System system = SystemBuilder.aSystem().withUsers(users).build();
+
+        assertTrue(system.getUsers().size() == 2);
+        assertTrue(system.getUsers().contains(user_1));
+        assertTrue(system.getUsers().contains(user_2));
+    }
+
+    @Test
     public void testSystemTopTenDonations() {
         User user_1 = mock(User.class);
         Donation donation_1_1 = DonationBuilder.aDonation().withAmount(1200).build();
@@ -53,7 +81,7 @@ class SystemTest {
         users.add(user_1);
         users.add(user_2);
         users.add(user_3);
-        System system = new System(null, users);
+        System system = SystemBuilder.aSystem().withUsers(users).build();
 
         List<Donation> topTenDonations = system.getTopTenBiggestDonations();
         assertTrue(topTenDonations.size() == 10);
