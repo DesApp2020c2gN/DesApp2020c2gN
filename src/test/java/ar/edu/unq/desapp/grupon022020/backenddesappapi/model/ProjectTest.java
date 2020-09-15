@@ -1,12 +1,16 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class ProjectTest {
-    
+
     @Test
     public void testProjectName() {
         String name = "Conectar San Juan";
@@ -45,5 +49,26 @@ public class ProjectTest {
         Project project = ProjectBuilder.aProject().withFinishDate(finishDate).build();
 
         assertEquals(project.getFinishDate(), finishDate);
+    }
+
+    @Test
+    public void testProjectDonationList() {
+        List<Donation> donations = new ArrayList<>();
+        Donation donation_1 = mock(Donation.class);
+        Donation donation_2 = mock(Donation.class);
+        donations.add(donation_1);
+        donations.add(donation_2);
+
+        Project project = ProjectBuilder.aProject().withDonations(donations).build();
+
+        assertEquals(project.getDonations(), donations);
+    }
+
+    @Test
+    public void testProjectLocation() {
+        Location location = mock(Location.class);
+        Project project = ProjectBuilder.aProject().withLocation(location).build();
+
+        assertEquals(project.getLocation(), location);
     }
 }
