@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -74,7 +73,7 @@ class UserTest {
         String comment = "This is my donation";
         Project project = mock(Project.class);
         user.donate(amount, comment, project);
-        assertTrue(!user.getDonations().isEmpty());
+        assertFalse(user.getDonations().isEmpty());
 
         Donation donation = user.getDonations().get(0);
         assertEquals(donation.getAmount(), amount);
