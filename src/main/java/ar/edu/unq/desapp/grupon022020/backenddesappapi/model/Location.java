@@ -2,10 +2,10 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 public class Location {
 
-    private String name;
-    private String province;
-    private int population;
-    private String state;
+    private final String name;
+    private final String province;
+    private final int population;
+    private final String state;
 
     public Location(String name, String province, int population, String state) {
         this.name = name;
