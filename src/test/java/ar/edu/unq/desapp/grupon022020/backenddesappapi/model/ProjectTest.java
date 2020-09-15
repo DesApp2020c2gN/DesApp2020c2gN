@@ -63,4 +63,12 @@ public class ProjectTest {
 
         assertEquals(project.getDonations(), donations);
     }
+
+    @Test
+    public void testProjectLocation() {
+        Location location = mock(Location.class);
+        Project project = ProjectBuilder.aProject().withLocation(location).build();
+
+        assertEquals(project.getLocation(), location);
+    }
 }

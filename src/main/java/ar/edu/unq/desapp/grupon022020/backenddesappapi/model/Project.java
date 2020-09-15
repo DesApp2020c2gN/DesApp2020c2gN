@@ -11,14 +11,16 @@ public class Project {
     private final int closurePercentage;
     private final LocalDate startDate;
     private final LocalDate finishDate;
+    private final Location location;
 
-    public Project(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, List<Donation> donations) {
+    public Project(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, List<Donation> donations, Location location) {
         this.name = name;
         this.factor = factor;
         this.closurePercentage = closurePercentage;
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.donations = donations;
+        this.location = location;
     }
 
     public String getName() {
@@ -45,7 +47,15 @@ public class Project {
         return donations;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
     public void receiveDonation(Donation donation) {
         this.donations.add(donation);
+    }
+
+    public int getLocationPopulation() {
+        return this.location.getPopulation();
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class UserTest {
 
@@ -57,6 +58,14 @@ class UserTest {
     }
 
     @Test
+    public void testUserPoints() {
+        int points = 71;
+        User user = UserBuilder.aUser().withPoints(points).build();
+
+        assertEquals(user.getPoints(), points);
+    }
+
+    @Test
     public void testUserDonation() {
         User user = UserBuilder.aUser().build();
         assertTrue(user.getDonations().isEmpty());
@@ -70,6 +79,20 @@ class UserTest {
         Donation donation = user.getDonations().get(0);
         assertEquals(donation.getAmount(), amount);
         assertEquals(donation.getComment(), comment);
+    }
+
+    @Test
+    public void testUserPointsWithHighAmountAndPopulatedLocation() {
+        User user = UserBuilder.aUser().build();
+        assertEquals(user.getPoints(), 0);
+
+        int donationAmount = 2000;
+        String comment = "This is my donation";
+        Project project = mock(Project.class);
+        when(project.getLocationPopulation()).thenReturn(3000);
+        user.donate(donationAmount, comment, project);
+
+        assertEquals(user.getPoints(), donationAmount);
     }
 
 }

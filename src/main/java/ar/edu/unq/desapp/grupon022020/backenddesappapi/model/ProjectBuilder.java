@@ -13,13 +13,14 @@ public class ProjectBuilder {
     private LocalDate startDate = LocalDate.now();
     private LocalDate finishDate = LocalDate.now();
     private List<Donation> donations = new ArrayList<>();
+    private Location location = LocationBuilder.aLocation().build();
 
     public static ProjectBuilder aProject() {
         return new ProjectBuilder();
     }
 
     public Project build() {
-        Project newProject = new Project(name, factor, closurePercentage, startDate, finishDate, donations);
+        Project newProject = new Project(name, factor, closurePercentage, startDate, finishDate, donations, location);
         return newProject;
     }
 
@@ -50,6 +51,11 @@ public class ProjectBuilder {
 
     public ProjectBuilder withDonations(List<Donation> donations) {
         this.donations = donations;
+        return this;
+    }
+
+    public ProjectBuilder withLocation(Location location) {
+        this.location = location;
         return this;
     }
 }

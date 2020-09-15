@@ -10,13 +10,14 @@ public class UserBuilder {
     private String mail = "default_mail";
     private String password = "default_password";
     private List<Donation> donations = new ArrayList<>();
+    private int points = 0;
 
     public static UserBuilder aUser() {
         return new UserBuilder();
     }
 
     public User build() {
-        User newUser = new User(name, nickname, mail, password, donations);
+        User newUser = new User(name, nickname, mail, password, donations, points);
         return newUser;
     }
 
@@ -42,6 +43,11 @@ public class UserBuilder {
 
     public UserBuilder withDonations(List<Donation> donations) {
         this.donations = donations;
+        return this;
+    }
+
+    public UserBuilder withPoints(int points) {
+        this.points = points;
         return this;
     }
 }
