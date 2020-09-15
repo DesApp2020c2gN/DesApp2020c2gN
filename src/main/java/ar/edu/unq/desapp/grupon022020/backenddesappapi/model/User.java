@@ -1,9 +1,9 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class User {
 
@@ -51,8 +51,8 @@ public class User {
     public void donate(int amount, String comment, Project project) {
         Donation donation = DonationBuilder.aDonation().withUser(this).withProject(project)
                 .withAmount(amount).withComment(comment).withDate(LocalDate.now()).build();
-        this.donations.add(donation);
         calculatePoints(amount, project);
+        this.donations.add(donation);
         project.receiveDonation(donation);
     }
 
@@ -66,14 +66,18 @@ public class User {
         if (population < 2000) {
             currentDonationPoints = amount * 2;
         }
-        if (lastDonationDate() != null && (Calendar.MONTH) == lastDonationDate().getMonthValue()) {
+        LocalDate lastDate = lastDonationDate();
+        if (lastDate != null && (LocalDate.now().getMonthValue()) == lastDate.getMonthValue()) {
             currentDonationPoints += 500;
         }
         this.points += currentDonationPoints;
     }
 
     private LocalDate lastDonationDate() {
-        LocalDate lastDonationDate = donations.stream().max(Comparator.comparing(Donation::getDate)).get().getDate();
-        return lastDonationDate;
+        Optional<Donation> lastDonation = donations.stream().max(Comparator.comparing(Donation::getDate));
+        if (lastDonation.isPresent()) {
+            return lastDonation.get().getDate();
+        }
+        return null;
     }
 }

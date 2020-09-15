@@ -82,7 +82,21 @@ class UserTest {
     }
 
     @Test
-    public void testUserPointsWithHighAmountAndPopulatedLocation() {
+    public void testUserPointsWithLess1000AmountAndPlus2000Population() {
+        User user = UserBuilder.aUser().build();
+        assertEquals(user.getPoints(), 0);
+
+        int donationAmount = 500;
+        String comment = "This is my donation";
+        Project project = mock(Project.class);
+        when(project.getLocationPopulation()).thenReturn(3000);
+        user.donate(donationAmount, comment, project);
+
+        assertEquals(user.getPoints(), 0);
+    }
+
+    @Test
+    public void testUserPointsWithPlus1000AmountAndPlus2000Population() {
         User user = UserBuilder.aUser().build();
         assertEquals(user.getPoints(), 0);
 
@@ -93,6 +107,38 @@ class UserTest {
         user.donate(donationAmount, comment, project);
 
         assertEquals(user.getPoints(), donationAmount);
+    }
+
+    @Test
+    public void testUserPointsWithPlus1000AmountAndLess2000Population() {
+        User user = UserBuilder.aUser().build();
+        assertEquals(user.getPoints(), 0);
+
+        int donationAmount = 2000;
+        String comment = "This is my donation";
+        Project project = mock(Project.class);
+        when(project.getLocationPopulation()).thenReturn(1700);
+        user.donate(donationAmount, comment, project);
+
+        assertEquals(user.getPoints(), donationAmount * 2);
+    }
+
+    @Test
+    public void testUserPointsWithLastDonationOnSameMonth() {
+        User user = UserBuilder.aUser().build();
+        assertEquals(user.getPoints(), 0);
+
+        Project project = mock(Project.class);
+        when(project.getLocationPopulation()).thenReturn(3300);
+
+        user.donate(500, "First donation", project);
+        assertEquals(user.getPoints(), 0);
+        assertEquals(user.getDonations().size(), 1);
+
+        int donationAmount = 2500;
+        String comment = "This is my donation";
+        user.donate(donationAmount, comment, project);
+        assertEquals(user.getPoints(), donationAmount + 500);
     }
 
 }
