@@ -4,14 +4,14 @@ import java.time.LocalDate;
 
 public class Donation {
 
-    private final String userNickname;
+    private final String donorNickname;
     private final String projectName;
     private final int amount;
     private final String comment;
     private final LocalDate date;
 
-    public Donation(String userNickname, String projectName, int amount, String comment, LocalDate date) {
-        this.userNickname = userNickname;
+    public Donation(String donorNickname, String projectName, int amount, String comment, LocalDate date) {
+        this.donorNickname = donorNickname;
         this.projectName = projectName;
         this.amount = amount;
         this.comment = comment;
@@ -19,8 +19,8 @@ public class Donation {
 
     }
 
-    public String getUserNickname() {
-        return userNickname;
+    public String getDonorNickname() {
+        return donorNickname;
     }
 
     public String getProjectName() {

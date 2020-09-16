@@ -10,11 +10,11 @@ import static org.mockito.Mockito.mock;
 class DonationTest {
 
     @Test
-    public void testDonationUserNickname() {
-        String userNickname = "Romina";
-        Donation donation = DonationBuilder.aDonation().withUserNickname(userNickname).build();
+    public void testDonationDonorNickname() {
+        String donorNickname = "Juan2001";
+        Donation donation = DonationBuilder.aDonation().withDonorNickname(donorNickname).build();
 
-        assertEquals(donation.getUserNickname(), userNickname);
+        assertEquals(donation.getDonorNickname(), donorNickname);
     }
 
     @Test

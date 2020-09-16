@@ -6,14 +6,14 @@ import java.util.List;
 public class SystemBuilder {
 
     private List<Project> projects = new ArrayList<>();
-    private List<User> users = new ArrayList<>();
+    private List<DonorUser> donorUsers = new ArrayList<>();
 
     public static SystemBuilder aSystem() {
         return new SystemBuilder();
     }
 
     public System build() {
-        System newSystem = new System(projects, users);
+        System newSystem = new System(projects, donorUsers);
         return newSystem;
     }
 
@@ -22,8 +22,8 @@ public class SystemBuilder {
         return this;
     }
 
-    public SystemBuilder withUsers(List<User> users) {
-        this.users = users;
+    public SystemBuilder withUsers(List<DonorUser> donorUsers) {
+        this.donorUsers = donorUsers;
         return this;
     }
 }

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class DonationBuilder {
 
-    private String userNickname = "default_userNickname";
+    private String donorNickname = "default_donorNickname";
     private String projectName = "default_projectName";
     private int amount = 1000;
     private String comment = "default_comment";
@@ -15,12 +15,12 @@ public class DonationBuilder {
     }
 
     public Donation build() {
-        Donation newDonation = new Donation(userNickname, projectName, amount, comment, date);
+        Donation newDonation = new Donation(donorNickname, projectName, amount, comment, date);
         return newDonation;
     }
 
-    public DonationBuilder withUserNickname(String userNickname) {
-        this.userNickname = userNickname;
+    public DonationBuilder withDonorNickname(String donorNickname) {
+        this.donorNickname = donorNickname;
         return this;
     }
 

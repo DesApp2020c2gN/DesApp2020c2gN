@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserBuilder {
+public class DonorUserBuilder {
 
     private String name = "default_name";
     private String nickname = "default_nickname";
@@ -12,41 +12,41 @@ public class UserBuilder {
     private List<Donation> donations = new ArrayList<>();
     private int points = 0;
 
-    public static UserBuilder aUser() {
-        return new UserBuilder();
+    public static DonorUserBuilder aDonorUser() {
+        return new DonorUserBuilder();
     }
 
-    public User build() {
-        User newUser = new User(name, nickname, mail, password, donations, points);
-        return newUser;
+    public DonorUser build() {
+        DonorUser newDonorUser = new DonorUser(name, nickname, mail, password, donations, points);
+        return newDonorUser;
     }
 
-    public UserBuilder withName(String name) {
+    public DonorUserBuilder withName(String name) {
         this.name = name;
         return this;
     }
 
-    public UserBuilder withNickname(String nickname) {
+    public DonorUserBuilder withNickname(String nickname) {
         this.nickname = nickname;
         return this;
     }
 
-    public UserBuilder withMail(String mail) {
+    public DonorUserBuilder withMail(String mail) {
         this.mail = mail;
         return this;
     }
 
-    public UserBuilder withPassword(String password) {
+    public DonorUserBuilder withPassword(String password) {
         this.password = password;
         return this;
     }
 
-    public UserBuilder withDonations(List<Donation> donations) {
+    public DonorUserBuilder withDonations(List<Donation> donations) {
         this.donations = donations;
         return this;
     }
 
-    public UserBuilder withPoints(int points) {
+    public DonorUserBuilder withPoints(int points) {
         this.points = points;
         return this;
     }

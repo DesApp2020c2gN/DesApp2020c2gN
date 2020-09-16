@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class User {
+public class DonorUser {
 
     private final String name;
     private final String nickname;
@@ -14,7 +14,7 @@ public class User {
     private final List<Donation> donations;
     private int points;
 
-    public User(String name, String nickname, String mail, String password, List<Donation> donations, int points) {
+    public DonorUser(String name, String nickname, String mail, String password, List<Donation> donations, int points) {
         this.name = name;
         this.nickname = nickname;
         this.mail = mail;
@@ -50,7 +50,7 @@ public class User {
 
     public void donate(int amount, String comment, Project project) {
         Donation donation = DonationBuilder.aDonation().
-                withUserNickname(getNickname()).
+                withDonorNickname(getNickname()).
                 withProjectName(project.getName()).
                 withAmount(amount).
                 withComment(comment).

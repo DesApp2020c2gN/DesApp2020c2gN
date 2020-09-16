@@ -7,19 +7,19 @@ import java.util.stream.Collectors;
 public class System {
 
     private final List<Project> projects;
-    private final List<User> users;
+    private final List<DonorUser> donorUsers;
 
-    public System(List<Project> projects, List<User> users) {
+    public System(List<Project> projects, List<DonorUser> donorUsers) {
         this.projects = projects;
-        this.users = users;
+        this.donorUsers = donorUsers;
     }
 
     public List<Project> getProjects() {
         return projects;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<DonorUser> getUsers() {
+        return donorUsers;
     }
 
     public List<Location> getTopTenLocationsWithOldestDonations() {
@@ -28,7 +28,7 @@ public class System {
 
     public List<Donation> getTopTenBiggestDonations() {
         List<Donation> topTenList =
-                users.stream().
+                donorUsers.stream().
                         map(user -> user.getDonations()).
                         flatMap(donations -> donations.stream()).
                         sorted(Comparator.comparing(Donation::getAmount).reversed()).
