@@ -49,8 +49,13 @@ public class User {
     }
 
     public void donate(int amount, String comment, Project project) {
-        Donation donation = DonationBuilder.aDonation().withUser(this).withProject(project)
-                .withAmount(amount).withComment(comment).withDate(LocalDate.now()).build();
+        Donation donation = DonationBuilder.aDonation().
+                withUserNickname(getNickname()).
+                withProjectName(project.getName()).
+                withAmount(amount).
+                withComment(comment).
+                withDate(LocalDate.now()).
+                build();
         calculatePoints(amount, project);
         this.donations.add(donation);
         project.receiveDonation(donation);

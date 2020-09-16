@@ -10,19 +10,19 @@ import static org.mockito.Mockito.mock;
 class DonationTest {
 
     @Test
-    public void testDonationUser() {
-        User user = mock(User.class);
-        Donation donation = DonationBuilder.aDonation().withUser(user).build();
+    public void testDonationUserNickname() {
+        String userNickname = "Romina";
+        Donation donation = DonationBuilder.aDonation().withUserNickname(userNickname).build();
 
-        assertEquals(donation.getUser(), user);
+        assertEquals(donation.getUserNickname(), userNickname);
     }
 
     @Test
-    public void testDonationProject() {
-        Project project = mock(Project.class);
-        Donation donation = DonationBuilder.aDonation().withProject(project).build();
+    public void testDonationProjectName() {
+        String projectName = "Conectando San Cristobal";
+        Donation donation = DonationBuilder.aDonation().withProjectName(projectName).build();
 
-        assertEquals(donation.getProject(), project);
+        assertEquals(donation.getProjectName(), projectName);
     }
 
     @Test
