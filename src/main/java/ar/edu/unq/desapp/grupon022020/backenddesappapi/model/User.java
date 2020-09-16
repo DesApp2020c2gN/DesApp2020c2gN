@@ -2,7 +2,6 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.ProjectClosedException;
 import java.time.LocalDate;
-import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
