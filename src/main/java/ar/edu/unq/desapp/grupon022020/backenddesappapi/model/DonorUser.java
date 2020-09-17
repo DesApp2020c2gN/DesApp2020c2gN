@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.ProjectClosedException;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -48,7 +50,8 @@ public class DonorUser {
         return points;
     }
 
-    public void donate(int amount, String comment, Project project) {
+    public void donate(int amount, String comment, Project project) throws ProjectClosedException {
+        validateProjectForDonation(project);
         Donation donation = DonationBuilder.aDonation().
                 withDonorNickname(getNickname()).
                 withProjectName(project.getName()).
@@ -84,5 +87,12 @@ public class DonorUser {
             return lastDonation.get().getDate();
         }
         return null;
+    }
+
+    private void validateProjectForDonation(Project project) throws ProjectClosedException {
+        LocalDate today = LocalDate.now();
+        if (today.isAfter(project.getFinishDate())) {
+            throw new ProjectClosedException();
+        }
     }
 }

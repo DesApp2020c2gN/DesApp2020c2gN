@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.ProjectClosedException;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,13 +67,14 @@ class DonorUserTest {
     }
 
     @Test
-    public void testDonorUserDonation() {
+    public void testDonorUserDonation() throws ProjectClosedException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertTrue(donorUser.getDonations().isEmpty());
 
         int amount = 3570;
         String comment = "This is my donation";
         Project project = mock(Project.class);
+        when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(amount, comment, project);
         assertFalse(donorUser.getDonations().isEmpty());
 
@@ -81,7 +84,7 @@ class DonorUserTest {
     }
 
     @Test
-    public void testDonorUserPointsWithLess1000AmountAndPlus2000Population() {
+    public void testDonorUserPointsWithLess1000AmountAndPlus2000Population() throws ProjectClosedException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertEquals(donorUser.getPoints(), 0);
 
@@ -89,13 +92,14 @@ class DonorUserTest {
         String comment = "This is my donation";
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
+        when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
         assertEquals(donorUser.getPoints(), 0);
     }
 
     @Test
-    public void testDonorUserPointsWithPlus1000AmountAndPlus2000Population() {
+    public void testDonorUserPointsWithPlus1000AmountAndPlus2000Population() throws ProjectClosedException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertEquals(donorUser.getPoints(), 0);
 
@@ -103,13 +107,14 @@ class DonorUserTest {
         String comment = "This is my donation";
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
+        when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
         assertEquals(donorUser.getPoints(), donationAmount);
     }
 
     @Test
-    public void testDonorUserPointsWithPlus1000AmountAndLess2000Population() {
+    public void testDonorUserPointsWithPlus1000AmountAndLess2000Population() throws ProjectClosedException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertEquals(donorUser.getPoints(), 0);
 
@@ -117,19 +122,20 @@ class DonorUserTest {
         String comment = "This is my donation";
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(1700);
+        when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
         assertEquals(donorUser.getPoints(), donationAmount * 2);
     }
 
     @Test
-    public void testDonorUserPointsWithLastDonationOnSameMonth() {
+    public void testDonorUserPointsWithLastDonationOnSameMonth() throws ProjectClosedException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertEquals(donorUser.getPoints(), 0);
 
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3300);
-
+        when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(500, "First donation", project);
         assertEquals(donorUser.getPoints(), 0);
         assertEquals(donorUser.getDonations().size(), 1);
@@ -138,6 +144,19 @@ class DonorUserTest {
         String comment = "This is my donation";
         donorUser.donate(donationAmount, comment, project);
         assertEquals(donorUser.getPoints(), donationAmount + 500);
+    }
+
+    @Test
+    public void testUserDonatesOnClosedProject() throws ProjectClosedException {
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+
+        Project project = mock(Project.class);
+        when(project.getLocationPopulation()).thenReturn(3300);
+        when(project.getFinishDate()).thenReturn(LocalDate.now().plusDays(-1));
+
+        assertThrows(ProjectClosedException.class, () -> {
+            donorUser.donate(500, "First donation", project);
+        });
     }
 
 }
