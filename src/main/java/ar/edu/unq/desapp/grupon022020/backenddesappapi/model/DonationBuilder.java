@@ -4,10 +4,10 @@ import java.time.LocalDate;
 
 public class DonationBuilder {
 
-    private User user = UserBuilder.aUser().build();
-    private Project project = ProjectBuilder.aProject().build();
+    private String donorNickname = "default_donorNickname";
+    private String projectName = "default_projectName";
     private int amount = 1000;
-    private String comment = "Default comment";
+    private String comment = "default_comment";
     private LocalDate date = LocalDate.now();
 
     public static DonationBuilder aDonation() {
@@ -15,17 +15,17 @@ public class DonationBuilder {
     }
 
     public Donation build() {
-        Donation newDonation = new Donation(user, project, amount, comment, date);
+        Donation newDonation = new Donation(donorNickname, projectName, amount, comment, date);
         return newDonation;
     }
 
-    public DonationBuilder withUser(User user) {
-        this.user = user;
+    public DonationBuilder withDonorNickname(String donorNickname) {
+        this.donorNickname = donorNickname;
         return this;
     }
 
-    public DonationBuilder withProject(Project project) {
-        this.project = project;
+    public DonationBuilder withProjectName(String projectName) {
+        this.projectName = projectName;
         return this;
     }
 
