@@ -1,28 +1,28 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 class DonationTest {
 
     @Test
-    public void testDonationUser() {
-        User user = mock(User.class);
-        Donation donation = DonationBuilder.aDonation().withUser(user).build();
+    public void testDonationDonorNickname() {
+        String donorNickname = "Juan2001";
+        Donation donation = DonationBuilder.aDonation().withDonorNickname(donorNickname).build();
 
-        assertEquals(donation.getUser(), user);
+        assertEquals(donation.getDonorNickname(), donorNickname);
     }
 
     @Test
-    public void testDonationProject() {
-        Project project = mock(Project.class);
-        Donation donation = DonationBuilder.aDonation().withProject(project).build();
+    public void testDonationProjectName() {
+        String projectName = "Conectando San Cristobal";
+        Donation donation = DonationBuilder.aDonation().withProjectName(projectName).build();
 
-        assertEquals(donation.getProject(), project);
+        assertEquals(donation.getProjectName(), projectName);
     }
 
     @Test

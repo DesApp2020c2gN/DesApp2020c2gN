@@ -4,27 +4,27 @@ import java.time.LocalDate;
 
 public class Donation {
 
-    private final User user;
-    private final Project project;
+    private final String donorNickname;
+    private final String projectName;
     private final int amount;
     private final String comment;
     private final LocalDate date;
 
-    public Donation(User user, Project project, int amount, String comment, LocalDate date) {
-        this.user = user;
-        this.project = project;
+    public Donation(String donorNickname, String projectName, int amount, String comment, LocalDate date) {
+        this.donorNickname = donorNickname;
+        this.projectName = projectName;
         this.amount = amount;
         this.comment = comment;
         this.date = date;
 
     }
 
-    public User getUser() {
-        return user;
+    public String getDonorNickname() {
+        return donorNickname;
     }
 
-    public Project getProject() {
-        return project;
+    public String getProjectName() {
+        return projectName;
     }
 
     public int getAmount() {

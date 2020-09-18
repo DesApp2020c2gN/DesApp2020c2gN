@@ -1,0 +1,94 @@
+package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
+
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class AdminUserTest {
+
+    @Test
+    public void testAdminUserName() {
+        String name = "Admin";
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withName(name).build();
+
+        assertEquals(adminUser.getName(), name);
+    }
+
+    @Test
+    public void testAdminUserMail() {
+        String mail = "admin@admin.com";
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withMail(mail).build();
+
+        assertEquals(adminUser.getMail(), mail);
+    }
+
+    @Test
+    public void testAdminUserPassword() {
+        String password = "admin001";
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withPassword(password).build();
+
+        assertEquals(adminUser.getPassword(), password);
+    }
+
+    @Test
+    public void testAdminUserLocations() {
+        Location location_1 = mock(Location.class);
+        Location location_2 = mock(Location.class);
+        List<Location> locations = new ArrayList<>();
+        locations.add(location_1);
+        locations.add(location_2);
+
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withLocations(locations).build();
+        assertEquals(adminUser.getLocations(), locations);
+        assertTrue(adminUser.getLocations().size() == 2);
+    }
+
+    @Test
+    public void testAdminUserProjects() {
+        Project project_1 = mock(Project.class);
+        Project project_2 = mock(Project.class);
+        List<Project> projects = new ArrayList<>();
+        projects.add(project_1);
+        projects.add(project_2);
+
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withProjects(projects).build();
+        assertEquals(adminUser.getProjects(), projects);
+        assertTrue(adminUser.getProjects().size() == 2);
+    }
+
+    @Test
+    public void testAdminUserProjectCreation() {
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
+        assertTrue(adminUser.getProjects().size() == 0);
+
+        Location location = mock(Location.class);
+        int locationPopulation = 1750;
+        when(location.getPopulation()).thenReturn(locationPopulation);
+
+        String projectName = "Conectando Rio Turbio";
+        int factor = 50000;
+        int closurePercentage = 85;
+        LocalDate startDate = LocalDate.parse("2020-12-27");
+        LocalDate finishDate = LocalDate.parse("2022-05-04");
+
+        adminUser.createProject(projectName, factor, closurePercentage, startDate, finishDate, location);
+        Project newProject = adminUser.getProjects().get(0);
+
+        assertEquals(adminUser.getProjects().size(), 1);
+        assertEquals(newProject.getName(), projectName);
+        assertEquals(newProject.getFactor(), factor);
+        assertEquals(newProject.getClosurePercentage(), closurePercentage);
+        assertEquals(newProject.getStartDate(), startDate);
+        assertEquals(newProject.getFinishDate(), finishDate);
+        assertEquals(newProject.getLocationPopulation(), locationPopulation);
+    }
+
+}

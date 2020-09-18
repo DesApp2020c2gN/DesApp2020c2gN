@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
