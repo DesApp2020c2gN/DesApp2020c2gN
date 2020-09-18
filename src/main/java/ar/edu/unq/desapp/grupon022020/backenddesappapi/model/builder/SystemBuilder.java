@@ -1,4 +1,8 @@
-package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
+package ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder;
+
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.System;
 
 import java.util.ArrayList;
 import java.util.List;
