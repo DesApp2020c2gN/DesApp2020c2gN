@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
-
 import java.time.LocalDate;
 import java.util.List;
 
