@@ -20,7 +20,7 @@ class DonorUserTest {
         String name = "Marcelo";
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withName(name).build();
 
-        assertEquals(donorUser.getName(), name);
+        assertEquals(name, donorUser.getName());
     }
 
     @Test
@@ -28,7 +28,7 @@ class DonorUserTest {
         String nickname = "Marce98";
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname(nickname).build();
 
-        assertEquals(donorUser.getNickname(), nickname);
+        assertEquals(nickname, donorUser.getNickname());
     }
 
     @Test
@@ -36,7 +36,7 @@ class DonorUserTest {
         String mail = "marce98@gmail.com";
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMail(mail).build();
 
-        assertEquals(donorUser.getMail(), mail);
+        assertEquals(mail, donorUser.getMail());
     }
 
     @Test
@@ -44,7 +44,7 @@ class DonorUserTest {
         String password = "marce_98_1001";
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withPassword(password).build();
 
-        assertEquals(donorUser.getPassword(), password);
+        assertEquals(password, donorUser.getPassword());
     }
 
     @Test
@@ -57,7 +57,7 @@ class DonorUserTest {
 
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withDonations(donations).build();
 
-        assertEquals(donorUser.getDonations(), donations);
+        assertEquals(donations, donorUser.getDonations());
     }
 
     @Test
@@ -65,12 +65,21 @@ class DonorUserTest {
         int points = 71;
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withPoints(points).build();
 
-        assertEquals(donorUser.getPoints(), points);
+        assertEquals(points, donorUser.getPoints());
+    }
+
+    @Test
+    public void testDonorUserMoney() {
+        int money = 2300;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+
+        assertEquals(money, donorUser.getMoney());
     }
 
     @Test
     public void testDonorUserDonation() throws InvalidDonationException {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        int money = 9999;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         assertTrue(donorUser.getDonations().isEmpty());
 
         int amount = 3570;
@@ -81,14 +90,15 @@ class DonorUserTest {
         assertFalse(donorUser.getDonations().isEmpty());
 
         Donation donation = donorUser.getDonations().get(0);
-        assertEquals(donation.getAmount(), amount);
-        assertEquals(donation.getComment(), comment);
+        assertEquals(amount, donation.getAmount());
+        assertEquals(comment, donation.getComment());
     }
 
     @Test
     public void testDonorUserPointsWithLess1000AmountAndPlus2000Population() throws InvalidDonationException {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
-        assertEquals(donorUser.getPoints(), 0);
+        int money = 9999;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+        assertEquals(0, donorUser.getPoints());
 
         int donationAmount = 500;
         String comment = "This is my donation";
@@ -97,13 +107,14 @@ class DonorUserTest {
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
-        assertEquals(donorUser.getPoints(), 0);
+        assertEquals(0, donorUser.getPoints());
     }
 
     @Test
     public void testDonorUserPointsWithPlus1000AmountAndPlus2000Population() throws InvalidDonationException {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
-        assertEquals(donorUser.getPoints(), 0);
+        int money = 9999;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+        assertEquals(0, donorUser.getPoints());
 
         int donationAmount = 2000;
         String comment = "This is my donation";
@@ -112,13 +123,14 @@ class DonorUserTest {
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
-        assertEquals(donorUser.getPoints(), donationAmount);
+        assertEquals(donationAmount, donorUser.getPoints());
     }
 
     @Test
     public void testDonorUserPointsWithPlus1000AmountAndLess2000Population() throws InvalidDonationException {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
-        assertEquals(donorUser.getPoints(), 0);
+        int money = 9999;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+        assertEquals(0, donorUser.getPoints());
 
         int donationAmount = 2000;
         String comment = "This is my donation";
@@ -127,38 +139,66 @@ class DonorUserTest {
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
-        assertEquals(donorUser.getPoints(), donationAmount * 2);
+        assertEquals(donationAmount * 2, donorUser.getPoints());
     }
 
     @Test
     public void testDonorUserPointsWithLastDonationOnSameMonth() throws InvalidDonationException {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
-        assertEquals(donorUser.getPoints(), 0);
+        int money = 9999;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+        assertEquals(0, donorUser.getPoints());
 
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3300);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(500, "First donation", project);
-        assertEquals(donorUser.getPoints(), 0);
-        assertEquals(donorUser.getDonations().size(), 1);
+        assertEquals(0, donorUser.getPoints());
+        assertEquals(1, donorUser.getDonations().size());
 
         int donationAmount = 2500;
         String comment = "This is my donation";
         donorUser.donate(donationAmount, comment, project);
-        assertEquals(donorUser.getPoints(), donationAmount + 500);
+        assertEquals(donationAmount + 500, donorUser.getPoints());
     }
 
     @Test
-    public void testUserDonatesOnClosedProject() throws InvalidDonationException {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+    public void testUserDonatesOnClosedProject() {
+        int money = 9999;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         Location location = mock(Location.class);
         when(location.getPopulation()).thenReturn(3300);
         LocalDate finishDate = LocalDate.now().plusDays(-1);
         Project project = ProjectBuilder.aProject().withFinishDate(finishDate).withLocation(location).build();
 
-        assertThrows(InvalidDonationException.class, () -> {
+        try
+        {
             donorUser.donate(500, "First donation", project);
-        });
+        }
+        catch(InvalidDonationException e)
+        {
+            String message = "Project " + project.getName() + " is closed";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testUserDonatesWithoutMoney() {
+        int money = 1000;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+        Location location = mock(Location.class);
+        when(location.getPopulation()).thenReturn(1000);
+        LocalDate finishDate = LocalDate.now().plusDays(7);
+        Project project = ProjectBuilder.aProject().withFinishDate(finishDate).withLocation(location).build();
+
+        try
+        {
+            donorUser.donate(2000, "Second donation", project);
+        }
+        catch(InvalidDonationException e)
+        {
+            String message = "User " + donorUser.getName() + " does not have enough money";
+            assertEquals(message, e.getMessage());
+        }
     }
 
 }

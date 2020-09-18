@@ -19,7 +19,7 @@ class AdminUserTest {
         String name = "Admin";
         AdminUser adminUser = AdminUserBuilder.anAdminUser().withName(name).build();
 
-        assertEquals(adminUser.getName(), name);
+        assertEquals(name, adminUser.getName());
     }
 
     @Test
@@ -27,7 +27,7 @@ class AdminUserTest {
         String mail = "admin@admin.com";
         AdminUser adminUser = AdminUserBuilder.anAdminUser().withMail(mail).build();
 
-        assertEquals(adminUser.getMail(), mail);
+        assertEquals(mail, adminUser.getMail());
     }
 
     @Test
@@ -35,7 +35,7 @@ class AdminUserTest {
         String password = "admin001";
         AdminUser adminUser = AdminUserBuilder.anAdminUser().withPassword(password).build();
 
-        assertEquals(adminUser.getPassword(), password);
+        assertEquals(password, adminUser.getPassword());
     }
 
     @Test
@@ -47,7 +47,7 @@ class AdminUserTest {
         locations.add(location_2);
 
         AdminUser adminUser = AdminUserBuilder.anAdminUser().withLocations(locations).build();
-        assertEquals(adminUser.getLocations(), locations);
+        assertEquals(locations, adminUser.getLocations());
         assertTrue(adminUser.getLocations().size() == 2);
     }
 
@@ -60,7 +60,7 @@ class AdminUserTest {
         projects.add(project_2);
 
         AdminUser adminUser = AdminUserBuilder.anAdminUser().withProjects(projects).build();
-        assertEquals(adminUser.getProjects(), projects);
+        assertEquals(projects, adminUser.getProjects());
         assertTrue(adminUser.getProjects().size() == 2);
     }
 
@@ -82,13 +82,13 @@ class AdminUserTest {
         adminUser.createProject(projectName, factor, closurePercentage, startDate, finishDate, location);
         Project newProject = adminUser.getProjects().get(0);
 
-        assertEquals(adminUser.getProjects().size(), 1);
-        assertEquals(newProject.getName(), projectName);
-        assertEquals(newProject.getFactor(), factor);
-        assertEquals(newProject.getClosurePercentage(), closurePercentage);
-        assertEquals(newProject.getStartDate(), startDate);
-        assertEquals(newProject.getFinishDate(), finishDate);
-        assertEquals(newProject.getLocationPopulation(), locationPopulation);
+        assertEquals(1, adminUser.getProjects().size());
+        assertEquals(projectName, newProject.getName());
+        assertEquals(factor, newProject.getFactor());
+        assertEquals(closurePercentage, newProject.getClosurePercentage());
+        assertEquals(startDate, newProject.getStartDate());
+        assertEquals(finishDate, newProject.getFinishDate());
+        assertEquals(locationPopulation, newProject.getLocationPopulation());
     }
 
 }

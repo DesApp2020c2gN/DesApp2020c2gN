@@ -12,7 +12,7 @@ class LocationTest {
         String name = "Piedras";
         Location location = LocationBuilder.aLocation().withName(name).build();
 
-        assertEquals(location.getName(), name);
+        assertEquals(name, location.getName());
     }
 
     @Test
@@ -20,7 +20,7 @@ class LocationTest {
         String province = "Catamarca";
         Location location = LocationBuilder.aLocation().withProvince(province).build();
 
-        assertEquals(location.getProvince(), province);
+        assertEquals(province, location.getProvince());
     }
 
     @Test
@@ -28,7 +28,7 @@ class LocationTest {
         int population = 1250;
         Location location = LocationBuilder.aLocation().withPopulation(population).build();
 
-        assertEquals(location.getPopulation(), population);
+        assertEquals(population, location.getPopulation());
     }
 
     @Test
@@ -36,6 +36,6 @@ class LocationTest {
         String state = "Conectado";
         Location location = LocationBuilder.aLocation().withState(state).build();
 
-        assertEquals(location.getState(), state);
+        assertEquals(state, location.getState());
     }
 }
