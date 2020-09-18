@@ -1,16 +1,18 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
+
 import java.time.LocalDate;
 import java.util.List;
 
 public class Project {
 
-    private final List<Donation> donations;
     private final String name;
     private final int factor;
     private final int closurePercentage;
     private final LocalDate startDate;
     private final LocalDate finishDate;
+    private final List<Donation> donations;
     private final Location location;
 
     public Project(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, List<Donation> donations, Location location) {
@@ -57,5 +59,12 @@ public class Project {
 
     public int getLocationPopulation() {
         return this.location.getPopulation();
+    }
+
+    public void validateDonation() throws InvalidDonationException {
+        LocalDate today = LocalDate.now();
+        if (today.isAfter(this.getFinishDate())) {
+            throw new InvalidDonationException("Project " + this.getName() + " is closed");
+        }
     }
 }

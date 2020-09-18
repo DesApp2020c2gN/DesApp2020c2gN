@@ -14,7 +14,7 @@ class DonationTest {
         String donorNickname = "Juan2001";
         Donation donation = DonationBuilder.aDonation().withDonorNickname(donorNickname).build();
 
-        assertEquals(donation.getDonorNickname(), donorNickname);
+        assertEquals(donorNickname, donation.getDonorNickname());
     }
 
     @Test
@@ -22,7 +22,7 @@ class DonationTest {
         String projectName = "Conectando San Cristobal";
         Donation donation = DonationBuilder.aDonation().withProjectName(projectName).build();
 
-        assertEquals(donation.getProjectName(), projectName);
+        assertEquals(projectName, donation.getProjectName());
     }
 
     @Test
@@ -30,7 +30,7 @@ class DonationTest {
         int amount = 2530;
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
-        assertEquals(donation.getAmount(), amount);
+        assertEquals(amount, donation.getAmount());
     }
 
     @Test
@@ -38,7 +38,7 @@ class DonationTest {
         String comment = "This is a donation";
         Donation donation = DonationBuilder.aDonation().withComment(comment).build();
 
-        assertEquals(donation.getComment(), comment);
+        assertEquals(comment, donation.getComment());
 
     }
 
@@ -47,7 +47,7 @@ class DonationTest {
         LocalDate date = LocalDate.now();
         Donation donation = DonationBuilder.aDonation().withDate(date).build();
 
-        assertEquals(donation.getDate(), date);
+        assertEquals(date, donation.getDate());
     }
 
 }

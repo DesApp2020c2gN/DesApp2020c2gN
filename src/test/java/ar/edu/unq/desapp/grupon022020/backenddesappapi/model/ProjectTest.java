@@ -17,7 +17,7 @@ public class ProjectTest {
         String name = "Conectar San Juan";
         Project project = ProjectBuilder.aProject().withName(name).build();
 
-        assertEquals(project.getName(), name);
+        assertEquals(name, project.getName());
     }
 
     @Test
@@ -25,7 +25,7 @@ public class ProjectTest {
         int factor = 1200;
         Project project = ProjectBuilder.aProject().withFactor(factor).build();
 
-        assertEquals(project.getFactor(), factor);
+        assertEquals(factor, project.getFactor());
     }
 
     @Test
@@ -33,7 +33,7 @@ public class ProjectTest {
         int closurePercentage = 75;
         Project project = ProjectBuilder.aProject().withClosurePercentage(closurePercentage).build();
 
-        assertEquals(project.getClosurePercentage(), closurePercentage);
+        assertEquals(closurePercentage, project.getClosurePercentage());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ProjectTest {
         LocalDate startDate = LocalDate.parse("2020-09-15");
         Project project = ProjectBuilder.aProject().withStartDate(startDate).build();
 
-        assertEquals(project.getStartDate(), startDate);
+        assertEquals(startDate, project.getStartDate());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ProjectTest {
         LocalDate finishDate = LocalDate.parse("2020-12-01");
         Project project = ProjectBuilder.aProject().withFinishDate(finishDate).build();
 
-        assertEquals(project.getFinishDate(), finishDate);
+        assertEquals(finishDate, project.getFinishDate());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class ProjectTest {
 
         Project project = ProjectBuilder.aProject().withDonations(donations).build();
 
-        assertEquals(project.getDonations(), donations);
+        assertEquals(donations, project.getDonations());
     }
 
     @Test
@@ -70,6 +70,6 @@ public class ProjectTest {
         Location location = mock(Location.class);
         Project project = ProjectBuilder.aProject().withLocation(location).build();
 
-        assertEquals(project.getLocation(), location);
+        assertEquals(location, project.getLocation());
     }
 }
