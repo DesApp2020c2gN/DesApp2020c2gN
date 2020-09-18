@@ -1,18 +1,15 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.ProjectClosedException;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -72,7 +69,7 @@ class DonorUserTest {
     }
 
     @Test
-    public void testDonorUserDonation() throws ProjectClosedException {
+    public void testDonorUserDonation() throws InvalidDonationException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertTrue(donorUser.getDonations().isEmpty());
 
@@ -89,7 +86,7 @@ class DonorUserTest {
     }
 
     @Test
-    public void testDonorUserPointsWithLess1000AmountAndPlus2000Population() throws ProjectClosedException {
+    public void testDonorUserPointsWithLess1000AmountAndPlus2000Population() throws InvalidDonationException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertEquals(donorUser.getPoints(), 0);
 
@@ -104,7 +101,7 @@ class DonorUserTest {
     }
 
     @Test
-    public void testDonorUserPointsWithPlus1000AmountAndPlus2000Population() throws ProjectClosedException {
+    public void testDonorUserPointsWithPlus1000AmountAndPlus2000Population() throws InvalidDonationException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertEquals(donorUser.getPoints(), 0);
 
@@ -119,7 +116,7 @@ class DonorUserTest {
     }
 
     @Test
-    public void testDonorUserPointsWithPlus1000AmountAndLess2000Population() throws ProjectClosedException {
+    public void testDonorUserPointsWithPlus1000AmountAndLess2000Population() throws InvalidDonationException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertEquals(donorUser.getPoints(), 0);
 
@@ -134,7 +131,7 @@ class DonorUserTest {
     }
 
     @Test
-    public void testDonorUserPointsWithLastDonationOnSameMonth() throws ProjectClosedException {
+    public void testDonorUserPointsWithLastDonationOnSameMonth() throws InvalidDonationException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
         assertEquals(donorUser.getPoints(), 0);
 
@@ -152,14 +149,14 @@ class DonorUserTest {
     }
 
     @Test
-    public void testUserDonatesOnClosedProject() throws ProjectClosedException {
+    public void testUserDonatesOnClosedProject() throws InvalidDonationException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        Location location = mock(Location.class);
+        when(location.getPopulation()).thenReturn(3300);
+        LocalDate finishDate = LocalDate.now().plusDays(-1);
+        Project project = ProjectBuilder.aProject().withFinishDate(finishDate).withLocation(location).build();
 
-        Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(3300);
-        when(project.getFinishDate()).thenReturn(LocalDate.now().plusDays(-1));
-
-        assertThrows(ProjectClosedException.class, () -> {
+        assertThrows(InvalidDonationException.class, () -> {
             donorUser.donate(500, "First donation", project);
         });
     }
