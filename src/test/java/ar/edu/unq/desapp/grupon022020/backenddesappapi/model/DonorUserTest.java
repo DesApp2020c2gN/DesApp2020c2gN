@@ -92,6 +92,7 @@ class DonorUserTest {
         Donation donation = donorUser.getDonations().get(0);
         assertEquals(amount, donation.getAmount());
         assertEquals(comment, donation.getComment());
+        assertEquals(money - amount, donorUser.getMoney());
     }
 
     @Test
