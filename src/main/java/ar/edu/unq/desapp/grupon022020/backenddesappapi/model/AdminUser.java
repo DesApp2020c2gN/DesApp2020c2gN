@@ -1,8 +1,12 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
+
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class AdminUser extends User {
 
@@ -34,5 +38,18 @@ public class AdminUser extends User {
                 withLocation(location).
                 build();
         this.projects.add(project);
+    }
+
+    public void cancelProject(String name) throws InvalidProjectOperation {
+        Optional optionalProject = this.projects.stream().
+                filter(project -> project.getName().equals(name)).
+                findFirst();
+        if(optionalProject.isPresent()){
+            Project projectToCancel = (Project) optionalProject.get();
+            projectToCancel.cancel();
+        }
+        else {
+            throw new InvalidProjectOperation("Project " + name + " does not exists");
+        }
     }
 }
