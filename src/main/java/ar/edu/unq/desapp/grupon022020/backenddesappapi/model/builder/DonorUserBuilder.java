@@ -14,13 +14,14 @@ public class DonorUserBuilder {
     private String password = "default_password";
     private List<Donation> donations = new ArrayList<>();
     private int points = 0;
+    private int money = 0;
 
     public static DonorUserBuilder aDonorUser() {
         return new DonorUserBuilder();
     }
 
     public DonorUser build() {
-        DonorUser newDonorUser = new DonorUser(name, nickname, mail, password, donations, points);
+        DonorUser newDonorUser = new DonorUser(name, nickname, mail, password, donations, points, money);
         return newDonorUser;
     }
 
@@ -51,6 +52,11 @@ public class DonorUserBuilder {
 
     public DonorUserBuilder withPoints(int points) {
         this.points = points;
+        return this;
+    }
+
+    public DonorUserBuilder withMoney(int money) {
+        this.money = money;
         return this;
     }
 }

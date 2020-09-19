@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -8,7 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ProjectTest {
 
@@ -17,7 +22,7 @@ public class ProjectTest {
         String name = "Conectar San Juan";
         Project project = ProjectBuilder.aProject().withName(name).build();
 
-        assertEquals(project.getName(), name);
+        assertEquals(name, project.getName());
     }
 
     @Test
@@ -25,7 +30,7 @@ public class ProjectTest {
         int factor = 1200;
         Project project = ProjectBuilder.aProject().withFactor(factor).build();
 
-        assertEquals(project.getFactor(), factor);
+        assertEquals(factor, project.getFactor());
     }
 
     @Test
@@ -33,7 +38,7 @@ public class ProjectTest {
         int closurePercentage = 75;
         Project project = ProjectBuilder.aProject().withClosurePercentage(closurePercentage).build();
 
-        assertEquals(project.getClosurePercentage(), closurePercentage);
+        assertEquals(closurePercentage, project.getClosurePercentage());
     }
 
     @Test
@@ -41,7 +46,7 @@ public class ProjectTest {
         LocalDate startDate = LocalDate.parse("2020-09-15");
         Project project = ProjectBuilder.aProject().withStartDate(startDate).build();
 
-        assertEquals(project.getStartDate(), startDate);
+        assertEquals(startDate, project.getStartDate());
     }
 
     @Test
@@ -49,7 +54,7 @@ public class ProjectTest {
         LocalDate finishDate = LocalDate.parse("2020-12-01");
         Project project = ProjectBuilder.aProject().withFinishDate(finishDate).build();
 
-        assertEquals(project.getFinishDate(), finishDate);
+        assertEquals(finishDate, project.getFinishDate());
     }
 
     @Test
@@ -62,7 +67,7 @@ public class ProjectTest {
 
         Project project = ProjectBuilder.aProject().withDonations(donations).build();
 
-        assertEquals(project.getDonations(), donations);
+        assertEquals(donations, project.getDonations());
     }
 
     @Test
@@ -70,6 +75,50 @@ public class ProjectTest {
         Location location = mock(Location.class);
         Project project = ProjectBuilder.aProject().withLocation(location).build();
 
-        assertEquals(project.getLocation(), location);
+        assertEquals(location, project.getLocation());
+    }
+
+    @Test
+    public void testProjectWithAchievedGoal() throws InvalidDonationException {
+        Location location = mock(Location.class);
+        int population = 1000;
+        when(location.getPopulation()).thenReturn(population);
+        int factor = 5000;
+        int closurePercentage = 50;
+        Project project = ProjectBuilder.aProject().
+                withLocation(location).
+                withStartDate(LocalDate.now().plusDays(-1)).
+                withFinishDate(LocalDate.now().plusDays(1)).
+                withFactor(factor).
+                withClosurePercentage(closurePercentage).
+                build();
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9999999).build();
+
+        donorUser.donate(2000000, "First donation", project);
+        donorUser.donate(2000000, "Second donation", project);
+
+        assertTrue(project.hasReachedGoal());
+    }
+
+    @Test
+    public void testProjectThatDoesNotReachGoal() throws InvalidDonationException {
+        Location location = mock(Location.class);
+        int population = 1000;
+        when(location.getPopulation()).thenReturn(population);
+        int factor = 5000;
+        int closurePercentage = 90;
+        Project project = ProjectBuilder.aProject().
+                withLocation(location).
+                withStartDate(LocalDate.now().plusDays(-1)).
+                withFinishDate(LocalDate.now().plusDays(1)).
+                withFactor(factor).
+                withClosurePercentage(closurePercentage).
+                build();
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9999999).build();
+
+        donorUser.donate(1000000, "First donation", project);
+        donorUser.donate(3000000, "Second donation", project);
+
+        assertFalse(project.hasReachedGoal());
     }
 }
