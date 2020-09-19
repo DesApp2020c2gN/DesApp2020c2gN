@@ -63,8 +63,11 @@ public class Project {
 
     public void validateDonation() throws InvalidDonationException {
         LocalDate today = LocalDate.now();
+        if (today.isBefore(this.getStartDate())) {
+            throw new InvalidDonationException("Project " + this.getName() + " has not started");
+        }
         if (today.isAfter(this.getFinishDate())) {
-            throw new InvalidDonationException("Project " + this.getName() + " is closed");
+            throw new InvalidDonationException("Project " + this.getName() + " has finished");
         }
     }
 }
