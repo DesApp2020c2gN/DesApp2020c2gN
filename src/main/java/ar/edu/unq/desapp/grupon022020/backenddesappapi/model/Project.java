@@ -70,4 +70,18 @@ public class Project {
             throw new InvalidDonationException("Project " + this.getName() + " has finished");
         }
     }
+
+    public boolean hasReachedGoal() {
+        float percentageAchieved = ((float) totalDonations() / moneyRequired()) * 100;
+        return percentageAchieved > this.getClosurePercentage();
+    }
+
+    private int totalDonations() {
+        return donations.stream().map(Donation::getAmount).reduce(0, Integer::sum);
+    }
+
+    private int moneyRequired() {
+        return this.factor * this.getLocation().getPopulation();
+    }
+
 }

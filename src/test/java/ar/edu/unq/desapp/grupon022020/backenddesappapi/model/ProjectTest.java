@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -8,7 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ProjectTest {
 
@@ -71,5 +76,49 @@ public class ProjectTest {
         Project project = ProjectBuilder.aProject().withLocation(location).build();
 
         assertEquals(location, project.getLocation());
+    }
+
+    @Test
+    public void testProjectWithAchievedGoal() throws InvalidDonationException {
+        Location location = mock(Location.class);
+        int population = 1000;
+        when(location.getPopulation()).thenReturn(population);
+        int factor = 5000;
+        int closurePercentage = 50;
+        Project project = ProjectBuilder.aProject().
+                withLocation(location).
+                withStartDate(LocalDate.now().plusDays(-1)).
+                withFinishDate(LocalDate.now().plusDays(1)).
+                withFactor(factor).
+                withClosurePercentage(closurePercentage).
+                build();
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9999999).build();
+
+        donorUser.donate(2000000, "First donation", project);
+        donorUser.donate(2000000, "Second donation", project);
+
+        assertTrue(project.hasReachedGoal());
+    }
+
+    @Test
+    public void testProjectThatDoesNotReachGoal() throws InvalidDonationException {
+        Location location = mock(Location.class);
+        int population = 1000;
+        when(location.getPopulation()).thenReturn(population);
+        int factor = 5000;
+        int closurePercentage = 90;
+        Project project = ProjectBuilder.aProject().
+                withLocation(location).
+                withStartDate(LocalDate.now().plusDays(-1)).
+                withFinishDate(LocalDate.now().plusDays(1)).
+                withFactor(factor).
+                withClosurePercentage(closurePercentage).
+                build();
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9999999).build();
+
+        donorUser.donate(1000000, "First donation", project);
+        donorUser.donate(3000000, "Second donation", project);
+
+        assertFalse(project.hasReachedGoal());
     }
 }
