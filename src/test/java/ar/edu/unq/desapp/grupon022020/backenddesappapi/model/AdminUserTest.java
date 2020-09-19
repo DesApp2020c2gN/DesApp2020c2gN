@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -89,6 +90,42 @@ class AdminUserTest {
         assertEquals(startDate, newProject.getStartDate());
         assertEquals(finishDate, newProject.getFinishDate());
         assertEquals(locationPopulation, newProject.getLocationPopulation());
+    }
+
+    @Test
+    public void testAdminUserProjectCancellation() throws InvalidProjectOperation {
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
+        Location location = mock(Location.class);
+        String name = "Conectando Tandil";
+        LocalDate startDate = LocalDate.parse("2020-12-27");
+        LocalDate finishDate = LocalDate.parse("2022-05-04");
+        adminUser.createProject(name, 1000, 60, startDate, finishDate, location);
+
+        Project project = adminUser.getProjects().get(0);
+        assertEquals(finishDate, project.getFinishDate());
+
+        adminUser.cancelProject(name);
+        assertEquals(startDate.minusDays(1), project.getFinishDate());
+    }
+
+    @Test
+    public void testAdminUserNonExistentProjectCancellation() {
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
+        Location location = mock(Location.class);
+        String name = "Mar Chiquita 3.0";
+        LocalDate startDate = LocalDate.parse("2020-12-27");
+        LocalDate finishDate = LocalDate.parse("2022-05-04");
+        adminUser.createProject("Conectando Tandil", 1000, 60, startDate, finishDate, location);
+
+        try
+        {
+            adminUser.cancelProject(name);
+        }
+        catch(InvalidProjectOperation e)
+        {
+            String message = "Project " + name + " does not exists";
+            assertEquals(message, e.getMessage());
+        }
     }
 
 }

@@ -11,7 +11,7 @@ public class Project {
     private final int factor;
     private final int closurePercentage;
     private final LocalDate startDate;
-    private final LocalDate finishDate;
+    private LocalDate finishDate;
     private final List<Donation> donations;
     private final Location location;
 
@@ -84,4 +84,7 @@ public class Project {
         return this.factor * this.getLocation().getPopulation();
     }
 
+    public void cancel() {
+        this.finishDate = getStartDate().minusDays(1);
+    }
 }
