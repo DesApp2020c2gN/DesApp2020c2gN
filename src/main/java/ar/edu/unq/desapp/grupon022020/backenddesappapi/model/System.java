@@ -22,10 +22,6 @@ public class System {
         return donorUsers;
     }
 
-    public List<Location> getTopTenLocationsWithOldestDonations() {
-        return null;
-    }
-
     public List<Donation> getTopTenBiggestDonations() {
         List<Donation> topTenList =
                 donorUsers.stream().
