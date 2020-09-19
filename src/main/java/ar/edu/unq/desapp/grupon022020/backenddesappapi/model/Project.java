@@ -63,8 +63,25 @@ public class Project {
 
     public void validateDonation() throws InvalidDonationException {
         LocalDate today = LocalDate.now();
+        if (today.isBefore(this.getStartDate())) {
+            throw new InvalidDonationException("Project " + this.getName() + " has not started");
+        }
         if (today.isAfter(this.getFinishDate())) {
-            throw new InvalidDonationException("Project " + this.getName() + " is closed");
+            throw new InvalidDonationException("Project " + this.getName() + " has finished");
         }
     }
+
+    public boolean hasReachedGoal() {
+        float percentageAchieved = ((float) totalDonations() / moneyRequired()) * 100;
+        return percentageAchieved > this.getClosurePercentage();
+    }
+
+    private int totalDonations() {
+        return donations.stream().map(Donation::getAmount).reduce(0, Integer::sum);
+    }
+
+    private int moneyRequired() {
+        return this.factor * this.getLocation().getPopulation();
+    }
+
 }

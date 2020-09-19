@@ -165,6 +165,26 @@ class DonorUserTest {
     }
 
     @Test
+    public void testUserDonatesOnProjectNotStarted() {
+        int money = 9999;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+        Location location = mock(Location.class);
+        when(location.getPopulation()).thenReturn(2000);
+        LocalDate startDate = LocalDate.now().plusDays(5);
+        Project project = ProjectBuilder.aProject().withStartDate(startDate).withLocation(location).build();
+
+        try
+        {
+            donorUser.donate(900, "First donation", project);
+        }
+        catch(InvalidDonationException e)
+        {
+            String message = "Project " + project.getName() + " has not started";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
     public void testUserDonatesOnClosedProject() {
         int money = 9999;
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
@@ -175,11 +195,11 @@ class DonorUserTest {
 
         try
         {
-            donorUser.donate(500, "First donation", project);
+            donorUser.donate(500, "Second donation", project);
         }
         catch(InvalidDonationException e)
         {
-            String message = "Project " + project.getName() + " is closed";
+            String message = "Project " + project.getName() + " has finished";
             assertEquals(message, e.getMessage());
         }
     }
@@ -195,7 +215,7 @@ class DonorUserTest {
 
         try
         {
-            donorUser.donate(2000, "Second donation", project);
+            donorUser.donate(2000, "Third donation", project);
         }
         catch(InvalidDonationException e)
         {
