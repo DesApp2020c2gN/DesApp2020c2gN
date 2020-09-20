@@ -79,6 +79,26 @@ public class ProjectTest {
     }
 
     @Test
+    public void testProjectTotalDonations() {
+        int amount_1 = 1200;
+        int amount_2 = 1750;
+        int amount_3 = 700;
+        Donation donation_1 = mock(Donation.class);
+        when(donation_1.getAmount()).thenReturn(amount_1);
+        Donation donation_2 = mock(Donation.class);
+        when(donation_2.getAmount()).thenReturn(amount_2);
+        Donation donation_3 = mock(Donation.class);
+        when(donation_3.getAmount()).thenReturn(amount_3);
+        List<Donation> donations = new ArrayList<>();
+        donations.add(donation_1);
+        donations.add(donation_2);
+        donations.add(donation_3);
+        Project project = ProjectBuilder.aProject().withDonations(donations).build();
+
+        assertEquals(amount_1 + amount_2 + amount_3, project.totalAmountDonations());
+    }
+
+    @Test
     public void testProjectWithAchievedGoal() throws InvalidDonationException {
         Location location = mock(Location.class);
         int population = 1000;
