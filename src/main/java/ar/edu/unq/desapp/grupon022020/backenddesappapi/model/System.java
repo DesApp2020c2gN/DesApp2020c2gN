@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -36,8 +38,18 @@ public class System {
         return locations;
     }
 
-    public void addNewProject(Project project) {
-        this.openProjects.add(project);
+    public void addNewProject(Project newProject) throws InvalidProjectOperation {
+        boolean isCurrentlyOpen = this.openProjects.stream().
+                anyMatch(project -> project.getLocation().equals(newProject.getLocation()));
+        boolean isAlreadyCompleted = this.closedProjects.stream().
+                anyMatch(project -> project.getLocation().equals(newProject.getLocation()) && project.hasReachedGoal());
+        if(isCurrentlyOpen){
+            throw new InvalidProjectOperation("A project for location " + newProject.getLocation().getName() + " is currently open");
+        }
+        if(isAlreadyCompleted){
+            throw new InvalidProjectOperation("A project for location " + newProject.getLocation().getName() + " is already completed");
+        }
+        this.openProjects.add(newProject);
     }
 
     public Optional<Project> getOpenProject(String name) {
@@ -46,10 +58,16 @@ public class System {
                 findFirst();
     }
 
+    private Optional<DonorUser> getUser(String donorNickname) {
+        return getUsers().stream().
+                filter(donorUser -> donorUser.getNickname().equals(donorNickname)).
+                findFirst();
+    }
+
     public void cancelProject(Project projectToCancel) {
         projectToCancel.cancel();
-        openProjects.remove(projectToCancel);
-        closedProjects.add(projectToCancel);
+        setAsClosed(projectToCancel);
+        returnDonations(projectToCancel);
     }
 
     public void closeFinishedProjects() {
@@ -57,8 +75,24 @@ public class System {
                 openProjects.stream().
                         filter(project -> project.getFinishDate().isEqual(LocalDate.now())).
                         collect(Collectors.toList());
-        openProjects.removeAll(finishedProjects);
-        closedProjects.addAll(finishedProjects);
+        finishedProjects.forEach(this::setAsClosed);
+        finishedProjects.stream().
+                filter(project -> !project.hasReachedGoal()).
+                forEach(project -> returnDonations(project));
+    }
+
+    private void setAsClosed(Project project) {
+        openProjects.remove(project);
+        closedProjects.add(project);
+    }
+
+
+    private void returnDonations(Project projectToCancel) {
+        List<Donation> donationsToReturn = projectToCancel.getDonations();
+        donationsToReturn.stream().
+                forEach(donation -> getUser(donation.getDonorNickname()).
+                        ifPresent(donorUser -> donorUser.undoDonation(donation)));
+        projectToCancel.undoDonations();
     }
 
     public List<Donation> getTopTenBiggestDonations() {

@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.SystemBuild
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -90,6 +92,44 @@ class SystemTest {
         system.closeFinishedProjects();
         assertEquals(1, system.getOpenProjects().size());
         assertEquals(2, system.getClosedProjects().size());
+    }
+
+    @Test
+    public void testSystemReturnsDonationsForFinishedIncompleteProjects() throws InvalidDonationException {
+        DonorUser donorUser_1 = DonorUserBuilder.aDonorUser().withNickname("Ana1970").withMoney(1500).build();
+        DonorUser donorUser_2 = DonorUserBuilder.aDonorUser().withNickname("Juan2001").withMoney(1500).build();
+        List<DonorUser> donorUsers = new ArrayList<>();
+        donorUsers.add(donorUser_1);
+        donorUsers.add(donorUser_2);
+        Project project_1 = ProjectBuilder.aProject().withStartDate(LocalDate.now().minusDays(3)).withFinishDate(LocalDate.now()).build();
+        Project project_2 = ProjectBuilder.aProject().withStartDate(LocalDate.now().minusDays(3)).withFinishDate(LocalDate.now()).build();
+        List<Project> projects = new ArrayList<>();
+        projects.add(project_1);
+        projects.add(project_2);
+        System system = SystemBuilder.aSystem().withUsers(donorUsers).withOpenProjects(projects).build();
+
+        assertEquals(2, system.getOpenProjects().size());
+        assertEquals(1500, donorUser_1.getMoney());
+        assertEquals(1500, donorUser_2.getMoney());
+
+        donorUser_1.donate(500, "Donation", project_1);
+        donorUser_2.donate(500, "Donation", project_1);
+        donorUser_2.donate(500, "Donation", project_2);
+
+        assertTrue(project_1.hasReachedGoal());
+        assertFalse(project_2.hasReachedGoal());
+        assertEquals(1000, donorUser_1.getMoney());
+        assertEquals(1, donorUser_1.getDonations().size());
+        assertEquals(500, donorUser_2.getMoney());
+        assertEquals(2, donorUser_2.getDonations().size());
+
+        system.closeFinishedProjects();
+        assertEquals(0, system.getOpenProjects().size());
+        assertEquals(2, system.getClosedProjects().size());
+        assertEquals(1000, donorUser_1.getMoney());
+        assertEquals(1, donorUser_1.getDonations().size());
+        assertEquals(1000, donorUser_2.getMoney());
+        assertEquals(1, donorUser_2.getDonations().size());
     }
 
     @Test
