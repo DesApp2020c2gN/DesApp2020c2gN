@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.SystemBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ManagerBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 import org.junit.jupiter.api.Test;
@@ -45,15 +45,15 @@ class AdminUserTest {
 
     @Test
     public void testAdminUserSystem() {
-        System system = mock(System.class);
+        Manager manager = mock(Manager.class);
         List<Location> locations = new ArrayList<>();
         List<Project> projects = new ArrayList<>();
         List<DonorUser> users = new ArrayList<>();
-        when(system.getLocations()).thenReturn(locations);
-        when(system.getOpenProjects()).thenReturn(projects);
-        when(system.getUsers()).thenReturn(users);
+        when(manager.getLocations()).thenReturn(locations);
+        when(manager.getOpenProjects()).thenReturn(projects);
+        when(manager.getUsers()).thenReturn(users);
 
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(system).build();
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(manager).build();
         assertEquals(locations, adminUser.getLocations());
         assertEquals(projects, adminUser.getOpenProjects());
         assertEquals(users, adminUser.getUsers());
@@ -113,8 +113,8 @@ class AdminUserTest {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9000).build();
         List<DonorUser> donorUsers = new ArrayList<>();
         donorUsers.add(donorUser);
-        System system = SystemBuilder.aSystem().withUsers(donorUsers).build();
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(system).build();
+        Manager manager = ManagerBuilder.aManager().withUsers(donorUsers).build();
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(manager).build();
         String project_1_Name = "Conectando Mercedes";
         String project_2_Name = "Conectando Colon";
         int factor = 100;
@@ -125,7 +125,7 @@ class AdminUserTest {
 
         Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
         donorUser.donate(700, "Donation", project_1);
-        system.closeFinishedProjects();
+        manager.closeFinishedProjects();
         try {
             adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
         } catch (InvalidProjectOperation e) {
@@ -136,8 +136,8 @@ class AdminUserTest {
 
     @Test
     public void testAdminUserFinishedButNotCompletedProjectCreation() throws InvalidProjectOperation {
-        System system = SystemBuilder.aSystem().build();
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(system).build();
+        Manager manager = ManagerBuilder.aManager().build();
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(manager).build();
         String project_1_Name = "Conectando Mercedes";
         String project_2_Name = "Conectando Colon";
         int factor = 100;
@@ -147,10 +147,10 @@ class AdminUserTest {
         Location location = LocationBuilder.aLocation().build();
 
         Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
-        system.closeFinishedProjects();
+        manager.closeFinishedProjects();
         Project project_2 = adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
-        assertTrue(system.getClosedProjects().contains(project_1));
-        assertTrue(system.getOpenProjects().contains(project_2));
+        assertTrue(manager.getClosedProjects().contains(project_1));
+        assertTrue(manager.getOpenProjects().contains(project_2));
     }
 
     @Test
