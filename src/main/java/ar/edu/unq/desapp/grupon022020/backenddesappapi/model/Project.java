@@ -87,4 +87,8 @@ public class Project {
     public void cancel() {
         this.finishDate = getStartDate().minusDays(1);
     }
+
+    public void undoDonations() {
+        this.donations.clear();
+    }
 }
