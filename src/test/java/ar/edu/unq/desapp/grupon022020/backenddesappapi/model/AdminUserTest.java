@@ -57,7 +57,7 @@ class AdminUserTest {
 
 
     @Test
-    public void testAdminUserProjectCreation() {
+    public void testAdminUserProjectCreation() throws InvalidProjectOperation {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         assertTrue(adminUser.getOpenProjects().size() == 0);
 
@@ -100,7 +100,7 @@ class AdminUserTest {
     }
 
     @Test
-    public void testAdminUserNonExistentProjectCancellation() {
+    public void testAdminUserNonExistentProjectCancellation() throws InvalidProjectOperation {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         Location location = mock(Location.class);
         String name = "Mar Chiquita 3.0";

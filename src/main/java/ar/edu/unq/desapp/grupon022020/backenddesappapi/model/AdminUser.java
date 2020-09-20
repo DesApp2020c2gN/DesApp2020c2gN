@@ -28,7 +28,7 @@ public class AdminUser extends User {
         return system.getUsers();
     }
 
-    public void createProject(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, Location location) {
+    public void createProject(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, Location location) throws InvalidProjectOperation {
         Project project = ProjectBuilder.aProject().
                 withName(name).
                 withFactor(factor).
