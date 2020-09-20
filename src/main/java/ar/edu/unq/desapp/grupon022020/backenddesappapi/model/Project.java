@@ -73,7 +73,7 @@ public class Project {
 
     public boolean hasReachedGoal() {
         float percentageAchieved = ((float) totalDonations() / moneyRequired()) * 100;
-        return percentageAchieved > this.getClosurePercentage();
+        return percentageAchieved >= this.getClosurePercentage();
     }
 
     private int totalDonations() {
