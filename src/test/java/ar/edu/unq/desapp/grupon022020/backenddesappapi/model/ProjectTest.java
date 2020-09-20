@@ -79,6 +79,48 @@ public class ProjectTest {
     }
 
     @Test
+    public void testProjectTotalDonations() {
+        int amount_1 = 1200;
+        int amount_2 = 1750;
+        int amount_3 = 700;
+        Donation donation_1 = mock(Donation.class);
+        when(donation_1.getAmount()).thenReturn(amount_1);
+        Donation donation_2 = mock(Donation.class);
+        when(donation_2.getAmount()).thenReturn(amount_2);
+        Donation donation_3 = mock(Donation.class);
+        when(donation_3.getAmount()).thenReturn(amount_3);
+        List<Donation> donations = new ArrayList<>();
+        donations.add(donation_1);
+        donations.add(donation_2);
+        donations.add(donation_3);
+        Project project = ProjectBuilder.aProject().withDonations(donations).build();
+
+        assertEquals(amount_1 + amount_2 + amount_3, project.totalAmountDonations());
+    }
+
+    @Test
+    public void testProjectPercentageAchieved() {
+        int amount_1 = 200;
+        int amount_2 = 170;
+        int amount_3 = 300;
+        Donation donation_1 = mock(Donation.class);
+        when(donation_1.getAmount()).thenReturn(amount_1);
+        Donation donation_2 = mock(Donation.class);
+        when(donation_2.getAmount()).thenReturn(amount_2);
+        Donation donation_3 = mock(Donation.class);
+        when(donation_3.getAmount()).thenReturn(amount_3);
+        List<Donation> donations = new ArrayList<>();
+        donations.add(donation_1);
+        donations.add(donation_2);
+        donations.add(donation_3);
+        int factor = 3400;
+        Project project = ProjectBuilder.aProject().withFactor(factor).withDonations(donations).build();
+
+        float expectedPercentageAchieved = ((float)(amount_1 + amount_2 + amount_3) / (project.moneyRequired())) * 100;
+        assertEquals(expectedPercentageAchieved, project.percentageAchieved());
+    }
+
+    @Test
     public void testProjectWithAchievedGoal() throws InvalidDonationException {
         Location location = mock(Location.class);
         int population = 1000;
@@ -120,5 +162,28 @@ public class ProjectTest {
         donorUser.donate(3000000, "Second donation", project);
 
         assertFalse(project.hasReachedGoal());
+    }
+
+    @Test
+    public void testProjectNumberOfDonors() {
+        String nickname_1 = "Juan2001";
+        String nickname_2 = "Ana1970";
+        String nickname_3 = "KM_12";
+        Donation donation_1 = mock(Donation.class);
+        when(donation_1.getDonorNickname()).thenReturn(nickname_1);
+        Donation donation_2 = mock(Donation.class);
+        when(donation_2.getDonorNickname()).thenReturn(nickname_2);
+        Donation donation_3 = mock(Donation.class);
+        when(donation_3.getDonorNickname()).thenReturn(nickname_3);
+        Donation donation_4 = mock(Donation.class);
+        when(donation_4.getDonorNickname()).thenReturn(nickname_2);
+        List<Donation> donations = new ArrayList<>();
+        donations.add(donation_1);
+        donations.add(donation_2);
+        donations.add(donation_3);
+        donations.add(donation_4);
+        Project project = ProjectBuilder.aProject().withDonations(donations).build();
+
+        assertEquals(3, project.numberOfDonors());
     }
 }

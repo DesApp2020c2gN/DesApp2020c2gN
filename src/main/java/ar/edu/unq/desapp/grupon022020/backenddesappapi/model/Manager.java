@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class System {
+public class Manager {
 
     private final List<Project> openProjects;
     private final List<Project> closedProjects;
     private final List<DonorUser> donorUsers;
     private final List<Location> locations;
 
-    public System(List<Project> openProjects, List<Project> closedProjects, List<DonorUser> donorUsers, List<Location> locations) {
+    public Manager(List<Project> openProjects, List<Project> closedProjects, List<DonorUser> donorUsers, List<Location> locations) {
         this.openProjects = openProjects;
         this.closedProjects = closedProjects;
         this.donorUsers = donorUsers;
@@ -24,6 +24,12 @@ public class System {
 
     public List<Project> getOpenProjects() {
         return openProjects;
+    }
+
+    public List<Project> getOpenProjectsEndingThisMonth() {
+        return openProjects.stream().
+                filter(project -> project.getFinishDate().getMonth().equals(LocalDate.now().getMonth())).
+                collect(Collectors.toList());
     }
 
     public List<Project> getClosedProjects() {
