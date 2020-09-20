@@ -29,9 +29,24 @@ class ManagerTest {
         openProjects.add(project_2);
         Manager manager = ManagerBuilder.aManager().withOpenProjects(openProjects).build();
 
-        assertTrue(manager.getOpenProjects().size() == 2);
+        assertEquals(2, manager.getOpenProjects().size());
         assertTrue(manager.getOpenProjects().contains(project_1));
         assertTrue(manager.getOpenProjects().contains(project_2));
+    }
+
+    @Test
+    public void testManagerOpenProjectsEndingThisMonth() {
+        Project project_1 = ProjectBuilder.aProject().withFinishDate(LocalDate.now()).build();
+        Project project_2 = ProjectBuilder.aProject().withFinishDate(LocalDate.now().minusMonths(3)).build();
+        Project project_3 = ProjectBuilder.aProject().withFinishDate(LocalDate.now().plusMonths(5)).build();
+        List<Project> openProjects = new ArrayList<>();
+        openProjects.add(project_1);
+        openProjects.add(project_2);
+        openProjects.add(project_3);
+        Manager manager = ManagerBuilder.aManager().withOpenProjects(openProjects).build();
+
+        assertEquals(1, manager.getOpenProjectsEndingThisMonth().size());
+        assertTrue(manager.getOpenProjectsEndingThisMonth().contains(project_1));
     }
 
     @Test

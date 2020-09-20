@@ -26,6 +26,12 @@ public class Manager {
         return openProjects;
     }
 
+    public List<Project> getOpenProjectsEndingThisMonth() {
+        return openProjects.stream().
+                filter(project -> project.getFinishDate().getMonth().equals(LocalDate.now().getMonth())).
+                collect(Collectors.toList());
+    }
+
     public List<Project> getClosedProjects() {
         return closedProjects;
     }
