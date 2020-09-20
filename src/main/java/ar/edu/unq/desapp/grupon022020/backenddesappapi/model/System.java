@@ -48,8 +48,7 @@ public class System {
 
     public void cancelProject(Project projectToCancel) {
         projectToCancel.cancel();
-        openProjects.remove(projectToCancel);
-        closedProjects.add(projectToCancel);
+        setAsClosed(projectToCancel);
     }
 
     public void closeFinishedProjects() {
@@ -57,8 +56,12 @@ public class System {
                 openProjects.stream().
                         filter(project -> project.getFinishDate().isEqual(LocalDate.now())).
                         collect(Collectors.toList());
-        openProjects.removeAll(finishedProjects);
-        closedProjects.addAll(finishedProjects);
+        finishedProjects.forEach(this::setAsClosed);
+    }
+
+    private void setAsClosed(Project project) {
+        openProjects.remove(project);
+        closedProjects.add(project);
     }
 
     public List<Donation> getTopTenBiggestDonations() {
