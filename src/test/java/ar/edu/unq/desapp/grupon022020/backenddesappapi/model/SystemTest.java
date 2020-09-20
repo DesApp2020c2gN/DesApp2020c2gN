@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -116,7 +117,7 @@ class SystemTest {
         donorUser_2.donate(500, "Donation", project_2);
 
         assertTrue(project_1.hasReachedGoal());
-        assertTrue(!project_2.hasReachedGoal());
+        assertFalse(project_2.hasReachedGoal());
         assertEquals(1000, donorUser_1.getMoney());
         assertEquals(1, donorUser_1.getDonations().size());
         assertEquals(500, donorUser_2.getMoney());
