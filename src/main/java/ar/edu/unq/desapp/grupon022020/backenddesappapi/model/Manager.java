@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class System {
+public class Manager {
 
     private final List<Project> openProjects;
     private final List<Project> closedProjects;
     private final List<DonorUser> donorUsers;
     private final List<Location> locations;
 
-    public System(List<Project> openProjects, List<Project> closedProjects, List<DonorUser> donorUsers, List<Location> locations) {
+    public Manager(List<Project> openProjects, List<Project> closedProjects, List<DonorUser> donorUsers, List<Location> locations) {
         this.openProjects = openProjects;
         this.closedProjects = closedProjects;
         this.donorUsers = donorUsers;
