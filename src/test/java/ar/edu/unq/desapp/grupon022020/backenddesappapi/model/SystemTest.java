@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.SystemBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -41,6 +38,20 @@ class SystemTest {
         assertTrue(system.getUsers().size() == 2);
         assertTrue(system.getUsers().contains(donorUser_1));
         assertTrue(system.getUsers().contains(donorUser_2));
+    }
+
+    @Test
+    public void testSystemLocations() {
+        Location location_1 = LocationBuilder.aLocation().build();
+        Location location_2 = LocationBuilder.aLocation().build();
+        List<Location> locations = new ArrayList<>();
+        locations.add(location_1);
+        locations.add(location_2);
+        System system = SystemBuilder.aSystem().withLocations(locations).build();
+
+        assertTrue(system.getLocations().size() == 2);
+        assertTrue(system.getLocations().contains(location_1));
+        assertTrue(system.getLocations().contains(location_2));
     }
 
     @Test
