@@ -46,12 +46,12 @@ class AdminUserTest {
         List<Project> projects = new ArrayList<>();
         List<DonorUser> users = new ArrayList<>();
         when(system.getLocations()).thenReturn(locations);
-        when(system.getProjects()).thenReturn(projects);
+        when(system.getOpenProjects()).thenReturn(projects);
         when(system.getUsers()).thenReturn(users);
 
         AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(system).build();
         assertEquals(locations, adminUser.getLocations());
-        assertEquals(projects, adminUser.getProjects());
+        assertEquals(projects, adminUser.getOpenProjects());
         assertEquals(users, adminUser.getUsers());
     }
 
@@ -59,7 +59,7 @@ class AdminUserTest {
     @Test
     public void testAdminUserProjectCreation() {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
-        assertTrue(adminUser.getProjects().size() == 0);
+        assertTrue(adminUser.getOpenProjects().size() == 0);
 
         Location location = mock(Location.class);
         int locationPopulation = 1750;
@@ -72,9 +72,9 @@ class AdminUserTest {
         LocalDate finishDate = LocalDate.parse("2022-05-04");
 
         adminUser.createProject(projectName, factor, closurePercentage, startDate, finishDate, location);
-        Project newProject = adminUser.getProjects().get(0);
+        Project newProject = adminUser.getOpenProjects().get(0);
 
-        assertEquals(1, adminUser.getProjects().size());
+        assertEquals(1, adminUser.getOpenProjects().size());
         assertEquals(projectName, newProject.getName());
         assertEquals(factor, newProject.getFactor());
         assertEquals(closurePercentage, newProject.getClosurePercentage());
@@ -92,7 +92,7 @@ class AdminUserTest {
         LocalDate finishDate = LocalDate.parse("2022-05-04");
         adminUser.createProject(name, 1000, 60, startDate, finishDate, location);
 
-        Project project = adminUser.getProjects().get(0);
+        Project project = adminUser.getOpenProjects().get(0);
         assertEquals(finishDate, project.getFinishDate());
 
         adminUser.cancelProject(name);
