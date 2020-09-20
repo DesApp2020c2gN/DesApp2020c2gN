@@ -1,6 +1,10 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.SystemBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +63,7 @@ class AdminUserTest {
     @Test
     public void testAdminUserProjectCreation() throws InvalidProjectOperation {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
-        assertTrue(adminUser.getOpenProjects().size() == 0);
+        assertEquals(0, adminUser.getOpenProjects().size());
 
         Location location = mock(Location.class);
         int locationPopulation = 1750;
@@ -81,6 +85,72 @@ class AdminUserTest {
         assertEquals(startDate, newProject.getStartDate());
         assertEquals(finishDate, newProject.getFinishDate());
         assertEquals(locationPopulation, newProject.getLocationPopulation());
+    }
+
+    @Test
+    public void testAdminUserAlreadyOpenedProjectCreation() throws InvalidProjectOperation {
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
+        String project_1_Name = "Conectando Mercedes";
+        String project_2_Name = "Conectando Colon";
+        int factor = 100;
+        int closurePercentage = 85;
+        LocalDate startDate = LocalDate.now();
+        LocalDate finishDate = LocalDate.now().plusDays(3);
+        Location location = LocationBuilder.aLocation().build();
+
+        adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
+
+        try {
+            adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
+        } catch (InvalidProjectOperation e) {
+            String message = "A project for location " + location.getName() + " is currently open";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAdminUserAlreadyCompletedProjectCreation() throws InvalidProjectOperation, InvalidDonationException {
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9000).build();
+        List<DonorUser> donorUsers = new ArrayList<>();
+        donorUsers.add(donorUser);
+        System system = SystemBuilder.aSystem().withUsers(donorUsers).build();
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(system).build();
+        String project_1_Name = "Conectando Mercedes";
+        String project_2_Name = "Conectando Colon";
+        int factor = 100;
+        int closurePercentage = 85;
+        LocalDate startDate = LocalDate.now().minusDays(3);
+        LocalDate finishDate = LocalDate.now();
+        Location location = LocationBuilder.aLocation().build();
+
+        Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
+        donorUser.donate(700, "Donation", project_1);
+        system.closeFinishedProjects();
+        try {
+            adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
+        } catch (InvalidProjectOperation e) {
+            String message = "A project for location " + location.getName() + " is already completed";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAdminUserFinishedButNotCompletedProjectCreation() throws InvalidProjectOperation {
+        System system = SystemBuilder.aSystem().build();
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(system).build();
+        String project_1_Name = "Conectando Mercedes";
+        String project_2_Name = "Conectando Colon";
+        int factor = 100;
+        int closurePercentage = 85;
+        LocalDate startDate = LocalDate.now().minusDays(3);
+        LocalDate finishDate = LocalDate.now();
+        Location location = LocationBuilder.aLocation().build();
+
+        Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
+        system.closeFinishedProjects();
+        Project project_2 = adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
+        assertTrue(system.getClosedProjects().contains(project_1));
+        assertTrue(system.getOpenProjects().contains(project_2));
     }
 
     @Test

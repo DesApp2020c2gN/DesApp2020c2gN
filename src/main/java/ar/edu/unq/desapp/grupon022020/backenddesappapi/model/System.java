@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 
 import java.time.LocalDate;
@@ -40,15 +39,15 @@ public class System {
     }
 
     public void addNewProject(Project newProject) throws InvalidProjectOperation {
-        boolean isAlreadyOpen = this.openProjects.stream().
+        boolean isCurrentlyOpen = this.openProjects.stream().
                 anyMatch(project -> project.getLocation().equals(newProject.getLocation()));
         boolean isAlreadyCompleted = this.closedProjects.stream().
                 anyMatch(project -> project.getLocation().equals(newProject.getLocation()) && project.hasReachedGoal());
-        if(isAlreadyOpen){
-            throw new InvalidProjectOperation("A project for location " + newProject.getLocation().getName() + " already exists");
+        if(isCurrentlyOpen){
+            throw new InvalidProjectOperation("A project for location " + newProject.getLocation().getName() + " is currently open");
         }
         if(isAlreadyCompleted){
-            throw new InvalidProjectOperation("A project for location " + newProject.getLocation().getName() + " has been completed");
+            throw new InvalidProjectOperation("A project for location " + newProject.getLocation().getName() + " is already completed");
         }
         this.openProjects.add(newProject);
     }
