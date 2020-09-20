@@ -90,4 +90,8 @@ public class DonorUser extends User {
         return null;
     }
 
+    public void undoDonation(Donation donation) {
+        this.money += donation.getAmount();
+        this.donations.remove(donation);
+    }
 }

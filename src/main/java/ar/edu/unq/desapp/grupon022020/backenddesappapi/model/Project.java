@@ -73,7 +73,7 @@ public class Project {
 
     public boolean hasReachedGoal() {
         float percentageAchieved = ((float) totalDonations() / moneyRequired()) * 100;
-        return percentageAchieved > this.getClosurePercentage();
+        return percentageAchieved >= this.getClosurePercentage();
     }
 
     private int totalDonations() {
@@ -86,5 +86,9 @@ public class Project {
 
     public void cancel() {
         this.finishDate = getStartDate().minusDays(1);
+    }
+
+    public void undoDonations() {
+        this.donations.clear();
     }
 }
