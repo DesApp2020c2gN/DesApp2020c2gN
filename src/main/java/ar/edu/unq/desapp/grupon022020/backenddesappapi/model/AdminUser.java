@@ -9,22 +9,23 @@ import java.util.Optional;
 
 public class AdminUser extends User {
 
-    private final List<Location> locations;
-    private final List<Project> projects;
+    private final System system;
 
-    public AdminUser(String name, String mail, String password, List<Location> locations, List<Project> projects) {
+    public AdminUser(String name, String mail, String password, System system) {
         super(name, mail, password);
-        this.locations = locations;
-        this.projects = projects;
-
+        this.system = system;
     }
 
     public List<Location> getLocations() {
-        return locations;
+        return system.getLocations();
     }
 
     public List<Project> getProjects() {
-        return projects;
+        return system.getProjects();
+    }
+
+    public List<DonorUser> getUsers() {
+        return system.getUsers();
     }
 
     public void createProject(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, Location location) {
@@ -36,19 +37,19 @@ public class AdminUser extends User {
                 withFinishDate(finishDate).
                 withLocation(location).
                 build();
-        this.projects.add(project);
+        this.system.addNewProject(project);
     }
 
     public void cancelProject(String name) throws InvalidProjectOperation {
-        Optional optionalProject = this.projects.stream().
+        Optional optionalProject = system.getProjects().stream().
                 filter(project -> project.getName().equals(name)).
                 findFirst();
-        if(optionalProject.isPresent()){
+        if (optionalProject.isPresent()) {
             Project projectToCancel = (Project) optionalProject.get();
             projectToCancel.cancel();
-        }
-        else {
+        } else {
             throw new InvalidProjectOperation("Project " + name + " does not exists");
         }
     }
+
 }
