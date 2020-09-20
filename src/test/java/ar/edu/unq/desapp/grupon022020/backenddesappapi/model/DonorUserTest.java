@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
@@ -146,6 +147,24 @@ class DonorUserTest {
     }
 
     @Test
+    public void testDonorUserPointsWithLastDonationNotOnSameMonth() throws InvalidDonationException {
+        int money = 9999;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+        Donation lastDonation = DonationBuilder.aDonation().withDate(LocalDate.now().minusMonths(7)).build();
+        List<Donation> donations = new ArrayList<>();
+        donations.add(lastDonation);
+        Location location = mock(Location.class);
+        when(location.getPopulation()).thenReturn(8000);
+        Project project = ProjectBuilder.aProject().withLocation(location).withDonations(donations).build();
+        assertEquals(0, donorUser.getPoints());
+
+        int donationAmount = 2500;
+        String comment = "This is my donation";
+        donorUser.donate(donationAmount, comment, project);
+        assertEquals(donationAmount, donorUser.getPoints());
+    }
+
+    @Test
     public void testDonorUserPointsWithLastDonationOnSameMonth() throws InvalidDonationException {
         int money = 9999;
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
@@ -154,7 +173,7 @@ class DonorUserTest {
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3300);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
-        donorUser.donate(500, "First donation", project);
+        donorUser.donate(500, "Second donation", project);
         assertEquals(0, donorUser.getPoints());
         assertEquals(1, donorUser.getDonations().size());
 
@@ -175,7 +194,7 @@ class DonorUserTest {
 
         try
         {
-            donorUser.donate(900, "First donation", project);
+            donorUser.donate(900, "Third donation", project);
         }
         catch(InvalidDonationException e)
         {
@@ -195,7 +214,7 @@ class DonorUserTest {
 
         try
         {
-            donorUser.donate(500, "Second donation", project);
+            donorUser.donate(500, "Fourth donation", project);
         }
         catch(InvalidDonationException e)
         {
@@ -215,7 +234,7 @@ class DonorUserTest {
 
         try
         {
-            donorUser.donate(2000, "Third donation", project);
+            donorUser.donate(2000, "Fifth donation", project);
         }
         catch(InvalidDonationException e)
         {

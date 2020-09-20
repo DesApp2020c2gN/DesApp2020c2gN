@@ -20,8 +20,8 @@ public class AdminUser extends User {
         return system.getLocations();
     }
 
-    public List<Project> getProjects() {
-        return system.getProjects();
+    public List<Project> getOpenProjects() {
+        return system.getOpenProjects();
     }
 
     public List<DonorUser> getUsers() {
@@ -41,12 +41,10 @@ public class AdminUser extends User {
     }
 
     public void cancelProject(String name) throws InvalidProjectOperation {
-        Optional optionalProject = system.getProjects().stream().
-                filter(project -> project.getName().equals(name)).
-                findFirst();
+        Optional<Project> optionalProject = system.getOpenProject(name);
         if (optionalProject.isPresent()) {
-            Project projectToCancel = (Project) optionalProject.get();
-            projectToCancel.cancel();
+            Project projectToCancel = optionalProject.get();
+            system.cancelProject(projectToCancel);
         } else {
             throw new InvalidProjectOperation("Project " + name + " does not exists");
         }
