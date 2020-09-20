@@ -1,6 +1,10 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.*;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.SystemBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
