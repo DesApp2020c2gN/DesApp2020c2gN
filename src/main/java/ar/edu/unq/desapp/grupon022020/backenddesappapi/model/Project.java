@@ -72,15 +72,18 @@ public class Project {
     }
 
     public boolean hasReachedGoal() {
-        float percentageAchieved = ((float) totalAmountDonations() / moneyRequired()) * 100;
-        return percentageAchieved >= this.getClosurePercentage();
+        return percentageAchieved() >= this.getClosurePercentage();
+    }
+
+    public float percentageAchieved(){
+        return ((float) totalAmountDonations() / moneyRequired()) * 100;
     }
 
     public int totalAmountDonations() {
         return donations.stream().map(Donation::getAmount).reduce(0, Integer::sum);
     }
 
-    private int moneyRequired() {
+    public int moneyRequired() {
         return this.factor * this.getLocation().getPopulation();
     }
 

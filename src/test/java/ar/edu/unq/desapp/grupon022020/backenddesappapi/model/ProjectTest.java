@@ -99,6 +99,28 @@ public class ProjectTest {
     }
 
     @Test
+    public void testProjectPercentageAchieved() {
+        int amount_1 = 200;
+        int amount_2 = 170;
+        int amount_3 = 300;
+        Donation donation_1 = mock(Donation.class);
+        when(donation_1.getAmount()).thenReturn(amount_1);
+        Donation donation_2 = mock(Donation.class);
+        when(donation_2.getAmount()).thenReturn(amount_2);
+        Donation donation_3 = mock(Donation.class);
+        when(donation_3.getAmount()).thenReturn(amount_3);
+        List<Donation> donations = new ArrayList<>();
+        donations.add(donation_1);
+        donations.add(donation_2);
+        donations.add(donation_3);
+        int factor = 3400;
+        Project project = ProjectBuilder.aProject().withFactor(factor).withDonations(donations).build();
+
+        float expectedPercentageAchieved = ((float)(amount_1 + amount_2 + amount_3) / (project.moneyRequired())) * 100;
+        assertEquals(expectedPercentageAchieved, project.percentageAchieved());
+    }
+
+    @Test
     public void testProjectWithAchievedGoal() throws InvalidDonationException {
         Location location = mock(Location.class);
         int population = 1000;
