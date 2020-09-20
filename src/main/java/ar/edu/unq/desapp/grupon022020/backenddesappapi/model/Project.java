@@ -94,4 +94,8 @@ public class Project {
     public void undoDonations() {
         this.donations.clear();
     }
+
+    public int numberOfDonors(){
+        return ((int) this.donations.stream().map(Donation::getDonorNickname).distinct().count());
+    }
 }
