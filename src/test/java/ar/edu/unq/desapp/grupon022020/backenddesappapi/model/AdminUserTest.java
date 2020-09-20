@@ -40,35 +40,26 @@ class AdminUserTest {
     }
 
     @Test
-    public void testAdminUserLocations() {
-        Location location_1 = mock(Location.class);
-        Location location_2 = mock(Location.class);
+    public void testAdminUserSystem() {
+        System system = mock(System.class);
         List<Location> locations = new ArrayList<>();
-        locations.add(location_1);
-        locations.add(location_2);
-
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().withLocations(locations).build();
-        assertEquals(locations, adminUser.getLocations());
-        assertTrue(adminUser.getLocations().size() == 2);
-    }
-
-    @Test
-    public void testAdminUserProjects() {
-        Project project_1 = mock(Project.class);
-        Project project_2 = mock(Project.class);
         List<Project> projects = new ArrayList<>();
-        projects.add(project_1);
-        projects.add(project_2);
+        List<DonorUser> users = new ArrayList<>();
+        when(system.getLocations()).thenReturn(locations);
+        when(system.getOpenProjects()).thenReturn(projects);
+        when(system.getUsers()).thenReturn(users);
 
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().withProjects(projects).build();
-        assertEquals(projects, adminUser.getProjects());
-        assertTrue(adminUser.getProjects().size() == 2);
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(system).build();
+        assertEquals(locations, adminUser.getLocations());
+        assertEquals(projects, adminUser.getOpenProjects());
+        assertEquals(users, adminUser.getUsers());
     }
+
 
     @Test
     public void testAdminUserProjectCreation() {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
-        assertTrue(adminUser.getProjects().size() == 0);
+        assertTrue(adminUser.getOpenProjects().size() == 0);
 
         Location location = mock(Location.class);
         int locationPopulation = 1750;
@@ -81,9 +72,9 @@ class AdminUserTest {
         LocalDate finishDate = LocalDate.parse("2022-05-04");
 
         adminUser.createProject(projectName, factor, closurePercentage, startDate, finishDate, location);
-        Project newProject = adminUser.getProjects().get(0);
+        Project newProject = adminUser.getOpenProjects().get(0);
 
-        assertEquals(1, adminUser.getProjects().size());
+        assertEquals(1, adminUser.getOpenProjects().size());
         assertEquals(projectName, newProject.getName());
         assertEquals(factor, newProject.getFactor());
         assertEquals(closurePercentage, newProject.getClosurePercentage());
@@ -101,7 +92,7 @@ class AdminUserTest {
         LocalDate finishDate = LocalDate.parse("2022-05-04");
         adminUser.createProject(name, 1000, 60, startDate, finishDate, location);
 
-        Project project = adminUser.getProjects().get(0);
+        Project project = adminUser.getOpenProjects().get(0);
         assertEquals(finishDate, project.getFinishDate());
 
         adminUser.cancelProject(name);
@@ -117,12 +108,9 @@ class AdminUserTest {
         LocalDate finishDate = LocalDate.parse("2022-05-04");
         adminUser.createProject("Conectando Tandil", 1000, 60, startDate, finishDate, location);
 
-        try
-        {
+        try {
             adminUser.cancelProject(name);
-        }
-        catch(InvalidProjectOperation e)
-        {
+        } catch (InvalidProjectOperation e) {
             String message = "Project " + name + " does not exists";
             assertEquals(message, e.getMessage());
         }
