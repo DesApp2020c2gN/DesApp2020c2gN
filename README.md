@@ -11,15 +11,15 @@ Se nos encarga realizar una aplicación para ayudar al programa mediante crowdfu
 La aplicación debe consumir una API provista por ARSAT (<https://developers.arsat.apim.junar.com/6/plan-federal-de-internet>) para obtener la lista de localidades que aún no tienen internet. De cada localidad se obtiene el nombre, la provincia, la población y el estado actual de conectividad. En base a la población, la aplicación debe calcular el dinero necesario para proveer internet en la localidad, multiplicando dicho valor por un parámetro configurable por localidad (por default será $1000 por habitante y 100% para finalizar el proyecto).
 
 Los parámetros a configurar (si fuera necesario) en los proyectos aún no iniciados son:
--  Factor: de 0 a $100.000
--  Porcentaje mínimo de cierre de proyecto: de 50% a 100%
--  Nombre de fantasía del proyecto: String a mostrar en el sitio
--  Fecha de Fin del proyecto.
--  Fecha de Inicio del proyecto
+  - Factor: de 0 a $100.000
+  - Porcentaje mínimo de cierre de proyecto: de 50% a 100%
+  - Nombre de fantasía del proyecto: String a mostrar en el sitio
+  - Fecha de Fin del proyecto.
+  - Fecha de Inicio del proyecto
 
 Por ejemplo, 
--  si la localidad tiene 1500 habitantes, y el factor está configurado en $2000, entonces el importe necesario para financiar la conectividad de la localidad es de 3 millones de pesos.
--  si la localidad tiene 1500 habitantes, y no tiene configuración de factor tomará el default que es $1000 por habitante.
+  - si la localidad tiene 1500 habitantes, y el factor está configurado en $2000, entonces el importe necesario para financiar la conectividad de la localidad es de 3 millones de pesos.
+  - si la localidad tiene 1500 habitantes, y no tiene configuración de factor tomará el default que es $1000 por habitante.
 
 Además, se crea un sistema de puntos por acciones solidarias que podrán ser canjeados por productos/servicios que dispondrá ARSAT en su momento. El esquema de puntos es el siguiente:
 1) Si colabora en 1 proyecto con más de 1000 pesos, obtendrá la misma cantidad de puntos que pesos invertidos.
@@ -35,8 +35,8 @@ Los usuarios donantes, sólo pueden ver la lista de localidades, y al selecciona
 La aplicación permitirá realizar una donación para la localidad seleccionada, en la que se ingresa el monto a donar y un comentario.
 
 La Home del sitio deberá listar :
--  Los proyectos abiertos: nombre, total de participantes, monto recaudado y porcentaje acumulado recaudado.
--  Los proyectos “Próximos a finalizar” (mes en curso):  nombre, total de participantes, monto recaudado y porcentaje acumulado recaudado.
+  - Los proyectos abiertos: nombre, total de participantes, monto recaudado y porcentaje acumulado recaudado.
+  - Los proyectos “Próximos a finalizar” (mes en curso):  nombre, total de participantes, monto recaudado y porcentaje acumulado recaudado.
 
 Todos los días, se enviará un email automático a cada usuario registrado, que contenga dos listas, por un lado el top 10 de donaciones, para incentivar a otros usuarios; por otro lado el top 10 de localidades que hace más tiempo no reciben donaciones.
 
