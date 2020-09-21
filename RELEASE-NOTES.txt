@@ -1,0 +1,20 @@
+---------------------------------------------------------------------
+TAG 1.0
+---------------------------------------------------------------------
+NEW FEATURES (lo que están entregando y está funcionando):
+* Donor users can donate money to a project
+* Validations to check that a donor user donation is valid
+* Admin user can create a new project based on a location
+* Manager closes projects that finishes on that day
+* Money gets returned to donors if project is not complete on its last day
+* Admin user ca cancel a project, return all donations done
+* Manager can return all projects finishing on that month
+* Manager can return the top 10 of biggest donations done
+
+NOTES (ej: funcionalidad que falta, alguna consideración especial):
+* Manager can return the top 10 of locations that didn't receive donations
+* There can be more that one admin user
+
+KNOWN ISSUES (ej: funcionalidad que saben que están funcionando diferente, algún error conocido en la funcionalidad terminada, etc) :
+* Emails are not sent
+
