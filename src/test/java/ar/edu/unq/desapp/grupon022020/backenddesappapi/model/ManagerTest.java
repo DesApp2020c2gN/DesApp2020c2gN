@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -193,6 +195,145 @@ class ManagerTest {
 
         List<Donation> topTenDonations = manager.getTopTenBiggestDonations();
         assertEquals(10, topTenDonations.size());
+    }
+    
+    @Test
+    public void testManagerTopTenDonationsWithNoLocations() {
+        Manager manager = ManagerBuilder.aManager().build();
+
+        List<Donation> topTenDonations = manager.getTopTenBiggestDonations();
+        assertEquals(0, topTenDonations.size());
+    }
+    
+    @Test
+    public void testManagerTopTenDonationStarvedLocationsWithNoLocations() {
+        Manager manager = ManagerBuilder.aManager().build();
+
+        List<Location> topTenDonationStarvedLocations = manager.getTopTenDonationStarvedLocations();
+        assertEquals(0, topTenDonationStarvedLocations.size());
+    }
+    
+    @Test
+    public void testManagerTopTenDonationStarvedLocationsElementsOrder() {
+        List<Project> openProjects = new ArrayList<>();
+        Project project1 = ProjectBuilder
+                .aProject()
+                .withStartDate(LocalDate.parse("2020-01-01"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .withDonations(
+                        Stream.of(DonationBuilder
+                                .aDonation()
+                                .withDate(LocalDate.parse("2020-04-01"))
+                                .build()
+                        ).collect(Collectors.toList())
+                )
+                .build();
+        Project project2 = ProjectBuilder
+                .aProject()
+                .withStartDate(LocalDate.parse("2020-02-01"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .withDonations(
+                        Stream.of(DonationBuilder
+                                .aDonation()
+                                .withDate(LocalDate.parse("2020-02-05"))
+                                .build()
+                        ).collect(Collectors.toList())
+                )
+                .build();
+        Project project3 = ProjectBuilder
+                .aProject()
+                .withStartDate(LocalDate.parse("2020-03-01"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build();
+        openProjects.add(project1);
+        openProjects.add(project2);
+        openProjects.add(project3);
+        
+        Manager manager = ManagerBuilder.aManager()
+                .withOpenProjects(openProjects)
+                .build();
+
+        List<Location> topTenDonationStarvedLocations = manager.getTopTenDonationStarvedLocations();
+        assertEquals(project2.getLocation(), topTenDonationStarvedLocations.get(0));
+        assertEquals(project3.getLocation(), topTenDonationStarvedLocations.get(1));
+        assertEquals(project1.getLocation(), topTenDonationStarvedLocations.get(2));
+    }
+    
+    @Test
+    public void testManagerTopTenDonationStarvedLocationsResponseAmmount() {
+        List<Project> openProjects = new ArrayList<>();
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-01"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-02"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-03"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-04"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-05"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-06"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-07"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-08"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-09"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-10"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-11"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-12"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        openProjects.add(ProjectBuilder.aProject()
+                .withStartDate(LocalDate.parse("2020-01-13"))
+                .withLocation(LocationBuilder.aLocation().build())
+                .build()
+        );
+        
+        Manager manager = ManagerBuilder.aManager()
+                .withOpenProjects(openProjects)
+                .build();
+
+        List<Location> topTenDonationStarvedLocations = manager.getTopTenDonationStarvedLocations();
+        assertEquals(10, topTenDonationStarvedLocations.size());
     }
 
 }

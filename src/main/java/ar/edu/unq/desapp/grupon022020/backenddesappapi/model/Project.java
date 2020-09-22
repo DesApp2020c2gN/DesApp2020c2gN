@@ -3,7 +3,9 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class Project {
 
@@ -97,5 +99,11 @@ public class Project {
 
     public int numberOfDonors(){
         return ((int) this.donations.stream().map(Donation::getDonorNickname).distinct().count());
+    }
+    
+    public Optional<Donation> getLastDonation() {
+        return donations.stream()
+                .sorted(Comparator.comparing(Donation::getDate).reversed())
+                .findFirst();
     }
 }
