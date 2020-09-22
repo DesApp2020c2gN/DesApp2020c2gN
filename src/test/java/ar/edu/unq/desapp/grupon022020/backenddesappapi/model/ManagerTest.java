@@ -198,7 +198,7 @@ class ManagerTest {
     }
     
     @Test
-    public void testManagerTopTenDonations_NoLocations() {
+    public void testManagerTopTenDonationsWithNoLocations() {
         Manager manager = ManagerBuilder.aManager().build();
 
         List<Donation> topTenDonations = manager.getTopTenBiggestDonations();
@@ -206,7 +206,7 @@ class ManagerTest {
     }
     
     @Test
-    public void testManagerTopTenDonationStarvedLocations_NoLocations() {
+    public void testManagerTopTenDonationStarvedLocationsWithNoLocations() {
         Manager manager = ManagerBuilder.aManager().build();
 
         List<Location> topTenDonationStarvedLocations = manager.getTopTenDonationStarvedLocations();
@@ -214,7 +214,7 @@ class ManagerTest {
     }
     
     @Test
-    public void testManagerTopTenDonationStarvedLocations_elementsOrder() {
+    public void testManagerTopTenDonationStarvedLocationsElementsOrder() {
         List<Project> openProjects = new ArrayList<>();
         Project project1 = ProjectBuilder
                 .aProject()
@@ -260,7 +260,7 @@ class ManagerTest {
     }
     
     @Test
-    public void testManagerTopTenDonationStarvedLocations_ammount() {
+    public void testManagerTopTenDonationStarvedLocationsResponseAmmount() {
         List<Project> openProjects = new ArrayList<>();
         openProjects.add(ProjectBuilder.aProject()
                 .withStartDate(LocalDate.parse("2020-01-01"))
