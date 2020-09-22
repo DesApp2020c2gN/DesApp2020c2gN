@@ -1,20 +1,25 @@
 ---------------------------------------------------------------------
-TAG 1.0
+TAG entrega-1.0
 ---------------------------------------------------------------------
-NEW FEATURES (lo que están entregando y está funcionando):
-* Donor users can donate money to a project
-* Validations to check that a donor user donation is valid
-* Admin user can create a new project based on a location
-* Manager closes projects that finishes on that day
-* Money gets returned to donors if project is not complete on its last day
-* Admin user ca cancel a project, return all donations done
-* Manager can return all projects finishing on that month
-* Manager can return the top 10 of biggest donations done
+NEW FEATURES
+* Model implementation
+ - DonorUser
+ - AdminUser
+ - Manager
+ - Project
+ - Donation
+ - Location
+* Unit Testing
+* Coverage over 90%
+* TravisCI integration
+* Codacy integration
+* Heroku automatic deployment
 
-NOTES (ej: funcionalidad que falta, alguna consideración especial):
-* Manager can return the top 10 of locations that didn't receive donations
-* There can be more that one admin user
+NOTES
+* User abstract class can share more behaviour
+* Login from both types of users
+* Email must be sent when projects are complete or donations are returned
 
-KNOWN ISSUES (ej: funcionalidad que saben que están funcionando diferente, algún error conocido en la funcionalidad terminada, etc) :
-* Emails are not sent
+KNOWN ISSUES
+* Finish dates for Projects should be determined based on starting date
 
