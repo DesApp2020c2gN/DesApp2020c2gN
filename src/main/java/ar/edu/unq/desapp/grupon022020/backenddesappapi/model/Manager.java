@@ -102,13 +102,36 @@ public class Manager {
     }
 
     public List<Donation> getTopTenBiggestDonations() {
-        List<Donation> topTenList =
+        List<Donation> sortedDonations =
                 donorUsers.stream().
                         map(user -> user.getDonations()).
                         flatMap(donations -> donations.stream()).
                         sorted(Comparator.comparing(Donation::getAmount).reversed()).
-                        collect(Collectors.toList()).subList(0, 10);
-        return topTenList;
+                        collect(Collectors.toList());
+        return getFirstTenIfExists(sortedDonations);
+    }
+    
+    public List<Location> getTopTenDonationStarvedLocations() {
+        List<Location> sortedLocations =
+                openProjects.stream()
+                        .sorted(Comparator.comparing(project -> getLastDonationDate(project)))
+                        .map(project -> project.getLocation())
+                        .collect(Collectors.toList());
+        return getFirstTenIfExists(sortedLocations);
+    }
+    
+    private <E> List<E> getFirstTenIfExists(List<E> elements) {
+        int lastIndex = 10;
+        if (elements.size() < lastIndex)
+            lastIndex = elements.size();
+        return elements.subList(0, lastIndex);
+    }
+    
+    private LocalDate getLastDonationDate(Project project) {
+        return project
+                .getLastDonation()
+                .map(donation -> donation.getDate())
+                .orElse(project.getStartDate());
     }
 
 }
