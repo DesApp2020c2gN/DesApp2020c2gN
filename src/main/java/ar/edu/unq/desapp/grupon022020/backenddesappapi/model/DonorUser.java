@@ -76,7 +76,7 @@ public class DonorUser extends User {
             currentDonationPoints = amount * 2;
         }
         LocalDate lastDate = lastDonationDate();
-        if (lastDate != null && (LocalDate.now().getMonthValue()) == lastDate.getMonthValue()) {
+        if (lastDate != null && (LocalDate.now().getMonthValue() == lastDate.getMonthValue()) && (LocalDate.now().getYear() == lastDate.getYear())) {
             currentDonationPoints += 500;
         }
         this.points += currentDonationPoints;
