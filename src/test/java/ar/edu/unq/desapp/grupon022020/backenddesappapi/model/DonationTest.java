@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ class DonationTest {
 
     @Test
     public void testDonationAmount() {
-        int amount = 2530;
+        BigDecimal amount = new BigDecimal(2530);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
         assertEquals(amount, donation.getAmount());
@@ -59,7 +60,7 @@ class DonationTest {
         when(donorUser.getLastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
-        int amount = 500;
+        BigDecimal amount = new BigDecimal(500);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
         int points = donation.calculatePoints(donorUser, project);
@@ -72,11 +73,11 @@ class DonationTest {
         when(donorUser.getLastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
-        int amount = 1500;
+        BigDecimal amount = new BigDecimal(1500);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
         int points = donation.calculatePoints(donorUser, project);
-        assertEquals(amount, points);
+        assertEquals(amount.intValue(), points);
     }
 
     @Test
@@ -85,11 +86,11 @@ class DonationTest {
         when(donorUser.getLastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(1200);
-        int amount = 500;
+        BigDecimal amount = new BigDecimal(500);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
         int points = donation.calculatePoints(donorUser, project);
-        assertEquals(amount * 2, points);
+        assertEquals(amount.multiply(new BigDecimal(2)).intValue(), points);
     }
 
     @Test
@@ -100,7 +101,7 @@ class DonationTest {
         when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
-        int amount = 500;
+        BigDecimal amount = new BigDecimal(500);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
         int points = donation.calculatePoints(donorUser, project);
@@ -115,11 +116,11 @@ class DonationTest {
         when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
-        int amount = 4000;
+        BigDecimal amount = new BigDecimal(4000);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
         int points = donation.calculatePoints(donorUser, project);
-        assertEquals(amount + donation.pointsFromLastDonationOnSameMonth(), points);
+        assertEquals(amount.add(new BigDecimal(donation.pointsFromLastDonationOnSameMonth())).intValue(), points);
     }
 
     @Test
@@ -130,11 +131,11 @@ class DonationTest {
         when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(900);
-        int amount = 700;
+        BigDecimal amount = new BigDecimal(700);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
         int points = donation.calculatePoints(donorUser, project);
-        assertEquals((amount * 2) + donation.pointsFromLastDonationOnSameMonth(), points);
+        assertEquals((amount.multiply(new BigDecimal(2))).add(new BigDecimal(donation.pointsFromLastDonationOnSameMonth())).intValue(), points);
     }
 
     @Test
@@ -145,11 +146,11 @@ class DonationTest {
         when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(900);
-        int amount = 5000;
+        BigDecimal amount = new BigDecimal(5000);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
         int points = donation.calculatePoints(donorUser, project);
-        assertEquals((amount * 2) + donation.pointsFromLastDonationOnSameMonth(), points);
+        assertEquals((amount.multiply(new BigDecimal(2))).add(new BigDecimal(donation.pointsFromLastDonationOnSameMonth())).intValue(), points);
     }
 
 }

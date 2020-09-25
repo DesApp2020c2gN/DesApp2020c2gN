@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -13,9 +14,9 @@ public class DonorUser extends User {
     private final String nickname;
     private final List<Donation> donations;
     private int points;
-    private int money;
+    private BigDecimal money;
 
-    public DonorUser(String name, String nickname, String mail, String password, List<Donation> donations, int points, int money) {
+    public DonorUser(String name, String nickname, String mail, String password, List<Donation> donations, int points, BigDecimal money) {
         super(name, mail, password);
         this.nickname = nickname;
         this.donations = donations;
@@ -35,11 +36,11 @@ public class DonorUser extends User {
         return points;
     }
 
-    public int getMoney() {
+    public BigDecimal getMoney() {
         return money;
     }
 
-    public void donate(int amount, String comment, Project project) throws InvalidDonationException {
+    public void donate(BigDecimal amount, String comment, Project project) throws InvalidDonationException {
         validateDonation(project, amount);
         Donation donation = DonationBuilder.aDonation().
                 withDonorNickname(getNickname()).
@@ -51,8 +52,8 @@ public class DonorUser extends User {
         executeDonation(donation, project);
     }
 
-    private void validateDonation(Project project, int amount) throws InvalidDonationException {
-        if (amount > this.money) {
+    private void validateDonation(Project project, BigDecimal amount) throws InvalidDonationException {
+        if (amount.compareTo(this.money) > 0) {
             throw new InvalidDonationException("User " + this.getName() + " does not have enough money");
         }
         project.validateDonation();
@@ -61,7 +62,7 @@ public class DonorUser extends User {
     private void executeDonation(Donation donation, Project project) {
         this.points += donation.calculatePoints(this, project);
         this.donations.add(donation);
-        this.money -= donation.getAmount();
+        this.money = this.money.subtract(donation.getAmount());
         project.receiveDonation(donation);
     }
 
@@ -70,7 +71,7 @@ public class DonorUser extends User {
     }
 
     public void undoDonation(Donation donation) {
-        this.money += donation.getAmount();
+        this.money = this.money.add(donation.getAmount());
         this.donations.remove(donation);
     }
 }

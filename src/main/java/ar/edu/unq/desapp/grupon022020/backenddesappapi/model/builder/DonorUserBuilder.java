@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class DonorUserBuilder {
     private String password = "default_password";
     private List<Donation> donations = new ArrayList<>();
     private int points = 0;
-    private int money = 0;
+    private BigDecimal money = new BigDecimal(0);
 
     public static DonorUserBuilder aDonorUser() {
         return new DonorUserBuilder();
@@ -55,7 +56,7 @@ public class DonorUserBuilder {
         return this;
     }
 
-    public DonorUserBuilder withMoney(int money) {
+    public DonorUserBuilder withMoney(BigDecimal money) {
         this.money = money;
         return this;
     }

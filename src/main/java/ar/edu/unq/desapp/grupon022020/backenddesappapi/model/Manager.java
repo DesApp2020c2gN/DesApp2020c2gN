@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +85,7 @@ public class Manager {
         finishedProjects.forEach(this::setAsClosed);
         finishedProjects.stream().
                 filter(project -> !project.hasReachedGoal()).
-                forEach(project -> returnDonations(project));
+                forEach(this::returnDonations);
     }
 
     private void setAsClosed(Project project) {
@@ -95,17 +96,16 @@ public class Manager {
 
     private void returnDonations(Project projectToCancel) {
         List<Donation> donationsToReturn = projectToCancel.getDonations();
-        donationsToReturn.stream().
-                forEach(donation -> getUser(donation.getDonorNickname()).
-                        ifPresent(donorUser -> donorUser.undoDonation(donation)));
+        donationsToReturn.forEach(donation -> getUser(donation.getDonorNickname()).
+                ifPresent(donorUser -> donorUser.undoDonation(donation)));
         projectToCancel.undoDonations();
     }
 
     public List<Donation> getTopTenBiggestDonations() {
         List<Donation> sortedDonations =
                 donorUsers.stream().
-                        map(user -> user.getDonations()).
-                        flatMap(donations -> donations.stream()).
+                        map(DonorUser::getDonations).
+                        flatMap(Collection::stream).
                         sorted(Comparator.comparing(Donation::getAmount).reversed()).
                         collect(Collectors.toList());
         return getFirstTenIfExists(sortedDonations);
@@ -114,8 +114,8 @@ public class Manager {
     public List<Location> getTopTenDonationStarvedLocations() {
         List<Location> sortedLocations =
                 openProjects.stream()
-                        .sorted(Comparator.comparing(project -> getLastDonationDate(project)))
-                        .map(project -> project.getLocation())
+                        .sorted(Comparator.comparing(this::getLastDonationDate))
+                        .map(Project::getLocation)
                         .collect(Collectors.toList());
         return getFirstTenIfExists(sortedLocations);
     }
@@ -130,7 +130,7 @@ public class Manager {
     private LocalDate getLastDonationDate(Project project) {
         return project
                 .getLastDonation()
-                .map(donation -> donation.getDate())
+                .map(Donation::getDate)
                 .orElse(project.getStartDate());
     }
 
