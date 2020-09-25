@@ -74,9 +74,8 @@ class AdminUserTest {
         int factor = 50000;
         int closurePercentage = 85;
         LocalDate startDate = LocalDate.parse("2020-12-27");
-        LocalDate finishDate = LocalDate.parse("2022-05-04");
 
-        adminUser.createProject(projectName, factor, closurePercentage, startDate, finishDate, location);
+        adminUser.createProject(projectName, factor, closurePercentage, startDate, 200, location);
         Project newProject = adminUser.getOpenProjects().get(0);
 
         assertEquals(1, adminUser.getOpenProjects().size());
@@ -84,7 +83,7 @@ class AdminUserTest {
         assertEquals(factor, newProject.getFactor());
         assertEquals(closurePercentage, newProject.getClosurePercentage());
         assertEquals(startDate, newProject.getStartDate());
-        assertEquals(finishDate, newProject.getFinishDate());
+        assertEquals(startDate.plusDays(200), newProject.getFinishDate());
         assertEquals(locationPopulation, newProject.getLocationPopulation());
     }
 
@@ -96,13 +95,12 @@ class AdminUserTest {
         int factor = 100;
         int closurePercentage = 85;
         LocalDate startDate = LocalDate.now();
-        LocalDate finishDate = LocalDate.now().plusDays(3);
         Location location = LocationBuilder.aLocation().build();
 
-        adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
+        adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, 3, location);
 
         try {
-            adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
+            adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, 3, location);
         } catch (InvalidProjectOperation e) {
             String message = "A project for location " + location.getName() + " is currently open";
             assertEquals(message, e.getMessage());
@@ -121,14 +119,13 @@ class AdminUserTest {
         int factor = 100;
         int closurePercentage = 85;
         LocalDate startDate = LocalDate.now().minusDays(3);
-        LocalDate finishDate = LocalDate.now();
         Location location = LocationBuilder.aLocation().build();
 
-        Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
+        Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, 3, location);
         donorUser.donate(new BigDecimal(700), "Donation", project_1);
         manager.closeFinishedProjects();
         try {
-            adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
+            adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, 3, location);
         } catch (InvalidProjectOperation e) {
             String message = "A project for location " + location.getName() + " is already completed";
             assertEquals(message, e.getMessage());
@@ -144,12 +141,11 @@ class AdminUserTest {
         int factor = 100;
         int closurePercentage = 85;
         LocalDate startDate = LocalDate.now().minusDays(3);
-        LocalDate finishDate = LocalDate.now();
         Location location = LocationBuilder.aLocation().build();
 
-        Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
+        Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, 3, location);
         manager.closeFinishedProjects();
-        Project project_2 = adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
+        Project project_2 = adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, 3, location);
         assertTrue(manager.getClosedProjects().contains(project_1));
         assertTrue(manager.getOpenProjects().contains(project_2));
     }
@@ -160,11 +156,10 @@ class AdminUserTest {
         Location location = mock(Location.class);
         String name = "Conectando Tandil";
         LocalDate startDate = LocalDate.parse("2020-12-27");
-        LocalDate finishDate = LocalDate.parse("2022-05-04");
-        adminUser.createProject(name, 1000, 60, startDate, finishDate, location);
+        adminUser.createProject(name, 1000, 60, startDate, 200, location);
 
         Project project = adminUser.getOpenProjects().get(0);
-        assertEquals(finishDate, project.getFinishDate());
+        assertEquals(startDate.plusDays(200), project.getFinishDate());
 
         adminUser.cancelProject(name);
         assertEquals(startDate.minusDays(1), project.getFinishDate());
@@ -176,8 +171,7 @@ class AdminUserTest {
         Location location = mock(Location.class);
         String name = "Mar Chiquita 3.0";
         LocalDate startDate = LocalDate.parse("2020-12-27");
-        LocalDate finishDate = LocalDate.parse("2022-05-04");
-        adminUser.createProject("Conectando Tandil", 1000, 60, startDate, finishDate, location);
+        adminUser.createProject("Conectando Tandil", 1000, 60, startDate, 200, location);
 
         try {
             adminUser.cancelProject(name);

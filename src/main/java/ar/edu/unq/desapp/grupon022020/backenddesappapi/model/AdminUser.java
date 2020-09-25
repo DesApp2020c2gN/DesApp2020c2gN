@@ -28,13 +28,13 @@ public class AdminUser extends User {
         return manager.getUsers();
     }
 
-    public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, Location location) throws InvalidProjectOperation {
+    public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, Location location) throws InvalidProjectOperation {
         Project project = ProjectBuilder.aProject().
                 withName(name).
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 withStartDate(startDate).
-                withFinishDate(finishDate).
+                withFinishDate(startDate.plusDays(durationInDays)).
                 withLocation(location).
                 build();
         this.manager.addNewProject(project);
