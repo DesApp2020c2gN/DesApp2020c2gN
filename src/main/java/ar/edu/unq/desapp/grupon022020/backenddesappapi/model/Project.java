@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -78,11 +79,11 @@ public class Project {
     }
 
     public float percentageAchieved(){
-        return ((float) totalAmountDonations() / moneyRequired()) * 100;
+        return ((float) totalAmountDonations().intValue() / moneyRequired()) * 100;
     }
 
-    public int totalAmountDonations() {
-        return donations.stream().map(Donation::getAmount).reduce(0, Integer::sum);
+    public BigDecimal totalAmountDonations() {
+        return new BigDecimal(donations.stream().map(Donation::getAmount).map(BigDecimal::intValue).reduce(0, Integer::sum));
     }
 
     public int moneyRequired() {

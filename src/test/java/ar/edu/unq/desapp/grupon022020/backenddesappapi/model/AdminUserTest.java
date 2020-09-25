@@ -8,6 +8,7 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidD
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +111,7 @@ class AdminUserTest {
 
     @Test
     public void testAdminUserAlreadyCompletedProjectCreation() throws InvalidProjectOperation, InvalidDonationException {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9000).build();
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9000)).build();
         List<DonorUser> donorUsers = new ArrayList<>();
         donorUsers.add(donorUser);
         Manager manager = ManagerBuilder.aManager().withUsers(donorUsers).build();
@@ -124,7 +125,7 @@ class AdminUserTest {
         Location location = LocationBuilder.aLocation().build();
 
         Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, finishDate, location);
-        donorUser.donate(700, "Donation", project_1);
+        donorUser.donate(new BigDecimal(700), "Donation", project_1);
         manager.closeFinishedProjects();
         try {
             adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, finishDate, location);
