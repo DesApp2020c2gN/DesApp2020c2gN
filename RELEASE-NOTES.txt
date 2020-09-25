@@ -19,7 +19,10 @@ NOTES
 * User abstract class can share more behaviour
 * Login from both types of users
 * Email must be sent when projects are complete or donations are returned
+* Points calculation should be on the Project, not on the DonorUser
+* Money should be represented as BigDecimal, not as int
 
 KNOWN ISSUES
 * Finish dates for Projects should be determined based on starting date
+* Last donation date on DonorUser makes comparison by month but not by year
 

@@ -102,8 +102,6 @@ public class Project {
     }
     
     public Optional<Donation> getLastDonation() {
-        return donations.stream()
-                .sorted(Comparator.comparing(Donation::getDate).reversed())
-                .findFirst();
+        return donations.stream().max(Comparator.comparing(Donation::getDate));
     }
 }

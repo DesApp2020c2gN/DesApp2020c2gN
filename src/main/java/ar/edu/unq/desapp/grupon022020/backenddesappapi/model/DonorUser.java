@@ -59,35 +59,14 @@ public class DonorUser extends User {
     }
 
     private void executeDonation(Donation donation, Project project) {
-        calculatePoints(donation.getAmount(), project);
+        this.points += donation.calculatePoints(this, project);
         this.donations.add(donation);
         this.money -= donation.getAmount();
         project.receiveDonation(donation);
     }
 
-    private void calculatePoints(int amount, Project project) {
-        int currentDonationPoints = 0;
-        int population = project.getLocationPopulation();
-
-        if (amount > 1000) {
-            currentDonationPoints = amount;
-        }
-        if (population < 2000) {
-            currentDonationPoints = amount * 2;
-        }
-        LocalDate lastDate = lastDonationDate();
-        if (lastDate != null && (LocalDate.now().getMonthValue()) == lastDate.getMonthValue()) {
-            currentDonationPoints += 500;
-        }
-        this.points += currentDonationPoints;
-    }
-
-    private LocalDate lastDonationDate() {
-        Optional<Donation> lastDonation = donations.stream().max(Comparator.comparing(Donation::getDate));
-        if (lastDonation.isPresent()) {
-            return lastDonation.get().getDate();
-        }
-        return null;
+    public Optional<Donation> getLastDonation() {
+        return donations.stream().max(Comparator.comparing(Donation::getDate));
     }
 
     public void undoDonation(Donation donation) {
