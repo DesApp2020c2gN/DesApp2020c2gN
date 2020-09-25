@@ -9,7 +9,7 @@ public class DonationBuilder {
 
     private String donorNickname = "default_donorNickname";
     private String projectName = "default_projectName";
-    private BigDecimal amount = new BigDecimal("1000");;
+    private BigDecimal amount = new BigDecimal(1000);
     private String comment = "default_comment";
     private LocalDate date = LocalDate.now();
 

@@ -74,7 +74,7 @@ class DonorUserTest {
 
     @Test
     public void testDonorUserMoney() {
-        BigDecimal money = new BigDecimal("2300");
+        BigDecimal money = new BigDecimal(2300);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
 
         assertEquals(money, donorUser.getMoney());
@@ -82,11 +82,11 @@ class DonorUserTest {
 
     @Test
     public void testDonorUserDonation() throws InvalidDonationException {
-        BigDecimal money = new BigDecimal("9999");
+        BigDecimal money = new BigDecimal(9999);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         assertTrue(donorUser.getDonations().isEmpty());
 
-        BigDecimal amount = new BigDecimal("3570");
+        BigDecimal amount = new BigDecimal(3570);
         String comment = "This is my donation";
         Project project = mock(Project.class);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
@@ -101,11 +101,11 @@ class DonorUserTest {
 
     @Test
     public void testDonorUserPointsWithLess1000AmountAndPlus2000Population() throws InvalidDonationException {
-        BigDecimal money = new BigDecimal("9999");
+        BigDecimal money = new BigDecimal(9999);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         assertEquals(0, donorUser.getPoints());
 
-        BigDecimal donationAmount = new BigDecimal("500");
+        BigDecimal donationAmount = new BigDecimal(500);
         String comment = "This is my donation";
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
@@ -117,11 +117,11 @@ class DonorUserTest {
 
     @Test
     public void testDonorUserPointsWithPlus1000AmountAndPlus2000Population() throws InvalidDonationException {
-        BigDecimal money = new BigDecimal("9999");
+        BigDecimal money = new BigDecimal(9999);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         assertEquals(0, donorUser.getPoints());
 
-        BigDecimal donationAmount = new BigDecimal("2000");
+        BigDecimal donationAmount = new BigDecimal(2000);
         String comment = "This is my donation";
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
@@ -133,23 +133,23 @@ class DonorUserTest {
 
     @Test
     public void testDonorUserPointsWithPlus1000AmountAndLess2000Population() throws InvalidDonationException {
-        BigDecimal money = new BigDecimal("9999");
+        BigDecimal money = new BigDecimal(9999);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         assertEquals(0, donorUser.getPoints());
 
-        BigDecimal donationAmount = new BigDecimal("2000");
+        BigDecimal donationAmount = new BigDecimal(2000);
         String comment = "This is my donation";
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(1700);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
-        assertEquals(donationAmount.multiply(new BigDecimal("2")).intValue(), donorUser.getPoints());
+        assertEquals(donationAmount.multiply(new BigDecimal(2)).intValue(), donorUser.getPoints());
     }
 
     @Test
     public void testDonorUserPointsWithLastDonationNotOnSameMonth() throws InvalidDonationException {
-        BigDecimal money = new BigDecimal("9999");
+        BigDecimal money = new BigDecimal(9999);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         Donation lastDonation = DonationBuilder.aDonation().withDate(LocalDate.now().minusMonths(7)).build();
         List<Donation> donations = new ArrayList<>();
@@ -159,7 +159,7 @@ class DonorUserTest {
         Project project = ProjectBuilder.aProject().withLocation(location).withDonations(donations).build();
         assertEquals(0, donorUser.getPoints());
 
-        BigDecimal donationAmount = new BigDecimal("2500");
+        BigDecimal donationAmount = new BigDecimal(2500);
         String comment = "This is my donation";
         donorUser.donate(donationAmount, comment, project);
         assertEquals(donationAmount.intValue(), donorUser.getPoints());
@@ -167,26 +167,26 @@ class DonorUserTest {
 
     @Test
     public void testDonorUserPointsWithLastDonationOnSameMonth() throws InvalidDonationException {
-        BigDecimal money = new BigDecimal("9999");
+        BigDecimal money = new BigDecimal(9999);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         assertEquals(0, donorUser.getPoints());
 
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3300);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
-        donorUser.donate(new BigDecimal("500"), "Second donation", project);
+        donorUser.donate(new BigDecimal(500), "Second donation", project);
         assertEquals(0, donorUser.getPoints());
         assertEquals(1, donorUser.getDonations().size());
 
-        BigDecimal donationAmount = new BigDecimal("2500");
+        BigDecimal donationAmount = new BigDecimal(2500);
         String comment = "This is my donation";
         donorUser.donate(donationAmount, comment, project);
-        assertEquals(donationAmount.add(new BigDecimal("500")).intValue(), donorUser.getPoints());
+        assertEquals(donationAmount.add(new BigDecimal(500)).intValue(), donorUser.getPoints());
     }
 
     @Test
     public void testUserDonatesOnProjectNotStarted() {
-        BigDecimal money = new BigDecimal("9999");
+        BigDecimal money = new BigDecimal(9999);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         Location location = mock(Location.class);
         when(location.getPopulation()).thenReturn(2000);
@@ -195,7 +195,7 @@ class DonorUserTest {
 
         try
         {
-            donorUser.donate(new BigDecimal("900"), "Third donation", project);
+            donorUser.donate(new BigDecimal(900), "Third donation", project);
         }
         catch(InvalidDonationException e)
         {
@@ -206,7 +206,7 @@ class DonorUserTest {
 
     @Test
     public void testUserDonatesOnClosedProject() {
-        BigDecimal money = new BigDecimal("9999");
+        BigDecimal money = new BigDecimal(9999);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         Location location = mock(Location.class);
         when(location.getPopulation()).thenReturn(3300);
@@ -215,7 +215,7 @@ class DonorUserTest {
 
         try
         {
-            donorUser.donate(new BigDecimal("500"), "Fourth donation", project);
+            donorUser.donate(new BigDecimal(500), "Fourth donation", project);
         }
         catch(InvalidDonationException e)
         {
@@ -226,7 +226,7 @@ class DonorUserTest {
 
     @Test
     public void testUserDonatesWithoutMoney() {
-        BigDecimal money = new BigDecimal("1000");
+        BigDecimal money = new BigDecimal(1000);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         Location location = mock(Location.class);
         when(location.getPopulation()).thenReturn(1000);
@@ -235,7 +235,7 @@ class DonorUserTest {
 
         try
         {
-            donorUser.donate(new BigDecimal("2000"), "Fifth donation", project);
+            donorUser.donate(new BigDecimal(2000), "Fifth donation", project);
         }
         catch(InvalidDonationException e)
         {

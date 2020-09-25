@@ -117,7 +117,7 @@ public class ProjectTest {
         int factor = 3400;
         Project project = ProjectBuilder.aProject().withFactor(factor).withDonations(donations).build();
 
-        float expectedPercentageAchieved = ((float)(amount_1.intValue() + amount_2.intValue() + amount_3.intValue()) / project.moneyRequired()) * 100;
+        float expectedPercentageAchieved = ((float) (amount_1.intValue() + amount_2.intValue() + amount_3.intValue()) / project.moneyRequired()) * 100;
         assertEquals(expectedPercentageAchieved, project.percentageAchieved());
     }
 
