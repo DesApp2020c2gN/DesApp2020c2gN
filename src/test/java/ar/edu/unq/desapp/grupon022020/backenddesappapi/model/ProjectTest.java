@@ -52,8 +52,9 @@ public class ProjectTest {
 
     @Test
     public void testProjectFinishDate() {
-        LocalDate finishDate = LocalDate.parse("2020-12-01");
-        Project project = ProjectBuilder.aProject().withFinishDate(finishDate).build();
+        int durationInDays = 120;
+        LocalDate finishDate = LocalDate.now().plusDays(durationInDays);
+        Project project = ProjectBuilder.aProject().withDurationInDays(durationInDays).build();
 
         assertEquals(finishDate, project.getFinishDate());
     }
@@ -131,7 +132,7 @@ public class ProjectTest {
         Project project = ProjectBuilder.aProject().
                 withLocation(location).
                 withStartDate(LocalDate.now().plusDays(-1)).
-                withFinishDate(LocalDate.now().plusDays(1)).
+                withDurationInDays(1).
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 build();
@@ -153,7 +154,7 @@ public class ProjectTest {
         Project project = ProjectBuilder.aProject().
                 withLocation(location).
                 withStartDate(LocalDate.now().plusDays(-1)).
-                withFinishDate(LocalDate.now().plusDays(1)).
+                withDurationInDays(1).
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 build();

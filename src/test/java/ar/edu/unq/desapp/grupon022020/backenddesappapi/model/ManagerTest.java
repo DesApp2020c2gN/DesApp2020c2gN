@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.doNothing;
 
 class ManagerTest {
 
@@ -36,9 +35,9 @@ class ManagerTest {
 
     @Test
     public void testManagerOpenProjectsEndingThisMonth() {
-        Project project_1 = ProjectBuilder.aProject().withFinishDate(LocalDate.now()).build();
-        Project project_2 = ProjectBuilder.aProject().withFinishDate(LocalDate.now().minusMonths(3)).build();
-        Project project_3 = ProjectBuilder.aProject().withFinishDate(LocalDate.now().plusMonths(5)).build();
+        Project project_1 = ProjectBuilder.aProject().withDurationInDays(0).build();
+        Project project_2 = ProjectBuilder.aProject().withDurationInDays(-90).build();
+        Project project_3 = ProjectBuilder.aProject().withDurationInDays(-150).build();
         List<Project> openProjects = new ArrayList<>();
         openProjects.add(project_1);
         openProjects.add(project_2);
@@ -105,9 +104,9 @@ class ManagerTest {
 
     @Test
     public void testManagerCloseFinishedProjects() {
-        Project project_1 = ProjectBuilder.aProject().withFinishDate(LocalDate.now()).build();
-        Project project_2 = ProjectBuilder.aProject().withFinishDate(LocalDate.now()).build();
-        Project project_3 = ProjectBuilder.aProject().withFinishDate(LocalDate.now().plusDays(5)).build();
+        Project project_1 = ProjectBuilder.aProject().withDurationInDays(0).build();
+        Project project_2 = ProjectBuilder.aProject().withDurationInDays(0).build();
+        Project project_3 = ProjectBuilder.aProject().withDurationInDays(5).build();
         List<Project> projects = new ArrayList<>();
         projects.add(project_1);
         projects.add(project_2);
@@ -123,7 +122,7 @@ class ManagerTest {
 
     @Test
     public void testManagerFinishedButNotCompletedProjects() throws InvalidProjectOperation {
-        LocalDate startDate = LocalDate.now().minusDays(3);
+        LocalDate startDate = LocalDate.now().minusDays(1);
         Location location_1 = LocationBuilder.aLocation().withName("Mercedes").build();
         Location location_2 = LocationBuilder.aLocation().withName("Tandil").build();
         Project project_1 = ProjectBuilder.aProject().withStartDate(startDate).withLocation(location_1).build();
@@ -138,18 +137,19 @@ class ManagerTest {
     }
 
     @Test
-    public void testManagerAlreadyCompletedProjects() throws InvalidDonationException {
+    public void testManagerAlreadyCompletedProjects() throws InvalidDonationException, InvalidProjectOperation {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9000)).build();
         Manager manager = ManagerBuilder.aManager().build();
         manager.addNewDonorUser(donorUser);
         int factor = 100;
         int closurePercentage = 85;
-        LocalDate startDate = LocalDate.now().minusDays(3);
         Location location = LocationBuilder.aLocation().build();
+        LocalDate startDate = LocalDate.now().minusDays(1);
         Project project_1 = ProjectBuilder.aProject().withFactor(factor).withClosurePercentage(closurePercentage).withStartDate(startDate).withLocation(location).build();
+        manager.addNewProject(project_1);
         donorUser.donate(new BigDecimal(700), "Donation", project_1);
         manager.closeFinishedProjects();
-        Project project_2 = ProjectBuilder.aProject().withFactor(factor).withClosurePercentage(closurePercentage).withStartDate(startDate).withLocation(location).build();
+        Project project_2 = ProjectBuilder.aProject().withFactor(factor).withClosurePercentage(closurePercentage).withLocation(location).build();
 
         try {
             manager.addNewProject(project_2);
@@ -166,8 +166,8 @@ class ManagerTest {
         List<DonorUser> donorUsers = new ArrayList<>();
         donorUsers.add(donorUser_1);
         donorUsers.add(donorUser_2);
-        Project project_1 = ProjectBuilder.aProject().withStartDate(LocalDate.now().minusDays(3)).withFinishDate(LocalDate.now()).build();
-        Project project_2 = ProjectBuilder.aProject().withStartDate(LocalDate.now().minusDays(3)).withFinishDate(LocalDate.now()).build();
+        Project project_1 = ProjectBuilder.aProject().withDurationInDays(0).build();
+        Project project_2 = ProjectBuilder.aProject().withDurationInDays(0).build();
         List<Project> projects = new ArrayList<>();
         projects.add(project_1);
         projects.add(project_2);

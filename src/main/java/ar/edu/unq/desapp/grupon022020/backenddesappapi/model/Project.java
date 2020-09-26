@@ -18,12 +18,12 @@ public class Project {
     private final List<Donation> donations;
     private final Location location;
 
-    public Project(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, List<Donation> donations, Location location) {
+    public Project(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, List<Donation> donations, Location location) {
         this.name = name;
         this.factor = factor;
         this.closurePercentage = closurePercentage;
         this.startDate = startDate;
-        this.finishDate = finishDate;
+        this.finishDate = startDate.plusDays(durationInDays);
         this.donations = donations;
         this.location = location;
     }

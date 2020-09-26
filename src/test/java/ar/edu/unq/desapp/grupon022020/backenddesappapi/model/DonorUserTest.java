@@ -210,8 +210,7 @@ class DonorUserTest {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         Location location = mock(Location.class);
         when(location.getPopulation()).thenReturn(3300);
-        LocalDate finishDate = LocalDate.now().plusDays(-1);
-        Project project = ProjectBuilder.aProject().withFinishDate(finishDate).withLocation(location).build();
+        Project project = ProjectBuilder.aProject().withStartDate(LocalDate.now().plusDays(-3)).withDurationInDays(1).withLocation(location).build();
 
         try
         {
@@ -230,8 +229,7 @@ class DonorUserTest {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
         Location location = mock(Location.class);
         when(location.getPopulation()).thenReturn(1000);
-        LocalDate finishDate = LocalDate.now().plusDays(7);
-        Project project = ProjectBuilder.aProject().withFinishDate(finishDate).withLocation(location).build();
+        Project project = ProjectBuilder.aProject().withDurationInDays(7).withLocation(location).build();
 
         try
         {

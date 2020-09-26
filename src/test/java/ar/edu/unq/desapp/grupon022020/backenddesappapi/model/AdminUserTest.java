@@ -1,20 +1,15 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ManagerBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class AdminUserTest {
@@ -74,8 +69,7 @@ class AdminUserTest {
         int closurePercentage = 85;
         LocalDate startDate = LocalDate.parse("2020-12-27");
 
-        adminUser.createProject(projectName, factor, closurePercentage, startDate, 200, location);
-        Project newProject = adminUser.getOpenProjects().get(0);
+        Project newProject = adminUser.createProject(projectName, factor, closurePercentage, startDate, 200, location);
 
         assertEquals(1, adminUser.getOpenProjects().size());
         assertEquals(projectName, newProject.getName());
@@ -87,7 +81,7 @@ class AdminUserTest {
     }
 
     @Test
-    public void testAdminUserProjectCreationWithInvalidStartDate() throws InvalidProjectOperation {
+    public void testAdminUserProjectCreationWithInvalidStartDate() {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         Location location = mock(Location.class);
         String name = "Mar Chiquita 3.0";

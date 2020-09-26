@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 
 import java.time.LocalDate;
@@ -38,7 +37,7 @@ public class AdminUser extends User {
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 withStartDate(startDate).
-                withFinishDate(startDate.plusDays(durationInDays)).
+                withDurationInDays(durationInDays).
                 withLocation(location).
                 build();
         this.manager.addNewProject(project);
