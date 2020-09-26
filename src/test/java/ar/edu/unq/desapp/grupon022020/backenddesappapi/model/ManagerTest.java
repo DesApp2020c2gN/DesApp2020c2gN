@@ -1,6 +1,10 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.*;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ManagerBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 import org.junit.jupiter.api.Test;
