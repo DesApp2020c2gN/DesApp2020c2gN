@@ -28,13 +28,16 @@ public class AdminUser extends User {
         return manager.getUsers();
     }
 
-    public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, Location location) throws InvalidProjectOperation {
+    public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, Location location) throws InvalidProjectOperation {
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new InvalidProjectOperation("Start day of " + startDate.toString() + " for project " + name + " is not valid");
+        }
         Project project = ProjectBuilder.aProject().
                 withName(name).
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 withStartDate(startDate).
-                withFinishDate(finishDate).
+                withDurationInDays(durationInDays).
                 withLocation(location).
                 build();
         this.manager.addNewProject(project);
