@@ -59,6 +59,10 @@ public class Manager {
         this.openProjects.add(newProject);
     }
 
+    public void addNewDonorUser(DonorUser donorUser) {
+        this.donorUsers.add(donorUser);
+    }
+
     public Optional<Project> getOpenProject(String name) {
         return getOpenProjects().stream().
                 filter(project -> project.getName().equals(name)).

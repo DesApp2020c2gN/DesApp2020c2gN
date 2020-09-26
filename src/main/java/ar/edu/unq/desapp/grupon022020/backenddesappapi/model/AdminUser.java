@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 
 import java.time.LocalDate;
@@ -29,6 +30,9 @@ public class AdminUser extends User {
     }
 
     public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, Location location) throws InvalidProjectOperation {
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new InvalidProjectOperation("Start day of " + startDate.toString() + " for project " + name + " is not valid");
+        }
         Project project = ProjectBuilder.aProject().
                 withName(name).
                 withFactor(factor).

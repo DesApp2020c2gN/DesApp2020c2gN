@@ -15,8 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class AdminUserTest {
 
@@ -88,6 +87,21 @@ class AdminUserTest {
     }
 
     @Test
+    public void testAdminUserProjectCreationWithInvalidStartDate() throws InvalidProjectOperation {
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
+        Location location = mock(Location.class);
+        String name = "Mar Chiquita 3.0";
+        LocalDate startDate = LocalDate.now().minusDays(12);
+
+        try {
+            adminUser.createProject(name, 1000, 60, startDate, 120, location);
+        } catch (InvalidProjectOperation e) {
+            String message = "Start day of " + startDate.toString() + " for project " + name + " is not valid";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
     public void testAdminUserAlreadyOpenedProjectCreation() throws InvalidProjectOperation {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         String project_1_Name = "Conectando Mercedes";
@@ -105,49 +119,6 @@ class AdminUserTest {
             String message = "A project for location " + location.getName() + " is currently open";
             assertEquals(message, e.getMessage());
         }
-    }
-
-    @Test
-    public void testAdminUserAlreadyCompletedProjectCreation() throws InvalidProjectOperation, InvalidDonationException {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9000)).build();
-        List<DonorUser> donorUsers = new ArrayList<>();
-        donorUsers.add(donorUser);
-        Manager manager = ManagerBuilder.aManager().withUsers(donorUsers).build();
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(manager).build();
-        String project_1_Name = "Conectando Mercedes";
-        String project_2_Name = "Conectando Colon";
-        int factor = 100;
-        int closurePercentage = 85;
-        LocalDate startDate = LocalDate.now().minusDays(3);
-        Location location = LocationBuilder.aLocation().build();
-
-        Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, 3, location);
-        donorUser.donate(new BigDecimal(700), "Donation", project_1);
-        manager.closeFinishedProjects();
-        try {
-            adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, 3, location);
-        } catch (InvalidProjectOperation e) {
-            String message = "A project for location " + location.getName() + " is already completed";
-            assertEquals(message, e.getMessage());
-        }
-    }
-
-    @Test
-    public void testAdminUserFinishedButNotCompletedProjectCreation() throws InvalidProjectOperation {
-        Manager manager = ManagerBuilder.aManager().build();
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(manager).build();
-        String project_1_Name = "Conectando Mercedes";
-        String project_2_Name = "Conectando Colon";
-        int factor = 100;
-        int closurePercentage = 85;
-        LocalDate startDate = LocalDate.now().minusDays(3);
-        Location location = LocationBuilder.aLocation().build();
-
-        Project project_1 = adminUser.createProject(project_1_Name, factor, closurePercentage, startDate, 3, location);
-        manager.closeFinishedProjects();
-        Project project_2 = adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, 3, location);
-        assertTrue(manager.getClosedProjects().contains(project_1));
-        assertTrue(manager.getOpenProjects().contains(project_2));
     }
 
     @Test

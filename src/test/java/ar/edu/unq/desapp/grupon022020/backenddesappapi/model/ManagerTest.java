@@ -1,11 +1,8 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ManagerBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.*;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -18,8 +15,8 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
 
 class ManagerTest {
 
@@ -81,6 +78,18 @@ class ManagerTest {
     }
 
     @Test
+    public void testManagerAddNewUser() {
+        DonorUser donorUser_1 = DonorUserBuilder.aDonorUser().build();
+        DonorUser donorUser_2 = DonorUserBuilder.aDonorUser().build();
+        Manager manager = ManagerBuilder.aManager().build();
+        manager.addNewDonorUser(donorUser_1);
+        manager.addNewDonorUser(donorUser_2);
+        assertEquals(2, manager.getUsers().size());
+        assertTrue(manager.getUsers().contains(donorUser_1));
+        assertTrue(manager.getUsers().contains(donorUser_2));
+    }
+
+    @Test
     public void testManagerLocations() {
         Location location_1 = LocationBuilder.aLocation().build();
         Location location_2 = LocationBuilder.aLocation().build();
@@ -110,6 +119,44 @@ class ManagerTest {
         manager.closeFinishedProjects();
         assertEquals(1, manager.getOpenProjects().size());
         assertEquals(2, manager.getClosedProjects().size());
+    }
+
+    @Test
+    public void testManagerFinishedButNotCompletedProjects() throws InvalidProjectOperation {
+        LocalDate startDate = LocalDate.now().minusDays(3);
+        Location location_1 = LocationBuilder.aLocation().withName("Mercedes").build();
+        Location location_2 = LocationBuilder.aLocation().withName("Tandil").build();
+        Project project_1 = ProjectBuilder.aProject().withStartDate(startDate).withLocation(location_1).build();
+        Project project_2 = ProjectBuilder.aProject().withStartDate(startDate).withLocation(location_2).build();
+        Manager manager = ManagerBuilder.aManager().build();
+
+        manager.addNewProject(project_1);
+        manager.closeFinishedProjects();
+        manager.addNewProject(project_2);
+        assertTrue(manager.getClosedProjects().contains(project_1));
+        assertTrue(manager.getOpenProjects().contains(project_2));
+    }
+
+    @Test
+    public void testManagerAlreadyCompletedProjects() throws InvalidDonationException {
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9000)).build();
+        Manager manager = ManagerBuilder.aManager().build();
+        manager.addNewDonorUser(donorUser);
+        int factor = 100;
+        int closurePercentage = 85;
+        LocalDate startDate = LocalDate.now().minusDays(3);
+        Location location = LocationBuilder.aLocation().build();
+        Project project_1 = ProjectBuilder.aProject().withFactor(factor).withClosurePercentage(closurePercentage).withStartDate(startDate).withLocation(location).build();
+        donorUser.donate(new BigDecimal(700), "Donation", project_1);
+        manager.closeFinishedProjects();
+        Project project_2 = ProjectBuilder.aProject().withFactor(factor).withClosurePercentage(closurePercentage).withStartDate(startDate).withLocation(location).build();
+
+        try {
+            manager.addNewProject(project_2);
+        } catch (InvalidProjectOperation e) {
+            String message = "A project for location " + location.getName() + " is already completed";
+            assertEquals(message, e.getMessage());
+        }
     }
 
     @Test
