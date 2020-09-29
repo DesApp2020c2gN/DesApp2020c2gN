@@ -43,7 +43,7 @@ public class DonorUser extends User {
     public void donate(BigDecimal amount, String comment, Project project) throws InvalidDonationException {
         validateDonation(project, amount);
         Donation donation = DonationBuilder.aDonation().
-                withDonorNickname(getNickname()).
+                withDonorNickname(this).
                 withProjectName(project.getName()).
                 withAmount(amount).
                 withComment(comment).
