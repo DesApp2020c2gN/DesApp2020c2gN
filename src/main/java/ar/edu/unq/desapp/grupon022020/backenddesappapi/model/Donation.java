@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Entity
-@SequenceGenerator(name = "SEQ_DONATION", initialValue = 1, allocationSize = 1, sequenceName = "SEQ_DONATION")
+@SequenceGenerator(name = "SEQ_DONATION", sequenceName = "SEQUENCE_DONATION", initialValue = 1, allocationSize = 1)
 public class Donation {
 
     @Id

@@ -10,10 +10,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
-@Table
+@SequenceGenerator(name = "SEQ_PROJECT", sequenceName = "SEQUENCE_PROJECT", initialValue = 1, allocationSize = 1)
 public class Project {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PROJECT")
+    private Integer id;
+
+    @Column
     private String name;
 
     @Column
