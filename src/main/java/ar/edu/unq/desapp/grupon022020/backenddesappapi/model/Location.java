@@ -1,11 +1,9 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import java.io.Serializable;
-
 import javax.persistence.*;
 
 @Entity
-@SequenceGenerator(name = "SEQ_LOCATION", initialValue = 1, allocationSize = 1, sequenceName = "SEQ_LOCATION")
+@Table
 public class Location {
 
     @Id
@@ -20,14 +18,14 @@ public class Location {
     @Column
     private String state;
 
+    public Location() {}
+
     public Location(String name, String province, int population, String state) {
         this.name = name;
         this.province = province;
         this.population = population;
         this.state = state;
     }
-
-    public Location() {}
 
     public String getName() {
         return name;

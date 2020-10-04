@@ -2,21 +2,41 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+@Entity
+@Table
 public class Project {
 
-    private final String name;
-    private final int factor;
-    private final int closurePercentage;
-    private final LocalDate startDate;
+    @Id
+    private String name;
+
+    @Column
+    private int factor;
+
+    @Column
+    private int closurePercentage;
+
+    @Column
+    private LocalDate startDate;
+
+    @Column
     private LocalDate finishDate;
-    private final List<Donation> donations;
-    private final Location location;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn
+    private List<Donation> donations;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn
+    private Location location;
+
+    public Project() {}
 
     public Project(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, List<Donation> donations, Location location) {
         this.name = name;
@@ -32,28 +52,56 @@ public class Project {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getFactor() {
         return factor;
+    }
+
+    public void setFactor(int factor) {
+        this.factor = factor;
     }
 
     public int getClosurePercentage() {
         return closurePercentage;
     }
 
+    public void setClosurePercentage(int closurePercentage) {
+        this.closurePercentage = closurePercentage;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDate getFinishDate() {
         return finishDate;
     }
 
+    public void setFinishDate(LocalDate finishDate) {
+        this.finishDate = finishDate;
+    }
+
     public List<Donation> getDonations() {
         return donations;
     }
 
+    public void setDonations(List<Donation> donations) {
+        this.donations = donations;
+    }
+
     public Location getLocation() {
         return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public void receiveDonation(Donation donation) {
