@@ -1,16 +1,19 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@SequenceGenerator(name = "SEQ_LOCATION", sequenceName = "SEQUENCE_LOCATION", initialValue = 1, allocationSize = 1)
+//@SequenceGenerator(name = "SEQ_LOCATION", sequenceName = "SEQUENCE_LOCATION", initialValue = 1, allocationSize = 1)
 public class Location {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LOCATION")
-    private Integer id;
+    //private static final long serialVersionUID = 1L;
 
-    @Column
+    //@Id
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LOCATION")
+    //private Integer id;
+
+    @Id
     private String name;
 
     @Column

@@ -100,8 +100,7 @@ public class Manager {
 
     private void returnDonations(Project projectToCancel) {
         List<Donation> donationsToReturn = projectToCancel.getDonations();
-        donationsToReturn.forEach(donation -> getUser(donation.getDonorNickname()).
-                ifPresent(donorUser -> donorUser.undoDonation(donation)));
+        donationsToReturn.forEach(donation -> donation.getDonorUser().undoDonation(donation));
         projectToCancel.undoDonations();
     }
 
