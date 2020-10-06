@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -16,19 +14,17 @@ import static org.mockito.Mockito.when;
 class DonationTest {
 
     @Test
-    public void testDonationDonorUser() {
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname("Juan2001").build();
-        Donation donation = DonationBuilder.aDonation().withDonorUser(donorUser).build();
-
-        assertEquals(donorUser, donation.getDonorUser());
+    public void testDonationDonorNickname() {
+        String donorNickname = "Juan2001";
+        Donation donation = DonationBuilder.aDonation().withDonorNickname(donorNickname).build();
+        assertEquals(donorNickname, donation.getDonorNickname());
     }
 
     @Test
-    public void testDonationProject() {
-        Project project = ProjectBuilder.aProject().withName("Conectando San Cristobal").build();
-        Donation donation = DonationBuilder.aDonation().withProject(project).build();
-
-        assertEquals(project, donation.getProject());
+    public void testDonationProjectName() {
+        String projectName = "Conectando San Cristobal";
+        Donation donation = DonationBuilder.aDonation().withProjectName(projectName).build();
+        assertEquals(projectName, donation.getProjectName());
     }
 
     @Test

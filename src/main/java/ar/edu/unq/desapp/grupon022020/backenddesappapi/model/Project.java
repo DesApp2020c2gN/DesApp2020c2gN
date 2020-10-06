@@ -10,12 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
-//@SequenceGenerator(name = "SEQ_PROJECT", sequenceName = "SEQUENCE_PROJECT", initialValue = 1, allocationSize = 1)
 public class Project {
-
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PROJECT")
-    //private Integer id;
 
     @Id
     private String name;
@@ -32,11 +27,10 @@ public class Project {
     @Column
     private LocalDate finishDate;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "projectName")
     private List<Donation> donations;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    //@JoinColumn(name = "locationId", referencedColumnName = "id")
     private Location location;
 
     public Project() {}
@@ -150,7 +144,7 @@ public class Project {
     }
 
     public int numberOfDonors(){
-        return ((int) this.donations.stream().map(Donation::getDonorUser).distinct().count());
+        return ((int) this.donations.stream().map(Donation::getDonorNickname).distinct().count());
     }
     
     public Optional<Donation> getLastDonation() {

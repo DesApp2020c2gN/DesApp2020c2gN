@@ -13,13 +13,11 @@ public class Donation {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DONATION")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "donorUser_id")
-    private DonorUser donorUser;
+    @Column
+    private String donorNickname;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @Column
+    private String projectName;
 
     @Column
     private BigDecimal amount;
@@ -32,29 +30,28 @@ public class Donation {
 
     public Donation() {}
 
-    public Donation(DonorUser donorUser, Project project, BigDecimal amount, String comment, LocalDate date) {
-        this.donorUser = donorUser;
-        this.project = project;
+    public Donation(String donorNickname, String projectName, BigDecimal amount, String comment, LocalDate date) {
+        this.donorNickname = donorNickname;
+        this.projectName = projectName;
         this.amount = amount;
         this.comment = comment;
         this.date = date;
-
     }
 
-    public DonorUser getDonorUser() {
-        return donorUser;
+    public String getDonorNickname() {
+        return donorNickname;
     }
 
-    public void setDonorUser(DonorUser donorUser) {
-        this.donorUser = donorUser;
+    public void setDonorNickname(String donorNickname) {
+        this.donorNickname = donorNickname;
     }
 
-    public Project getProject() {
-        return project;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public BigDecimal getAmount() {

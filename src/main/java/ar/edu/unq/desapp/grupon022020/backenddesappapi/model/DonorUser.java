@@ -16,7 +16,7 @@ public class DonorUser extends User {
     @Id
     private String nickname;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "donorUser")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "donorNickname")
     private List<Donation> donations;
 
     @Column
@@ -62,8 +62,8 @@ public class DonorUser extends User {
     public void donate(BigDecimal amount, String comment, Project project) throws InvalidDonationException {
         validateDonation(project, amount);
         Donation donation = DonationBuilder.aDonation().
-                withDonorUser(this).
-                withProject(project).
+                withDonorNickname(this.getNickname()).
+                withProjectName(project.getName()).
                 withAmount(amount).
                 withComment(comment).
                 withDate(LocalDate.now()).

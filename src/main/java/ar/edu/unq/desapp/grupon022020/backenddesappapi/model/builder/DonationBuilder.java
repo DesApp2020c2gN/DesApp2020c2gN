@@ -1,16 +1,13 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class DonationBuilder {
 
-    private DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
-    private Project project = ProjectBuilder.aProject().build();
+    private String donorNickname = "default_donorNickname";
+    private String projectName = "default_projectName";
     private BigDecimal amount = new BigDecimal(1000);
     private String comment = "default_comment";
     private LocalDate date = LocalDate.now();
@@ -20,17 +17,17 @@ public class DonationBuilder {
     }
 
     public Donation build() {
-        Donation newDonation = new Donation(donorUser, project, amount, comment, date);
+        Donation newDonation = new Donation(donorNickname, projectName, amount, comment, date);
         return newDonation;
     }
 
-    public DonationBuilder withDonorUser(DonorUser donorUser) {
-        this.donorUser = donorUser;
+    public DonationBuilder withDonorNickname(String donorNickname) {
+        this.donorNickname = donorNickname;
         return this;
     }
 
-    public DonationBuilder withProject(Project project) {
-        this.project = project;
+    public DonationBuilder withProjectName(String projectName) {
+        this.projectName = projectName;
         return this;
     }
 
