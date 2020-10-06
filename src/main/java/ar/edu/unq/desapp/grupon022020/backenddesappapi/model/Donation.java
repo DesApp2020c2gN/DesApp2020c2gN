@@ -6,14 +6,14 @@ import java.util.Optional;
 
 public class Donation {
 
-    private final String donorNickname;
+    private final DonorUser donor;
     private final String projectName;
     private final BigDecimal amount;
     private final String comment;
     private final LocalDate date;
 
-    public Donation(String donorNickname, String projectName, BigDecimal amount, String comment, LocalDate date) {
-        this.donorNickname = donorNickname;
+    public Donation(DonorUser donor, String projectName, BigDecimal amount, String comment, LocalDate date) {
+        this.donor = donor;
         this.projectName = projectName;
         this.amount = amount;
         this.comment = comment;
@@ -22,7 +22,7 @@ public class Donation {
     }
 
     public String getDonorNickname() {
-        return donorNickname;
+        return donor.getNickname();
     }
 
     public String getProjectName() {

@@ -16,7 +16,9 @@ class DonationTest {
     @Test
     public void testDonationDonorNickname() {
         String donorNickname = "Juan2001";
-        Donation donation = DonationBuilder.aDonation().withDonorNickname(donorNickname).build();
+        DonorUser donor = mock(DonorUser.class);
+        when(donor.getNickname()).thenReturn(donorNickname);
+        Donation donation = DonationBuilder.aDonation().withDonorNickname(donor).build();
 
         assertEquals(donorNickname, donation.getDonorNickname());
     }
