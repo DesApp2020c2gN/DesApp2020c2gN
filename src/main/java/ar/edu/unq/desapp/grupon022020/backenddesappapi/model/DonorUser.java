@@ -3,7 +3,12 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
