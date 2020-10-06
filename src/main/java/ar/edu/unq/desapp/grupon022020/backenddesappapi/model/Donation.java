@@ -1,44 +1,87 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
+
+import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
+@Entity
+@SequenceGenerator(name = "SEQ_DONATION", sequenceName = "SEQUENCE_DONATION", initialValue = 1, allocationSize = 1)
 public class Donation {
 
-    private final DonorUser donor;
-    private final String projectName;
-    private final BigDecimal amount;
-    private final String comment;
-    private final LocalDate date;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DONATION")
+    private Integer id;
 
-    public Donation(DonorUser donor, String projectName, BigDecimal amount, String comment, LocalDate date) {
-        this.donor = donor;
+    @Column
+    private String donorNickname;
+
+    @Column
+    private String projectName;
+
+    @Column
+    private BigDecimal amount;
+
+    @Column
+    private String comment;
+
+    @Column
+    private LocalDate date;
+
+    public Donation() {}
+
+    public Donation(String donorNickname, String projectName, BigDecimal amount, String comment, LocalDate date) {
+        this.donorNickname = donorNickname;
         this.projectName = projectName;
         this.amount = amount;
         this.comment = comment;
         this.date = date;
-
     }
 
     public String getDonorNickname() {
-        return donor.getNickname();
+        return donorNickname;
+    }
+
+    public void setDonorNickname(String donorNickname) {
+        this.donorNickname = donorNickname;
     }
 
     public String getProjectName() {
         return projectName;
     }
 
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public String getComment() {
         return comment;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public LocalDate getDate() {
         return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public int pointsFromLastDonationOnSameMonth() {

@@ -16,10 +16,7 @@ class DonationTest {
     @Test
     public void testDonationDonorNickname() {
         String donorNickname = "Juan2001";
-        DonorUser donor = mock(DonorUser.class);
-        when(donor.getNickname()).thenReturn(donorNickname);
-        Donation donation = DonationBuilder.aDonation().withDonorNickname(donor).build();
-
+        Donation donation = DonationBuilder.aDonation().withDonorNickname(donorNickname).build();
         assertEquals(donorNickname, donation.getDonorNickname());
     }
 
@@ -27,7 +24,6 @@ class DonationTest {
     public void testDonationProjectName() {
         String projectName = "Conectando San Cristobal";
         Donation donation = DonationBuilder.aDonation().withProjectName(projectName).build();
-
         assertEquals(projectName, donation.getProjectName());
     }
 

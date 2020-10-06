@@ -168,17 +168,17 @@ public class ProjectTest {
 
     @Test
     public void testProjectNumberOfDonors() {
-        String nickname_1 = "Juan2001";
-        String nickname_2 = "Ana1970";
-        String nickname_3 = "KM_12";
+        String donorNickname_1 = "juan123";
+        String donorNickname_2 = "maria321";
+        String donorNickname_3 = "ariel999";
         Donation donation_1 = mock(Donation.class);
-        when(donation_1.getDonorNickname()).thenReturn(nickname_1);
+        when(donation_1.getDonorNickname()).thenReturn(donorNickname_1);
         Donation donation_2 = mock(Donation.class);
-        when(donation_2.getDonorNickname()).thenReturn(nickname_2);
+        when(donation_2.getDonorNickname()).thenReturn(donorNickname_2);
         Donation donation_3 = mock(Donation.class);
-        when(donation_3.getDonorNickname()).thenReturn(nickname_3);
+        when(donation_3.getDonorNickname()).thenReturn(donorNickname_3);
         Donation donation_4 = mock(Donation.class);
-        when(donation_4.getDonorNickname()).thenReturn(nickname_2);
+        when(donation_4.getDonorNickname()).thenReturn(donorNickname_2);
         List<Donation> donations = new ArrayList<>();
         donations.add(donation_1);
         donations.add(donation_2);
