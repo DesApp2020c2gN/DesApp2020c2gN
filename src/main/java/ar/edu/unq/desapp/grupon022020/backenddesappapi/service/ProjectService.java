@@ -19,8 +19,8 @@ public class ProjectService {
         return this.repository.save(project);
     }
 
-    public Project findByID(Integer id) {
-        return this.repository.findById(id).get();
+    public Project findByID(String name) {
+        return this.repository.findById(name).get();
     }
 
     public List<Project> findAll() {

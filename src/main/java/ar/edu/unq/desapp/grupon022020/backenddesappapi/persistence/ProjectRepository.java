@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Configuration
 @Repository
-public interface ProjectRepository extends CrudRepository<Project, Integer> {
+public interface ProjectRepository extends CrudRepository<Project, String> {
 
-    Optional<Project> findById(Integer id);
+    Optional<Project> findById(String id);
 
     List<Project> findAll();
 }

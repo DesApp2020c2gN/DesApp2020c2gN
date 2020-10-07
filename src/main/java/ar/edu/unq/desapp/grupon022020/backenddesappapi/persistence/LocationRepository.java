@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Configuration
 @Repository
-public interface LocationRepository extends CrudRepository<Location, Integer> {
+public interface LocationRepository extends CrudRepository<Location, String> {
 
-    Optional<Location> findById(Integer id);
+    Optional<Location> findById(String id);
 
     List<Location> findAll();
 }

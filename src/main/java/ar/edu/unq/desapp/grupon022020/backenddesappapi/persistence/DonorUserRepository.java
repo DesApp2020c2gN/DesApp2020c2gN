@@ -10,9 +10,10 @@ import java.util.Optional;
 
 @Configuration
 @Repository
-public interface DonorUserRepository extends CrudRepository<DonorUser, Integer> {
+public interface DonorUserRepository extends CrudRepository<DonorUser, String> {
 
-    Optional<DonorUser> findById(Integer id);
+    Optional<DonorUser> findById(String id);
 
     List<DonorUser> findAll();
+
 }
