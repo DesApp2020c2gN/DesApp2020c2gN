@@ -19,11 +19,12 @@ public class DonorUserService {
         return this.repository.save(donorUser);
     }
 
-    public DonorUser findByID(Integer id) {
+    public DonorUser findByID(String id) {
         return this.repository.findById(id).get();
     }
 
     public List<DonorUser> findAll() {
         return this.repository.findAll();
     }
+
 }

@@ -19,8 +19,8 @@ public class LocationService {
         return this.repository.save(location);
     }
 
-    public Location findByID(Integer id) {
-        return this.repository.findById(id).get();
+    public Location findByID(String name) {
+        return this.repository.findById(name).get();
     }
 
     public List<Location> findAll() {
