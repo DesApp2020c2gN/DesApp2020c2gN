@@ -64,7 +64,7 @@ public class DonorUser extends User {
         return money;
     }
 
-    public void donate(BigDecimal amount, String comment, Project project) throws InvalidDonationException {
+    public Donation donate(BigDecimal amount, String comment, Project project) throws InvalidDonationException {
         validateDonation(project, amount);
         Donation donation = DonationBuilder.aDonation().
                 withDonorNickname(this.getNickname()).
@@ -74,6 +74,7 @@ public class DonorUser extends User {
                 withDate(LocalDate.now()).
                 build();
         executeDonation(donation, project);
+        return donation;
     }
 
     private void validateDonation(Project project, BigDecimal amount) throws InvalidDonationException {
