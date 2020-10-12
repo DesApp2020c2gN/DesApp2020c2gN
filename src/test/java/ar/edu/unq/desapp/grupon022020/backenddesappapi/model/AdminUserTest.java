@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -57,7 +57,7 @@ class AdminUserTest {
 
 
     @Test
-    public void testAdminUserProjectCreation() throws InvalidProjectOperation {
+    public void testAdminUserProjectCreation() throws InvalidProjectOperationException {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         assertEquals(0, adminUser.getOpenProjects().size());
 
@@ -90,14 +90,14 @@ class AdminUserTest {
 
         try {
             adminUser.createProject(name, 1000, 60, startDate, 120, location);
-        } catch (InvalidProjectOperation e) {
+        } catch (InvalidProjectOperationException e) {
             String message = "Start day of " + startDate.toString() + " for project " + name + " is not valid";
             assertEquals(message, e.getMessage());
         }
     }
 
     @Test
-    public void testAdminUserAlreadyOpenedProjectCreation() throws InvalidProjectOperation {
+    public void testAdminUserAlreadyOpenedProjectCreation() throws InvalidProjectOperationException {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         String project_1_Name = "Conectando Mercedes";
         String project_2_Name = "Conectando Colon";
@@ -110,14 +110,14 @@ class AdminUserTest {
 
         try {
             adminUser.createProject(project_2_Name, factor, closurePercentage, startDate, 3, location);
-        } catch (InvalidProjectOperation e) {
+        } catch (InvalidProjectOperationException e) {
             String message = "A project for location " + location.getName() + " is currently open";
             assertEquals(message, e.getMessage());
         }
     }
 
     @Test
-    public void testAdminUserProjectCancellation() throws InvalidProjectOperation {
+    public void testAdminUserProjectCancellation() throws InvalidProjectOperationException {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         Location location = mock(Location.class);
         String name = "Conectando Tandil";
@@ -132,7 +132,7 @@ class AdminUserTest {
     }
 
     @Test
-    public void testAdminUserNonExistentProjectCancellation() throws InvalidProjectOperation {
+    public void testAdminUserNonExistentProjectCancellation() throws InvalidProjectOperationException {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         Location location = mock(Location.class);
         String name = "Mar Chiquita 3.0";
@@ -141,7 +141,7 @@ class AdminUserTest {
 
         try {
             adminUser.cancelProject(name);
-        } catch (InvalidProjectOperation e) {
+        } catch (InvalidProjectOperationException e) {
             String message = "Project " + name + " does not exists";
             assertEquals(message, e.getMessage());
         }

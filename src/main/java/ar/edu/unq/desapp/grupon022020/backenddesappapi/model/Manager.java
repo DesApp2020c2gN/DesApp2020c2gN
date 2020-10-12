@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -45,16 +45,16 @@ public class Manager {
         return locations;
     }
 
-    public void addNewProject(Project newProject) throws InvalidProjectOperation {
+    public void addNewProject(Project newProject) throws InvalidProjectOperationException {
         boolean isCurrentlyOpen = this.openProjects.stream().
                 anyMatch(project -> project.getLocation().equals(newProject.getLocation()));
         boolean isAlreadyCompleted = this.closedProjects.stream().
                 anyMatch(project -> project.getLocation().equals(newProject.getLocation()) && project.hasReachedGoal());
         if(isCurrentlyOpen){
-            throw new InvalidProjectOperation("A project for location " + newProject.getLocation().getName() + " is currently open");
+            throw new InvalidProjectOperationException("A project for location " + newProject.getLocation().getName() + " is currently open");
         }
         if(isAlreadyCompleted){
-            throw new InvalidProjectOperation("A project for location " + newProject.getLocation().getName() + " is already completed");
+            throw new InvalidProjectOperationException("A project for location " + newProject.getLocation().getName() + " is already completed");
         }
         this.openProjects.add(newProject);
     }

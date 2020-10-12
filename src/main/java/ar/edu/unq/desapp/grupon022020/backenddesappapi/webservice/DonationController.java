@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.service.DonationService;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.service.DonorUserService;
@@ -42,7 +43,7 @@ public class DonationController {
     public void donate(@RequestParam("nickname") String nickname,
                        @RequestParam("projectName") String projectName,
                        @RequestParam("comment") String comment,
-                       @RequestParam("amount") int amount){
+                       @RequestParam("amount") int amount) throws DataNotFoundException {
         DonorUser donorUser = donorUserService.findByID(nickname);
         Project project = projectService.findByID(projectName);
         Donation donation = null;
