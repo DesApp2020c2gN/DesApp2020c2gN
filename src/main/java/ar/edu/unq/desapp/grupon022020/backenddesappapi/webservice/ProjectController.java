@@ -30,7 +30,8 @@ public class ProjectController {
 
     @RequestMapping(value = "/data/{name}", method = RequestMethod.GET)
     public ResponseEntity<?> getProject(@PathVariable("name") String name){
-        Project project = projectService.findByID(name);
+        // Check if a non existing project is requested!
+        Project project = projectService.findById(name);
         return ResponseEntity.ok().body(project);
     }
 }
