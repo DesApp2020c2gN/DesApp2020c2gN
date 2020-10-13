@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuil
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +52,9 @@ public class ProjectTest {
 
     @Test
     public void testProjectFinishDate() {
-        LocalDate finishDate = LocalDate.parse("2020-12-01");
-        Project project = ProjectBuilder.aProject().withFinishDate(finishDate).build();
+        int durationInDays = 120;
+        LocalDate finishDate = LocalDate.now().plusDays(durationInDays);
+        Project project = ProjectBuilder.aProject().withDurationInDays(durationInDays).build();
 
         assertEquals(finishDate, project.getFinishDate());
     }
@@ -80,9 +82,9 @@ public class ProjectTest {
 
     @Test
     public void testProjectTotalDonations() {
-        int amount_1 = 1200;
-        int amount_2 = 1750;
-        int amount_3 = 700;
+        BigDecimal amount_1 = new BigDecimal(1200);
+        BigDecimal amount_2 = new BigDecimal(1750);
+        BigDecimal amount_3 = new BigDecimal(700);
         Donation donation_1 = mock(Donation.class);
         when(donation_1.getAmount()).thenReturn(amount_1);
         Donation donation_2 = mock(Donation.class);
@@ -95,14 +97,14 @@ public class ProjectTest {
         donations.add(donation_3);
         Project project = ProjectBuilder.aProject().withDonations(donations).build();
 
-        assertEquals(amount_1 + amount_2 + amount_3, project.totalAmountDonations());
+        assertEquals(amount_1.add(amount_2).add(amount_3) , project.totalAmountDonations());
     }
 
     @Test
     public void testProjectPercentageAchieved() {
-        int amount_1 = 200;
-        int amount_2 = 170;
-        int amount_3 = 300;
+        BigDecimal amount_1 = new BigDecimal(200);
+        BigDecimal amount_2 = new BigDecimal(170);
+        BigDecimal amount_3 = new BigDecimal(300);
         Donation donation_1 = mock(Donation.class);
         when(donation_1.getAmount()).thenReturn(amount_1);
         Donation donation_2 = mock(Donation.class);
@@ -116,7 +118,7 @@ public class ProjectTest {
         int factor = 3400;
         Project project = ProjectBuilder.aProject().withFactor(factor).withDonations(donations).build();
 
-        float expectedPercentageAchieved = ((float)(amount_1 + amount_2 + amount_3) / (project.moneyRequired())) * 100;
+        float expectedPercentageAchieved = ((float) (amount_1.intValue() + amount_2.intValue() + amount_3.intValue()) / project.moneyRequired()) * 100;
         assertEquals(expectedPercentageAchieved, project.percentageAchieved());
     }
 
@@ -130,14 +132,14 @@ public class ProjectTest {
         Project project = ProjectBuilder.aProject().
                 withLocation(location).
                 withStartDate(LocalDate.now().plusDays(-1)).
-                withFinishDate(LocalDate.now().plusDays(1)).
+                withDurationInDays(1).
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 build();
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9999999).build();
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9999999)).build();
 
-        donorUser.donate(2000000, "First donation", project);
-        donorUser.donate(2000000, "Second donation", project);
+        donorUser.donate(new BigDecimal(2000000), "First donation", project);
+        donorUser.donate(new BigDecimal(2000000), "Second donation", project);
 
         assertTrue(project.hasReachedGoal());
     }
@@ -152,31 +154,31 @@ public class ProjectTest {
         Project project = ProjectBuilder.aProject().
                 withLocation(location).
                 withStartDate(LocalDate.now().plusDays(-1)).
-                withFinishDate(LocalDate.now().plusDays(1)).
+                withDurationInDays(1).
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 build();
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(9999999).build();
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9999999)).build();
 
-        donorUser.donate(1000000, "First donation", project);
-        donorUser.donate(3000000, "Second donation", project);
+        donorUser.donate(new BigDecimal(1000000), "First donation", project);
+        donorUser.donate(new BigDecimal(3000000), "Second donation", project);
 
         assertFalse(project.hasReachedGoal());
     }
 
     @Test
     public void testProjectNumberOfDonors() {
-        String nickname_1 = "Juan2001";
-        String nickname_2 = "Ana1970";
-        String nickname_3 = "KM_12";
+        String donorNickname_1 = "juan123";
+        String donorNickname_2 = "maria321";
+        String donorNickname_3 = "ariel999";
         Donation donation_1 = mock(Donation.class);
-        when(donation_1.getDonorNickname()).thenReturn(nickname_1);
+        when(donation_1.getDonorNickname()).thenReturn(donorNickname_1);
         Donation donation_2 = mock(Donation.class);
-        when(donation_2.getDonorNickname()).thenReturn(nickname_2);
+        when(donation_2.getDonorNickname()).thenReturn(donorNickname_2);
         Donation donation_3 = mock(Donation.class);
-        when(donation_3.getDonorNickname()).thenReturn(nickname_3);
+        when(donation_3.getDonorNickname()).thenReturn(donorNickname_3);
         Donation donation_4 = mock(Donation.class);
-        when(donation_4.getDonorNickname()).thenReturn(nickname_2);
+        when(donation_4.getDonorNickname()).thenReturn(donorNickname_2);
         List<Donation> donations = new ArrayList<>();
         donations.add(donation_1);
         donations.add(donation_2);

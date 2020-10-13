@@ -15,7 +15,7 @@ public class ProjectBuilder {
     private int factor = 1000;
     private int closurePercentage = 100;
     private LocalDate startDate = LocalDate.now();
-    private LocalDate finishDate = LocalDate.now();
+    private int durationInDays = 1;
     private List<Donation> donations = new ArrayList<>();
     private Location location = LocationBuilder.aLocation().build();
 
@@ -24,7 +24,7 @@ public class ProjectBuilder {
     }
 
     public Project build() {
-        Project newProject = new Project(name, factor, closurePercentage, startDate, finishDate, donations, location);
+        Project newProject = new Project(name, factor, closurePercentage, startDate, durationInDays, donations, location);
         return newProject;
     }
 
@@ -48,8 +48,8 @@ public class ProjectBuilder {
         return this;
     }
 
-    public ProjectBuilder withFinishDate(LocalDate finishDate) {
-        this.finishDate = finishDate;
+    public ProjectBuilder withDurationInDays(int durationInDays) {
+        this.durationInDays = durationInDays;
         return this;
     }
 

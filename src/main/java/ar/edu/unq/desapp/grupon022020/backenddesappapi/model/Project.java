@@ -2,27 +2,51 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.Column;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+@Entity
 public class Project {
 
-    private final String name;
-    private final int factor;
-    private final int closurePercentage;
-    private final LocalDate startDate;
-    private LocalDate finishDate;
-    private final List<Donation> donations;
-    private final Location location;
+    @Id
+    private String name;
 
-    public Project(String name, int factor, int closurePercentage, LocalDate startDate, LocalDate finishDate, List<Donation> donations, Location location) {
+    @Column
+    private int factor;
+
+    @Column
+    private int closurePercentage;
+
+    @Column
+    private LocalDate startDate;
+
+    @Column
+    private LocalDate finishDate;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "projectName")
+    private List<Donation> donations;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Location location;
+
+    public Project() {}
+
+    public Project(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, List<Donation> donations, Location location) {
         this.name = name;
         this.factor = factor;
         this.closurePercentage = closurePercentage;
         this.startDate = startDate;
-        this.finishDate = finishDate;
+        this.finishDate = startDate.plusDays(durationInDays);
         this.donations = donations;
         this.location = location;
     }
@@ -31,28 +55,56 @@ public class Project {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getFactor() {
         return factor;
+    }
+
+    public void setFactor(int factor) {
+        this.factor = factor;
     }
 
     public int getClosurePercentage() {
         return closurePercentage;
     }
 
+    public void setClosurePercentage(int closurePercentage) {
+        this.closurePercentage = closurePercentage;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDate getFinishDate() {
         return finishDate;
     }
 
+    public void setFinishDate(LocalDate finishDate) {
+        this.finishDate = finishDate;
+    }
+
     public List<Donation> getDonations() {
         return donations;
     }
 
+    public void setDonations(List<Donation> donations) {
+        this.donations = donations;
+    }
+
     public Location getLocation() {
         return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public void receiveDonation(Donation donation) {
@@ -78,11 +130,11 @@ public class Project {
     }
 
     public float percentageAchieved(){
-        return ((float) totalAmountDonations() / moneyRequired()) * 100;
+        return ((float) totalAmountDonations().intValue() / moneyRequired()) * 100;
     }
 
-    public int totalAmountDonations() {
-        return donations.stream().map(Donation::getAmount).reduce(0, Integer::sum);
+    public BigDecimal totalAmountDonations() {
+        return new BigDecimal(donations.stream().map(Donation::getAmount).map(BigDecimal::intValue).reduce(0, Integer::sum));
     }
 
     public int moneyRequired() {
