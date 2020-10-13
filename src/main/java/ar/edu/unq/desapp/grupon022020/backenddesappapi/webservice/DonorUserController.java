@@ -61,8 +61,8 @@ public class DonorUserController {
                                 @RequestParam("mail") String mail,
                                 @RequestParam("password") String password,
                                 @RequestParam("money") int money){
-        // Check that nickname doesn't exist already (if it exists, it updates!)
+        // TODO: Check that nickname doesn't exist already (if it exists, it updates!)
         DonorUser donorUser = userService.createDonorUser(nickname, name, mail, password, money);
-        return ResponseEntity.ok().body(donorUser);
+        return new ResponseEntity<>(donorUser, HttpStatus.CREATED);
     }
 }

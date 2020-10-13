@@ -7,8 +7,6 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginExc
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonorUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
