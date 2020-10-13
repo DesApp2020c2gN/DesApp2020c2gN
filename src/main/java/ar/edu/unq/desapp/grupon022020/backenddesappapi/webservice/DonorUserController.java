@@ -53,7 +53,7 @@ public class DonorUserController {
         }
         return ResponseEntity.ok().body(donorUser);
     }
-    
+
     @RequestMapping(value = "/data", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> allDonorUsers() {
