@@ -29,8 +29,6 @@ public class InitServiceInMemory {
     @Autowired
     private LocationService locationService;
     @Autowired
-    private DonationService donationService;
-    @Autowired
     private ProjectService projectService;
     @Autowired
     private UserService userService;
