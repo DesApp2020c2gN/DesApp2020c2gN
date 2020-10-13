@@ -19,7 +19,7 @@ public class LocationService {
         return this.repository.save(location);
     }
 
-    public Location findByID(String name) {
+    public Location findById(String name) {
         return this.repository.findById(name).get();
     }
 

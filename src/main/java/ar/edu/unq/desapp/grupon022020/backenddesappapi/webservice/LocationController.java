@@ -32,7 +32,8 @@ public class LocationController {
     @RequestMapping(value = "/data/{name}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getLocation(@PathVariable("name") String name) {
-        Location location = locationService.findByID(name);
+        // TODO: Check if a non existing location is requested!
+        Location location = locationService.findById(name);
         return ResponseEntity.ok().body(location);
     }
 

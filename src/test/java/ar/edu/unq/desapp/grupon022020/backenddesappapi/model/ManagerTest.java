@@ -6,7 +6,7 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBu
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -126,7 +126,7 @@ class ManagerTest {
     }
 
     @Test
-    public void testManagerFinishedButNotCompletedProjects() throws InvalidProjectOperation {
+    public void testManagerFinishedButNotCompletedProjects() throws InvalidProjectOperationException {
         LocalDate startDate = LocalDate.now().minusDays(1);
         Location location_1 = LocationBuilder.aLocation().withName("Mercedes").build();
         Location location_2 = LocationBuilder.aLocation().withName("Tandil").build();
@@ -142,7 +142,7 @@ class ManagerTest {
     }
 
     @Test
-    public void testManagerAlreadyCompletedProjects() throws InvalidDonationException, InvalidProjectOperation {
+    public void testManagerAlreadyCompletedProjects() throws InvalidDonationException, InvalidProjectOperationException {
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9000)).build();
         Manager manager = ManagerBuilder.aManager().build();
         manager.addNewDonorUser(donorUser);
@@ -158,7 +158,7 @@ class ManagerTest {
 
         try {
             manager.addNewProject(project_2);
-        } catch (InvalidProjectOperation e) {
+        } catch (InvalidProjectOperationException e) {
             String message = "A project for location " + location.getName() + " is already completed";
             assertEquals(message, e.getMessage());
         }

@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperation;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,9 +28,9 @@ public class AdminUser extends User {
         return manager.getUsers();
     }
 
-    public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, Location location) throws InvalidProjectOperation {
+    public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, Location location) throws InvalidProjectOperationException {
         if (startDate.isBefore(LocalDate.now())) {
-            throw new InvalidProjectOperation("Start day of " + startDate.toString() + " for project " + name + " is not valid");
+            throw new InvalidProjectOperationException("Start day of " + startDate.toString() + " for project " + name + " is not valid");
         }
         Project project = ProjectBuilder.aProject().
                 withName(name).
@@ -44,13 +44,13 @@ public class AdminUser extends User {
         return project;
     }
 
-    public void cancelProject(String name) throws InvalidProjectOperation {
+    public void cancelProject(String name) throws InvalidProjectOperationException {
         Optional<Project> optionalProject = manager.getOpenProject(name);
         if (optionalProject.isPresent()) {
             Project projectToCancel = optionalProject.get();
             manager.cancelProject(projectToCancel);
         } else {
-            throw new InvalidProjectOperation("Project " + name + " does not exists");
+            throw new InvalidProjectOperationException("Project " + name + " does not exists");
         }
     }
 

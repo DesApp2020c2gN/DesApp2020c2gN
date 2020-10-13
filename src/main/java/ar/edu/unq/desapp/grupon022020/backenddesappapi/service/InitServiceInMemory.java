@@ -33,7 +33,7 @@ public class InitServiceInMemory {
     @Autowired
     private ProjectService projectService;
     @Autowired
-    private DonorUserService donorUserService;
+    private UserService userService;
 
     @PostConstruct
     public void initialize() {
@@ -44,25 +44,25 @@ public class InitServiceInMemory {
     }
 
     private void fireInitialData() {
-        Location location_1 = LocationBuilder.aLocation().withName("Santa Rita").build();
-        Location location_2 = LocationBuilder.aLocation().withName("Rio Tercero").build();
-        Location location_3 = LocationBuilder.aLocation().withName("Puerto Iguazu").build();
-        Location location_4 = LocationBuilder.aLocation().withName("Cruz Azul").build();
+        Location location_1 = LocationBuilder.aLocation().withName("Santa Rita").withPopulation(1209).build();
+        Location location_2 = LocationBuilder.aLocation().withName("Rio Tercero").withPopulation(712).build();
+        Location location_3 = LocationBuilder.aLocation().withName("Puerto Iguazu").withPopulation(1530).build();
+        Location location_4 = LocationBuilder.aLocation().withName("Cruz Azul").withPopulation(955).build();
         locationService.save(location_1);
         locationService.save(location_4);
 
-        DonorUser donorUser_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(9000)).build();
-        donorUserService.save(donorUser_1);
-        DonorUser donorUser_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(8000)).build();
-        donorUserService.save(donorUser_2);
-        DonorUser donorUser_3 = DonorUserBuilder.aDonorUser().withNickname("nick000").withMoney(BigDecimal.valueOf(7500)).build();
-        donorUserService.save(donorUser_3);
+        DonorUser donorUser_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withName("Juan").withPassword("123").withMoney(BigDecimal.valueOf(9000)).build();
+        userService.save(donorUser_1);
+        DonorUser donorUser_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withName("Maria").withPassword("456").withMoney(BigDecimal.valueOf(8000)).build();
+        userService.save(donorUser_2);
+        DonorUser donorUser_3 = DonorUserBuilder.aDonorUser().withNickname("fabian789").withName("Fabian").withPassword("789").withMoney(BigDecimal.valueOf(7500)).build();
+        userService.save(donorUser_3);
 
-        Project project_1 = ProjectBuilder.aProject().withName("Conectando Santa Rita").withLocation(location_1).build();
+        Project project_1 = ProjectBuilder.aProject().withName("Conectando Santa Rita").withDurationInDays(90).withLocation(location_1).build();
         projectService.save(project_1);
-        Project project_2 = ProjectBuilder.aProject().withName("Conectando Rio Tercero").withLocation(location_2).build();
+        Project project_2 = ProjectBuilder.aProject().withName("Conectando Rio Tercero").withDurationInDays(120).withLocation(location_2).build();
         projectService.save(project_2);
-        Project project_3 = ProjectBuilder.aProject().withName("Conectando Puerto Iguazu").withLocation(location_3).build();
+        Project project_3 = ProjectBuilder.aProject().withName("Conectando Puerto Iguazu").withDurationInDays(35).withLocation(location_3).build();
         projectService.save(project_3);
 
         try {
@@ -74,9 +74,9 @@ public class InitServiceInMemory {
             donorUser_2.donate(BigDecimal.valueOf(500), "Cool!", project_1);
             donorUser_2.donate(BigDecimal.valueOf(2000), "Awesome!", project_1);
             donorUser_1.donate(BigDecimal.valueOf(200), "This is my second donation!", project_1);
-            donorUserService.save(donorUser_1);
-            donorUserService.save(donorUser_2);
-            donorUserService.save(donorUser_3);
+            userService.save(donorUser_1);
+            userService.save(donorUser_2);
+            userService.save(donorUser_3);
         } catch (InvalidDonationException e) {
             e.printStackTrace();
         }
