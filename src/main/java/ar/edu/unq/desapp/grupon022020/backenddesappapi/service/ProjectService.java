@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.AdminUser;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.LocationRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.ProjectRepository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -28,8 +30,13 @@ public class ProjectService {
         return this.projectRepository.save(project);
     }
 
-    public Project findById(String name) {
-        return this.projectRepository.findById(name).get();
+    public Project findById(String name) throws DataNotFoundException {
+        try {
+            return this.projectRepository.findById(name).get();
+        }
+        catch (NoSuchElementException e){
+            throw  new DataNotFoundException("Project " + name + " is not a valid project");
+        }
     }
 
     public List<Project> findAll() {

@@ -89,7 +89,6 @@ public class ProjectTest {
     @Test
     public void testProjectFinishDateSetter() {
         int durationInDays = 120;
-        LocalDate finishDate = LocalDate.now().plusDays(durationInDays);
         Project project = ProjectBuilder.aProject().withDurationInDays(durationInDays).build();
         LocalDate newFinishDate = LocalDate.parse("2021-11-21");
         project.setFinishDate(newFinishDate);
