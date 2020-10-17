@@ -10,7 +10,9 @@ import java.util.Optional;
 
 @Configuration
 @Repository
-public interface DonorUserRepository extends CrudRepository<DonorUser, String> {
+public interface UserRepository extends CrudRepository<DonorUser, String>, CustomizedUserRepository {
+
+    boolean existsById(String name);
 
     Optional<DonorUser> findById(String id);
 

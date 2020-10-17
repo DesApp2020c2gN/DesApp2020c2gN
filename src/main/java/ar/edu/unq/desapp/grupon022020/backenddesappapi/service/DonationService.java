@@ -6,7 +6,7 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonationRepository;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonorUserRepository;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class DonationService {
     @Autowired
     private DonationRepository donationRepository;
     @Autowired
-    private DonorUserRepository donorUserRepository;
+    private UserRepository userRepository;
     @Autowired
     private ProjectRepository projectRepository;
 
@@ -43,16 +43,16 @@ public class DonationService {
                            String projectName,
                            String comment,
                            int amount) throws DataNotFoundException, InvalidDonationException {
-        Optional<DonorUser> donorUser = donorUserRepository.findById(nickname);
-        Optional<Project> project = projectRepository.findById(projectName);
-        if(!donorUser.isPresent()){
+        if(!userRepository.existsById(nickname)){
             throw new DataNotFoundException("User " + nickname + " does not exist");
         }
-        if(!project.isPresent()){
+        if(!projectRepository.existsById(projectName)){
             throw new DataNotFoundException("Project " + projectName + " does not exist");
         }
         Donation donation;
         try {
+            Optional<DonorUser> donorUser = userRepository.findById(nickname);
+            Optional<Project> project = projectRepository.findById(projectName);
             donation = donorUser.get().donate(BigDecimal.valueOf(amount), comment, project.get());
             save(donation);
         } catch (InvalidDonationException e) {

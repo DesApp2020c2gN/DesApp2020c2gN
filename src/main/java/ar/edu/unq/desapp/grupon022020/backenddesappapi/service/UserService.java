@@ -2,9 +2,8 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonorUserRepository;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,13 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
 
     @Autowired
-    private DonorUserRepository repository;
+    private UserRepository repository;
     @Value("${admin.name:NONE}")
     private String adminName;
     @Value("${admin.password:NONE}")
@@ -30,14 +28,9 @@ public class UserService {
         return this.repository.save(donorUser);
     }
 
-    public DonorUser findById(String id) throws DataNotFoundException {
-        try {
-            return this.repository.findById(id).get();
-        }
-        catch (NoSuchElementException e){
-            throw  new DataNotFoundException("User " + id + " is not a valid user");
-        }
-    }
+    public boolean existsById(String name){ return this.repository.existsById(name); }
+
+    public DonorUser findById(String id) { return this.repository.findById(id).get(); }
 
     public List<DonorUser> findAll() {
         return this.repository.findAll();
@@ -71,14 +64,9 @@ public class UserService {
     }
 
     public void loginDonorUser(String nickname, String password) throws LoginException {
-        DonorUser donorUser;
-        try {
-            donorUser = findById(nickname);
-        } catch (DataNotFoundException e) {
-            throw  new LoginException("Nickname is incorrect");
-        }
-        if(!donorUser.getPassword().equals(password)){
-            throw new LoginException("Password is incorrect");
+        DonorUser donorUser = repository.loginUser(nickname, password);
+        if(donorUser == null) {
+            throw  new LoginException("Nickname or password is incorrect");
         }
     }
 

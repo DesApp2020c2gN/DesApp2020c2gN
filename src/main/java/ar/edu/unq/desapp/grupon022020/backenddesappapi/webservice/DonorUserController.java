@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.service.UserService;
@@ -39,13 +40,13 @@ public class DonorUserController {
 
     @RequestMapping(value = "/data/{nickname}", method = RequestMethod.GET)
     public ResponseEntity<?> getDonorUser(@PathVariable("nickname") String nickname) {
-        DonorUser donorUser;
-        try {
-            donorUser = userService.findById(nickname);
-        } catch (DataNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        if (userService.existsById(nickname)){
+            DonorUser donorUser = userService.findById(nickname);
+            return ResponseEntity.ok().body(donorUser);
         }
-        return ResponseEntity.ok().body(donorUser);
+        else {
+            return new ResponseEntity<>("User " + nickname + " is not a valid user", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
@@ -61,13 +62,12 @@ public class DonorUserController {
                                 @RequestParam("mail") String mail,
                                 @RequestParam("password") String password,
                                 @RequestParam("money") int money){
-        DonorUser donorUser;
-        try {
-            userService.findById(nickname);
-        } catch (DataNotFoundException e) {
-            donorUser = userService.createDonorUser(nickname, name, mail, password, money);
+        if (userService.existsById(nickname)){
+            return new ResponseEntity<>("User " + nickname + " already exists", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        else {
+            DonorUser donorUser = userService.createDonorUser(nickname, name, mail, password, money);
             return new ResponseEntity<>(donorUser, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>("User " + nickname + " already exists", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
