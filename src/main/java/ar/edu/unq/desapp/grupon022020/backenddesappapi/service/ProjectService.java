@@ -43,10 +43,16 @@ public class ProjectService {
                                  int durationInDays,
                                  String locationName) throws InvalidProjectOperationException {
         Project project;
+        //TODO: check there is an existing location!
         Optional<Location> location = locationRepository.findById(locationName);
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         project = adminUser.createProject(name, factor, closurePercentage, LocalDate.parse(startDate), durationInDays, location.get());
         save(project);
         return project;
+    }
+
+    public boolean existsOpenProject(String locationName) {
+        Project project = projectRepository.existsOpenProject(locationName, LocalDate.now());
+        return (project != null);
     }
 }

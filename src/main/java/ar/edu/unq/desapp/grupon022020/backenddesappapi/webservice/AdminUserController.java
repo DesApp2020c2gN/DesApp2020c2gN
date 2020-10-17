@@ -47,14 +47,15 @@ public class AdminUserController {
                                            @RequestParam("startDate") String startDate,
                                            @RequestParam("durationInDays") int durationInDays,
                                            @RequestParam("locationName") String locationName) {
-        // TODO: Check that there is no open project for that location!
-        Project project;
+        if(projectService.existsOpenProject(locationName)){
+            return new ResponseEntity<>("There is already an open project for location " + locationName, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         try {
-            project = projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
+            Project project = projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
+            return new ResponseEntity<>(project, HttpStatus.CREATED);
         } catch (InvalidProjectOperationException e) {
             return new ResponseEntity<>("Project could not be created: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(project, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.POST)

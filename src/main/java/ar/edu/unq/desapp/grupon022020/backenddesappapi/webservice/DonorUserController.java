@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
