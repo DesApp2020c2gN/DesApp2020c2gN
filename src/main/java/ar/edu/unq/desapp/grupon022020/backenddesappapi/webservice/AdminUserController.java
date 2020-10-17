@@ -57,4 +57,11 @@ public class AdminUserController {
         return new ResponseEntity<>(project, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/data", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> cancelProject(@RequestParam("name") String name) {
+        // TODO: Cancel the project and return the donations!
+        return new ResponseEntity<>("This method is not implemented yet", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

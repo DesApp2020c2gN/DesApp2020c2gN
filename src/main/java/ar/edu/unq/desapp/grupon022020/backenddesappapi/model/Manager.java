@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 public class Manager {
 
+    //TODO: extract all this logic into the services!
+
     private final List<Project> openProjects;
     private final List<Project> closedProjects;
     private final List<DonorUser> donorUsers;

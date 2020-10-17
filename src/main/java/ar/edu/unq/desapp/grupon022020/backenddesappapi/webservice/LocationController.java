@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -34,15 +33,13 @@ public class LocationController {
     @RequestMapping(value = "/data/{name}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getLocation(@PathVariable("name") String name) {
-        Location location;
-        try {
-            location = locationService.findById(name);
-        } catch (DataNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        if (locationService.existsById(name)){
+            Location location = locationService.findById(name);
+            return ResponseEntity.ok().body(location);
         }
-        return ResponseEntity.ok().body(location);
+        else {
+            return new ResponseEntity<>("Location " + name + " is not a valid location", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
-
 
 }
