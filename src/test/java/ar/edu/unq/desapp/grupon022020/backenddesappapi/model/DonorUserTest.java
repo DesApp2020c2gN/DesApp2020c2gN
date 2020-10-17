@@ -23,7 +23,14 @@ class DonorUserTest {
     public void testDonorUserName() {
         String name = "Marcelo";
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withName(name).build();
+        assertEquals(name, donorUser.getName());
+    }
 
+    @Test
+    public void testDonorUserNameSetter() {
+        String name = "Marcelo";
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        donorUser.setName(name);
         assertEquals(name, donorUser.getName());
     }
 
@@ -31,7 +38,14 @@ class DonorUserTest {
     public void testDonorUserNickname() {
         String nickname = "Marce98";
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname(nickname).build();
+        assertEquals(nickname, donorUser.getNickname());
+    }
 
+    @Test
+    public void testDonorUserNicknameSetter() {
+        String nickname = "Marce98";
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        donorUser.setNickname(nickname);
         assertEquals(nickname, donorUser.getNickname());
     }
 
@@ -39,7 +53,14 @@ class DonorUserTest {
     public void testDonorUserMail() {
         String mail = "marce98@gmail.com";
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMail(mail).build();
+        assertEquals(mail, donorUser.getMail());
+    }
 
+    @Test
+    public void testDonorUserMailSetter() {
+        String mail = "marce98@gmail.com";
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        donorUser.setMail(mail);
         assertEquals(mail, donorUser.getMail());
     }
 
@@ -47,7 +68,14 @@ class DonorUserTest {
     public void testDonorUserPassword() {
         String password = "marce_98_1001";
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withPassword(password).build();
+        assertEquals(password, donorUser.getPassword());
+    }
 
+    @Test
+    public void testDonorUserPasswordSetter() {
+        String password = "marce_98_1001";
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        donorUser.setPassword(password);
         assertEquals(password, donorUser.getPassword());
     }
 
@@ -58,9 +86,19 @@ class DonorUserTest {
         Donation donation_2 = mock(Donation.class);
         donations.add(donation_1);
         donations.add(donation_2);
-
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withDonations(donations).build();
+        assertEquals(donations, donorUser.getDonations());
+    }
 
+    @Test
+    public void testDonorUserDonationListSetter() {
+        List<Donation> donations = new ArrayList<>();
+        Donation donation_1 = mock(Donation.class);
+        Donation donation_2 = mock(Donation.class);
+        donations.add(donation_1);
+        donations.add(donation_2);
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        donorUser.setDonations(donations);
         assertEquals(donations, donorUser.getDonations());
     }
 
@@ -68,7 +106,14 @@ class DonorUserTest {
     public void testDonorUserPoints() {
         int points = 71;
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withPoints(points).build();
+        assertEquals(points, donorUser.getPoints());
+    }
 
+    @Test
+    public void testDonorUserPointsSetter() {
+        int points = 71;
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        donorUser.setPoints(points);
         assertEquals(points, donorUser.getPoints());
     }
 
@@ -76,7 +121,14 @@ class DonorUserTest {
     public void testDonorUserMoney() {
         BigDecimal money = new BigDecimal(2300);
         DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(money).build();
+        assertEquals(money, donorUser.getMoney());
+    }
 
+    @Test
+    public void testDonorUserMoneySetter() {
+        BigDecimal money = new BigDecimal(2300);
+        DonorUser donorUser = DonorUserBuilder.aDonorUser().build();
+        donorUser.setMoney(money);
         assertEquals(money, donorUser.getMoney());
     }
 

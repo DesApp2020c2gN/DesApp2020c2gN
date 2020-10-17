@@ -60,8 +60,16 @@ public class DonorUser extends User {
         return points;
     }
 
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     public BigDecimal getMoney() {
         return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
     }
 
     public Donation donate(BigDecimal amount, String comment, Project project) throws InvalidDonationException {
