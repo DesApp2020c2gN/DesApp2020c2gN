@@ -61,8 +61,13 @@ public class DonorUserController {
                                 @RequestParam("mail") String mail,
                                 @RequestParam("password") String password,
                                 @RequestParam("money") int money){
-        // TODO: Check that nickname doesn't exist already (if it exists, it updates!)
-        DonorUser donorUser = userService.createDonorUser(nickname, name, mail, password, money);
-        return new ResponseEntity<>(donorUser, HttpStatus.CREATED);
+        DonorUser donorUser;
+        try {
+            userService.findById(nickname);
+        } catch (DataNotFoundException e) {
+            donorUser = userService.createDonorUser(nickname, name, mail, password, money);
+            return new ResponseEntity<>(donorUser, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("User " + nickname + " already exists", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
