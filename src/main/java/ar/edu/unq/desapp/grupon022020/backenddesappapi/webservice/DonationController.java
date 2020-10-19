@@ -36,12 +36,12 @@ public class DonationController {
                        @RequestParam("projectName") String projectName,
                        @RequestParam("comment") String comment,
                        @RequestParam("amount") int amount) {
-        Donation donation;
         try {
-            donation = donationService.donate(nickname, projectName, comment, amount);
+            Donation donation = donationService.donate(nickname, projectName, comment, amount);
+            return ResponseEntity.ok().body(donation);
         } catch (InvalidDonationException | DataNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Donation could not be completed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok().body(donation);
+
     }
 }

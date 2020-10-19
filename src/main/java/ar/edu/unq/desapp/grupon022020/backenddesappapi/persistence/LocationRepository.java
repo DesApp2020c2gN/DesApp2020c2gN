@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface LocationRepository extends CrudRepository<Location, String> {
 
+    boolean existsById(String name);
+
     Optional<Location> findById(String id);
 
     List<Location> findAll();

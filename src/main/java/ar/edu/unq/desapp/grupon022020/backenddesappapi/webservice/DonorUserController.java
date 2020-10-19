@@ -31,21 +31,20 @@ public class DonorUserController {
                                        @RequestParam("password") String password) {
         try {
             userService.loginDonorUser(nickname, password);
+            return ResponseEntity.ok().body("Donor login successful");
         } catch (LoginException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Donor login failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok().body("Login successful");
     }
 
     @RequestMapping(value = "/data/{nickname}", method = RequestMethod.GET)
     public ResponseEntity<?> getDonorUser(@PathVariable("nickname") String nickname) {
-        DonorUser donorUser;
         try {
-            donorUser = userService.findById(nickname);
+            DonorUser donorUser = userService.findById(nickname);
+            return ResponseEntity.ok().body(donorUser);
         } catch (DataNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("User could not be found: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok().body(donorUser);
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
@@ -61,8 +60,11 @@ public class DonorUserController {
                                 @RequestParam("mail") String mail,
                                 @RequestParam("password") String password,
                                 @RequestParam("money") int money){
-        // TODO: Check that nickname doesn't exist already (if it exists, it updates!)
-        DonorUser donorUser = userService.createDonorUser(nickname, name, mail, password, money);
-        return new ResponseEntity<>(donorUser, HttpStatus.CREATED);
+        try {
+            DonorUser donorUser = userService.createDonorUser(nickname, name, mail, password, money);
+            return new ResponseEntity<>(donorUser, HttpStatus.CREATED);
+        } catch (DataNotFoundException e) {
+            return new ResponseEntity<>("User could not be created: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

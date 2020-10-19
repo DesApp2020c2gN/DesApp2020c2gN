@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Entity
 public class Project {
@@ -151,6 +152,10 @@ public class Project {
 
     public int numberOfDonors(){
         return ((int) this.donations.stream().map(Donation::getDonorNickname).distinct().count());
+    }
+
+    public List<String> donors(){
+        return this.donations.stream().map(Donation::getDonorNickname).distinct().collect(Collectors.toList());
     }
     
     public Optional<Donation> getLastDonation() {

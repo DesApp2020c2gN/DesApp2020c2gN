@@ -14,6 +14,7 @@ public abstract class User {
 
     @Column
     private String password;
+    //TODO: save password as Hash in the database!
 
     public User() {	}
 

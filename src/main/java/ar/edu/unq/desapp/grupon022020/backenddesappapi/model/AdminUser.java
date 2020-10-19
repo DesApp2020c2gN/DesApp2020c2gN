@@ -29,6 +29,7 @@ public class AdminUser extends User {
     }
 
     public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, Location location) throws InvalidProjectOperationException {
+        //TODO: validate factor and durationInDays are positive numbers and closurePercentage is between 1 and 100!
         if (startDate.isBefore(LocalDate.now())) {
             throw new InvalidProjectOperationException("Start day of " + startDate.toString() + " for project " + name + " is not valid");
         }
@@ -44,14 +45,19 @@ public class AdminUser extends User {
         return project;
     }
 
-    public void cancelProject(String name) throws InvalidProjectOperationException {
-        Optional<Project> optionalProject = manager.getOpenProject(name);
-        if (optionalProject.isPresent()) {
-            Project projectToCancel = optionalProject.get();
-            manager.cancelProject(projectToCancel);
-        } else {
-            throw new InvalidProjectOperationException("Project " + name + " does not exists");
-        }
+    public void cancelProject(Project project, List<DonorUser> donorsList) {
+        project.cancel();
+        returnDonations(project, donorsList);
+    }
+
+    public void returnDonations(Project projectToCancel, List<DonorUser> donorsList) {
+        List<Donation> donationsToReturn = projectToCancel.getDonations();
+        donationsToReturn.forEach(donation -> getUser(donation.getDonorNickname(), donorsList).undoDonation(donation));
+        projectToCancel.undoDonations();
+    }
+
+    private DonorUser getUser(String donorNickname, List<DonorUser> donorsList) {
+        return donorsList.stream().filter(donorUser -> donorUser.getNickname().equals(donorNickname)).findFirst().get();
     }
 
 }

@@ -23,6 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ManagerTest {
+    //TODO: This test have to be removed!
 
     @Test
     public void testManagerOpenProjects() {
