@@ -38,7 +38,7 @@ public class LocationController {
             Location location = locationService.findById(name);
             return ResponseEntity.ok().body(location);
         } catch (DataNotFoundException e) {
-            return new ResponseEntity<>("Location couldnot be found: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Location could not be found: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
