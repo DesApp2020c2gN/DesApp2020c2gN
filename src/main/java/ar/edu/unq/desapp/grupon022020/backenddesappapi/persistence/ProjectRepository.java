@@ -18,7 +18,7 @@ public interface ProjectRepository extends CrudRepository<Project, String> {
 
     List<Project> findAll();
 
-    @Query("SELECT p FROM Project p WHERE p.location.name=?1 and p.finishDate>p.startDate and p.finishDate>?2")
-    Project existsOpenProject(String locationName, LocalDate now);
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Project p WHERE p.location.name=?1 and p.finishDate>p.startDate and p.finishDate>?2")
+    boolean existsOpenProject(String locationName, LocalDate now);
 
 }

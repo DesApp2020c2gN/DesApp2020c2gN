@@ -14,6 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class AdminUserTest {
+    //TODO: test in this class have to be changed or removed!
 
     @Test
     public void testAdminUserName() {
@@ -115,7 +116,7 @@ class AdminUserTest {
             assertEquals(message, e.getMessage());
         }
     }
-
+/*
     @Test
     public void testAdminUserProjectCancellation() throws InvalidProjectOperationException {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
@@ -146,5 +147,5 @@ class AdminUserTest {
             assertEquals(message, e.getMessage());
         }
     }
-
+*/
 }

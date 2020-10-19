@@ -65,23 +65,12 @@ public class Manager {
         this.donorUsers.add(donorUser);
     }
 
-    public Optional<Project> getOpenProject(String name) {
-        return getOpenProjects().stream().
-                filter(project -> project.getName().equals(name)).
-                findFirst();
-    }
-
     private Optional<DonorUser> getUser(String donorNickname) {
         return getUsers().stream().
                 filter(donorUser -> donorUser.getNickname().equals(donorNickname)).
                 findFirst();
     }
 
-    public void cancelProject(Project projectToCancel) {
-        projectToCancel.cancel();
-        setAsClosed(projectToCancel);
-        returnDonations(projectToCancel);
-    }
 
     public void closeFinishedProjects() {
         List<Project> finishedProjects =

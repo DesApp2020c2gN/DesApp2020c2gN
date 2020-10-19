@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Service
 public class DonationService {
+    //TODO: create test for DonationService!
 
     @Autowired
     private DonationRepository donationRepository;

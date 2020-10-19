@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 public class UserService {
+    //TODO: create test for UserService!
 
     @Autowired
     private UserRepository repository;
@@ -28,9 +30,14 @@ public class UserService {
         return this.repository.save(donorUser);
     }
 
-    public boolean existsById(String name){ return this.repository.existsById(name); }
-
-    public DonorUser findById(String id) { return this.repository.findById(id).get(); }
+    public DonorUser findById(String id) throws DataNotFoundException {
+        if(repository.existsById(id)){
+            return this.repository.findById(id).get();
+        }
+        else {
+            throw new DataNotFoundException("Donor " + id + " does not exists");
+        }
+    }
 
     public List<DonorUser> findAll() {
         return this.repository.findAll();
@@ -40,7 +47,11 @@ public class UserService {
                                      String name,
                                      String mail,
                                      String password,
-                                     int money){
+                                     int money) throws DataNotFoundException {
+        if (repository.existsById(nickname)){
+            throw new DataNotFoundException("User " + nickname + " already exists");
+        }
+        //TODO: validate money is zero or a positive number!
         DonorUser donorUser = DonorUserBuilder.aDonorUser().
                 withNickname(nickname).
                 withName(name).
@@ -64,9 +75,11 @@ public class UserService {
     }
 
     public void loginDonorUser(String nickname, String password) throws LoginException {
-        DonorUser donorUser = repository.loginUser(nickname, password);
-        if(donorUser == null) {
-            throw  new LoginException("Nickname or password is incorrect");
+        if(!repository.existsById(nickname)) {
+            throw new LoginException("Nickname belongs to a non existing user");
+        }
+        if(!repository.loginUser(nickname, password)) {
+            throw new LoginException("Password is incorrect");
         }
     }
 

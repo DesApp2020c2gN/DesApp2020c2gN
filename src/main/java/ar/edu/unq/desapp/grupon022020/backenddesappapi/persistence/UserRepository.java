@@ -19,7 +19,7 @@ public interface UserRepository extends CrudRepository<DonorUser, String> {
 
     List<DonorUser> findAll();
 
-    @Query("SELECT u FROM DonorUser u WHERE u.nickname=?1 and u.password=?2")
-    DonorUser loginUser(String nickname, String password);
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM DonorUser u WHERE u.nickname=?1 and u.password=?2")
+    boolean loginUser(String nickname, String password);
 
 }
