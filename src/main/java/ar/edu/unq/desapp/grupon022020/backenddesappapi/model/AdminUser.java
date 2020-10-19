@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidP
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public class AdminUser extends User {
 
