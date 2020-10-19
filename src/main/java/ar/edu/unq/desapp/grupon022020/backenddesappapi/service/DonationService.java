@@ -8,13 +8,17 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidD
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonationRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.ProjectRepository;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.utils.CommonTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DonationService {
@@ -60,5 +64,15 @@ public class DonationService {
             throw new InvalidDonationException(e.getMessage());
         }
         return donation;
+    }
+
+    public List<Donation> getTopTenBiggestDonations() {
+        //TODO: review this method!
+        List<Donation> donations = donationRepository.findAll();
+        List<Donation> sortedDonations =
+                donations.stream().
+                        sorted(Comparator.comparing(Donation::getAmount).reversed()).
+                        collect(Collectors.toList());
+        return CommonTools.getFirstTenIfExists(sortedDonations);
     }
 }

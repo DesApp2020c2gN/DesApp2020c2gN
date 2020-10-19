@@ -50,7 +50,7 @@ public class AdminUser extends User {
         returnDonations(project, donorsList);
     }
 
-    private void returnDonations(Project projectToCancel, List<DonorUser> donorsList) {
+    public void returnDonations(Project projectToCancel, List<DonorUser> donorsList) {
         List<Donation> donationsToReturn = projectToCancel.getDonations();
         donationsToReturn.forEach(donation -> getUser(donation.getDonorNickname(), donorsList).undoDonation(donation));
         projectToCancel.undoDonations();
