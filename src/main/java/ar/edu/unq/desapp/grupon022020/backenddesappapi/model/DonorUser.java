@@ -87,7 +87,7 @@ public class DonorUser extends User {
 
     private void validateDonation(Project project, BigDecimal amount) throws InvalidDonationException {
         if (amount.compareTo(this.money) > 0) {
-            throw new InvalidDonationException("User " + this.getName() + " does not have enough money");
+            throw new InvalidDonationException("User " + this.getNickname() + " does not have enough money");
         }
         project.validateDonation();
     }

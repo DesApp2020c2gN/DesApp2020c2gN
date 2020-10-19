@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class DonationService {
-    //TODO: create test for DonationService!
 
     @Autowired
     private DonationRepository donationRepository;
@@ -66,7 +65,6 @@ public class DonationService {
     }
 
     public List<Donation> getTopTenBiggestDonations() {
-        //TODO: review this method!
         List<Donation> donations = donationRepository.findAll();
         List<Donation> sortedDonations =
                 donations.stream().

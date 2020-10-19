@@ -289,7 +289,7 @@ class DonorUserTest {
         }
         catch(InvalidDonationException e)
         {
-            String message = "User " + donorUser.getName() + " does not have enough money";
+            String message = "User " + donorUser.getNickname() + " does not have enough money";
             assertEquals(message, e.getMessage());
         }
     }
