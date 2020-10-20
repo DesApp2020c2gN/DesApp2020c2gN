@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -107,7 +108,7 @@ public class UserServiceTest {
         String password = "456";
         when(userRepository.existsById(nickname)).thenReturn(true);
         when(userRepository.loginUser(nickname, password)).thenReturn(true);
-        userService.loginDonorUser(nickname, password);
+        assertDoesNotThrow(() -> userService.loginDonorUser(nickname, password));
     }
 
     @Test
