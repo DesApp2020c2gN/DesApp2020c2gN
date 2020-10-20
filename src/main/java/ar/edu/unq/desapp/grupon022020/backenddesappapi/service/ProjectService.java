@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
-    //TODO: complete test for ProjectService!
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -93,7 +92,6 @@ public class ProjectService {
     }
 
     public void closeFinishedProjects(){
-        //TODO: review this method!
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         List<Project> projects = projectRepository.findAll();
         List<Project> finishedProjects = projects.stream().

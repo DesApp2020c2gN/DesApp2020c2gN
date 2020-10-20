@@ -216,4 +216,49 @@ public class ProjectServiceTest {
         assertFalse(locations.contains(location_2));
     }
 
+    @Test
+    public void testProjectServiceCloseFinishedProjects () throws InvalidDonationException {
+        MockitoAnnotations.initMocks(this);
+        DonorUser donor_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
+        DonorUser donor_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
+        List<DonorUser> donorsList = new ArrayList<>();
+        donorsList.add(donor_1); donorsList.add(donor_2);
+        Project project_1 = ProjectBuilder.aProject().withFactor(100).withClosurePercentage(100).build();
+        Project project_2 = ProjectBuilder.aProject().withFactor(1000).withClosurePercentage(100).build();
+        Project project_3 = ProjectBuilder.aProject().withFactor(100).withClosurePercentage(100).build();
+        Project project_4 = ProjectBuilder.aProject().withFactor(1000).withClosurePercentage(100).build();
+        List<Project> projectList = new ArrayList<>();
+        projectList.add(project_1); projectList.add(project_2);
+        projectList.add(project_3); projectList.add(project_4);
+        donor_1.donate(BigDecimal.valueOf(500), "Donation 1", project_1);
+        donor_2.donate(BigDecimal.valueOf(500), "Donation 2", project_1);
+        donor_1.donate(BigDecimal.valueOf(100), "Donation 3", project_2);
+        donor_2.donate(BigDecimal.valueOf(100), "Donation 4", project_2);
+        donor_1.donate(BigDecimal.valueOf(200), "Donation 5", project_3);
+        when(projectRepository.findAll()).thenReturn(projectList);
+        when(userRepository.findAll()).thenReturn(donorsList);
+        when(donationRepository.findAll()).thenReturn(null);
+        project_1.setStartDate(LocalDate.now().minusDays(10));
+        project_1.setFinishDate(LocalDate.now());
+        project_2.setStartDate(LocalDate.now().minusDays(10));
+        project_2.setFinishDate(LocalDate.now());
+        project_3.setStartDate(LocalDate.now().minusDays(10));
+        project_3.setFinishDate(LocalDate.now().plusDays(10));
+        project_4.setStartDate(LocalDate.now().minusDays(10));
+        project_4.setFinishDate(LocalDate.now().plusDays(10));
+        assertEquals(2, project_1.getDonations().size());
+        assertEquals(2, project_2.getDonations().size());
+        assertEquals(1, project_3.getDonations().size());
+        assertEquals(0, project_4.getDonations().size());
+        projectService.closeFinishedProjects();
+        assertEquals(2, project_1.getDonations().size());
+        assertEquals(0, project_2.getDonations().size());
+        assertEquals(1, project_3.getDonations().size());
+        assertEquals(0, project_4.getDonations().size());
+        assertTrue(project_1.hasReachedGoal());
+        assertFalse(project_2.hasReachedGoal());
+        assertTrue(project_3.hasReachedGoal());
+        assertFalse(project_4.hasReachedGoal());
+    }
+
 }
