@@ -55,11 +55,12 @@ public class DonationServiceTest {
     }
 
     @Test
-    public void testDonationServiceFindById() {
+    public void testDonationServiceFindById() throws DataNotFoundException {
         MockitoAnnotations.initMocks(this);
         Integer id = 7;
         Donation donation = DonationBuilder.aDonation().build();
         donation.setId(id);
+        when(donationRepository.existsById(id)).thenReturn(true);
         when(donationRepository.findById(id)).thenReturn(Optional.of(donation));
         assertEquals(donation, donationService.findById(id));
     }
