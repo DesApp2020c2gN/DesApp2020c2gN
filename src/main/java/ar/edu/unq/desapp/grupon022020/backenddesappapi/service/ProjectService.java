@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
-    //TODO: create test for ProjectService!
+    //TODO: complete test for ProjectService!
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -120,7 +120,6 @@ public class ProjectService {
     }
 
     public List<Location> getTopTenDonationStarvedLocations() {
-        //TODO: review this method!
         List<Project> projects = projectRepository.findAll();
         List<Location> sortedLocations =
                 projects.stream()

@@ -49,4 +49,17 @@ class LocationServiceTest {
         assertEquals(location, locationService.findById(name));
     }
 
+    @Test
+    public void testLocationServiceFindByIdForNonExistingLocation() {
+        MockitoAnnotations.initMocks(this);
+        String name = "Santa Rita";
+        when(locationRepository.existsById(name)).thenReturn(false);
+        try {
+            locationService.findById(name);
+        } catch (DataNotFoundException e) {
+            String message = "Location " + name + " does not exists";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
 }
