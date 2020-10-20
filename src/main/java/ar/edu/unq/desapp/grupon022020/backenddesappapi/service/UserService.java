@@ -16,7 +16,6 @@ import java.util.List;
 
 @Service
 public class UserService {
-    //TODO: create test for UserService!
 
     @Autowired
     private UserRepository repository;
@@ -35,7 +34,7 @@ public class UserService {
             return this.repository.findById(id).get();
         }
         else {
-            throw new DataNotFoundException("Donor " + id + " does not exists");
+            throw new DataNotFoundException("User " + id + " does not exists");
         }
     }
 
@@ -66,6 +65,7 @@ public class UserService {
     }
 
     public void loginAdmin(String nickname, String password) throws LoginException {
+        //TODO: create test for this method!
         if(!nickname.equals(adminName)){
             throw new LoginException("Nickname is incorrect");
         }

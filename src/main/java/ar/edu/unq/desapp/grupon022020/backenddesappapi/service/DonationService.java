@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class DonationService {
-    //TODO: create test for DonationService!
 
     @Autowired
     private DonationRepository donationRepository;
@@ -35,8 +34,13 @@ public class DonationService {
         return this.donationRepository.save(donation);
     }
 
-    public Donation findById(Integer id) {
-        return this.donationRepository.findById(id).get();
+    public Donation findById(Integer id) throws DataNotFoundException {
+        if(donationRepository.existsById(id)){
+            return this.donationRepository.findById(id).get();
+        }
+        else {
+            throw new DataNotFoundException("Donation " + id + " does not exists");
+        }
     }
 
     public List<Donation> findAll() {
@@ -66,7 +70,6 @@ public class DonationService {
     }
 
     public List<Donation> getTopTenBiggestDonations() {
-        //TODO: review this method!
         List<Donation> donations = donationRepository.findAll();
         List<Donation> sortedDonations =
                 donations.stream().
