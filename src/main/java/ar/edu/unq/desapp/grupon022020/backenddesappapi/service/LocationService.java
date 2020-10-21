@@ -36,7 +36,7 @@ public class LocationService {
         if (repository.existsById(name)){
             throw new DataNotFoundException("Location " + name + " already exists");
         }
-        //TODO: validate that population is greater than zero!
+        //TODO: validate that population is greater than zero and that province belongs to ENUM!
         Location location = LocationBuilder.aLocation().
                 withName(name).
                 withProvince(province).
