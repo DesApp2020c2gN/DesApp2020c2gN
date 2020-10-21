@@ -64,6 +64,7 @@ public class ProjectService {
         if(!locationRepository.existsById(locationName)){
             throw new DataNotFoundException("There is no location with name " + locationName);
         }
+        //TODO: add validation in case a project for this location was completed!
         Location location = locationRepository.findById(locationName).get();
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         Project project = adminUser.createProject(name, factor, closurePercentage, LocalDate.parse(startDate), durationInDays, location);
@@ -76,6 +77,7 @@ public class ProjectService {
         if(!projectRepository.existsById(name)){
             throw new DataNotFoundException("Project " + name + " does not exists");
         }
+        //TODO: add validation in case the project was completed!
         Project projectToCancel = findById(name);
         List<Donation> donationsToReturn = projectToCancel.getDonations();
         List<DonorUser> donorsList = donorsList(projectToCancel);

@@ -66,6 +66,19 @@ public class DonationServiceTest {
     }
 
     @Test
+    public void testDonationServiceFindByIdForNonExistingDonation() {
+        MockitoAnnotations.initMocks(this);
+        Integer id = 7;
+        when(donationRepository.existsById(id)).thenReturn(false);
+        try {
+            donationService.findById(id);
+        } catch (DataNotFoundException e) {
+            String message = "Donation " + id + " does not exists";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
     public void testDonationServiceDonate() throws InvalidDonationException, DataNotFoundException {
         MockitoAnnotations.initMocks(this);
         String nickname = "juan123";

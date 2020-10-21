@@ -104,6 +104,7 @@ public class DonorUser extends User {
     }
 
     public void undoDonation(Donation donation) {
+        //TODO: return points when donation is cancelled!
         this.money = this.money.add(donation.getAmount());
         this.donations.remove(donation);
     }
