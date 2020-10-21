@@ -7,11 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -39,6 +35,19 @@ public class LocationController {
             return ResponseEntity.ok().body(location);
         } catch (DataNotFoundException e) {
             return new ResponseEntity<>("Location could not be found: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/data", method = RequestMethod.PUT)
+    public ResponseEntity<?> createLocation(@RequestParam("name") String name,
+                                            @RequestParam("province") String province,
+                                            @RequestParam("population") int population,
+                                            @RequestParam("state") String state) {
+        try {
+            Location location = locationService.createLocation(name, province, population, state);
+            return new ResponseEntity<>(location, HttpStatus.CREATED);
+        } catch (DataNotFoundException e) {
+            return new ResponseEntity<>("Location could not be created: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
