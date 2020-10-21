@@ -8,23 +8,8 @@ import java.util.List;
 
 public class AdminUser extends User {
 
-    private final Manager manager;
-
-    public AdminUser(String name, String mail, String password, Manager manager) {
+    public AdminUser(String name, String mail, String password) {
         super(name, mail, password);
-        this.manager = manager;
-    }
-
-    public List<Location> getLocations() {
-        return manager.getLocations();
-    }
-
-    public List<Project> getOpenProjects() {
-        return manager.getOpenProjects();
-    }
-
-    public List<DonorUser> getUsers() {
-        return manager.getUsers();
     }
 
     public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, Location location) throws InvalidProjectOperationException {
@@ -40,7 +25,6 @@ public class AdminUser extends User {
                 withDurationInDays(durationInDays).
                 withLocation(location).
                 build();
-        this.manager.addNewProject(project);
         return project;
     }
 
