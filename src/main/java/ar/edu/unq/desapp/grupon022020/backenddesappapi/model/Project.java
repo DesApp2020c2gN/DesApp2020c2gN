@@ -40,6 +40,8 @@ public class Project {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
+    //TODO: add status variable?
+
     public Project() {}
 
     public Project(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, List<Donation> donations, Location location) {

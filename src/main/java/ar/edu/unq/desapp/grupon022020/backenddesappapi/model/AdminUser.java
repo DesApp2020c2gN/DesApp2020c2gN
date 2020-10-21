@@ -13,10 +13,7 @@ public class AdminUser extends User {
     }
 
     public Project createProject(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, Location location) throws InvalidProjectOperationException {
-        //TODO: validate factor and durationInDays are positive numbers and closurePercentage is between 1 and 100!
-        if (startDate.isBefore(LocalDate.now())) {
-            throw new InvalidProjectOperationException("Start day of " + startDate.toString() + " for project " + name + " is not valid");
-        }
+        validateArguments(name, factor, closurePercentage, startDate, durationInDays);
         Project project = ProjectBuilder.aProject().
                 withName(name).
                 withFactor(factor).
@@ -26,6 +23,21 @@ public class AdminUser extends User {
                 withLocation(location).
                 build();
         return project;
+    }
+
+    private void validateArguments(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays) throws InvalidProjectOperationException {
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new InvalidProjectOperationException("Start day of " + startDate.toString() + " for project " + name + " is not valid");
+        }
+        if (!(factor > 0)) {
+            throw new InvalidProjectOperationException("Project " + name + " must have a positive factor");
+        }
+        if (!(durationInDays > 0)) {
+            throw new InvalidProjectOperationException("Project " + name + " must have a positive duration");
+        }
+        if (!(closurePercentage > 0 && closurePercentage <= 100)) {
+            throw new InvalidProjectOperationException("Project " + name + " must have a percentage between 1 and 100");
+        }
     }
 
     public void cancelProject(Project project, List<DonorUser> donorsList) {

@@ -54,7 +54,7 @@ class AdminUserTest {
         String projectName = "Conectando Rio Turbio";
         int factor = 50000;
         int closurePercentage = 85;
-        LocalDate startDate = LocalDate.parse("2020-12-27");
+        LocalDate startDate = LocalDate.now().plusDays(10);
 
         Project newProject = adminUser.createProject(projectName, factor, closurePercentage, startDate, 200, location);
 
@@ -71,12 +71,60 @@ class AdminUserTest {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         Location location = mock(Location.class);
         String name = "Mar Chiquita 3.0";
-        LocalDate startDate = LocalDate.now().minusDays(12);
+        LocalDate startDate = LocalDate.now().minusDays(10);
 
         try {
             adminUser.createProject(name, 1000, 60, startDate, 120, location);
         } catch (InvalidProjectOperationException e) {
             String message = "Start day of " + startDate.toString() + " for project " + name + " is not valid";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAdminUserProjectCreationWithInvalidFactor() {
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
+        Location location = mock(Location.class);
+        String name = "Santa Clara 3.0";
+        LocalDate startDate = LocalDate.now().plusDays(10);
+        int invalidFactor = 0;
+
+        try {
+            adminUser.createProject(name, invalidFactor, 60, startDate, 120, location);
+        } catch (InvalidProjectOperationException e) {
+            String message = "Project " + name + " must have a positive factor";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAdminUserProjectCreationWithInvalidDurationInDays() {
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
+        Location location = mock(Location.class);
+        String name = "Santa Clara 3.0";
+        LocalDate startDate = LocalDate.now().plusDays(10);
+        int durationInDays = 0;
+
+        try {
+            adminUser.createProject(name, 1000, 60, startDate, durationInDays, location);
+        } catch (InvalidProjectOperationException e) {
+            String message = "Project " + name + " must have a positive duration";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAdminUserProjectCreationWithInvalidClosurePercentage() {
+        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
+        Location location = mock(Location.class);
+        String name = "Santa Clara 3.0";
+        LocalDate startDate = LocalDate.now().plusDays(10);
+        int closurePercentage = 132;
+
+        try {
+            adminUser.createProject(name, 1000, closurePercentage, startDate, 30, location);
+        } catch (InvalidProjectOperationException e) {
+            String message = "Project " + name + " must have a percentage between 1 and 100";
             assertEquals(message, e.getMessage());
         }
     }
