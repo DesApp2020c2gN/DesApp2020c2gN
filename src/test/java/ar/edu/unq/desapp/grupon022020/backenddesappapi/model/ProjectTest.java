@@ -22,7 +22,14 @@ public class ProjectTest {
     public void testProjectName() {
         String name = "Conectar San Juan";
         Project project = ProjectBuilder.aProject().withName(name).build();
+        assertEquals(name, project.getName());
+    }
 
+    @Test
+    public void testProjectNameSetter() {
+        String name = "Conectar San Juan";
+        Project project = ProjectBuilder.aProject().build();
+        project.setName(name);
         assertEquals(name, project.getName());
     }
 
@@ -30,7 +37,14 @@ public class ProjectTest {
     public void testProjectFactor() {
         int factor = 1200;
         Project project = ProjectBuilder.aProject().withFactor(factor).build();
+        assertEquals(factor, project.getFactor());
+    }
 
+    @Test
+    public void testProjectFactorSetter() {
+        int factor = 1200;
+        Project project = ProjectBuilder.aProject().build();
+        project.setFactor(factor);
         assertEquals(factor, project.getFactor());
     }
 
@@ -38,7 +52,14 @@ public class ProjectTest {
     public void testProjectClosurePercentage() {
         int closurePercentage = 75;
         Project project = ProjectBuilder.aProject().withClosurePercentage(closurePercentage).build();
+        assertEquals(closurePercentage, project.getClosurePercentage());
+    }
 
+    @Test
+    public void testProjectClosurePercentageSetter() {
+        int closurePercentage = 75;
+        Project project = ProjectBuilder.aProject().build();
+        project.setClosurePercentage(closurePercentage);
         assertEquals(closurePercentage, project.getClosurePercentage());
     }
 
@@ -46,7 +67,14 @@ public class ProjectTest {
     public void testProjectStartDate() {
         LocalDate startDate = LocalDate.parse("2020-09-15");
         Project project = ProjectBuilder.aProject().withStartDate(startDate).build();
+        assertEquals(startDate, project.getStartDate());
+    }
 
+    @Test
+    public void testProjectStartDateSetter() {
+        LocalDate startDate = LocalDate.parse("2020-09-15");
+        Project project = ProjectBuilder.aProject().build();
+        project.setStartDate(startDate);
         assertEquals(startDate, project.getStartDate());
     }
 
@@ -55,8 +83,16 @@ public class ProjectTest {
         int durationInDays = 120;
         LocalDate finishDate = LocalDate.now().plusDays(durationInDays);
         Project project = ProjectBuilder.aProject().withDurationInDays(durationInDays).build();
-
         assertEquals(finishDate, project.getFinishDate());
+    }
+
+    @Test
+    public void testProjectFinishDateSetter() {
+        int durationInDays = 120;
+        Project project = ProjectBuilder.aProject().withDurationInDays(durationInDays).build();
+        LocalDate newFinishDate = LocalDate.parse("2021-11-21");
+        project.setFinishDate(newFinishDate);
+        assertEquals(newFinishDate, project.getFinishDate());
     }
 
     @Test
@@ -66,9 +102,19 @@ public class ProjectTest {
         Donation donation_2 = mock(Donation.class);
         donations.add(donation_1);
         donations.add(donation_2);
-
         Project project = ProjectBuilder.aProject().withDonations(donations).build();
+        assertEquals(donations, project.getDonations());
+    }
 
+    @Test
+    public void testProjectDonationListSetter() {
+        List<Donation> donations = new ArrayList<>();
+        Donation donation_1 = mock(Donation.class);
+        Donation donation_2 = mock(Donation.class);
+        donations.add(donation_1);
+        donations.add(donation_2);
+        Project project = ProjectBuilder.aProject().build();
+        project.setDonations(donations);
         assertEquals(donations, project.getDonations());
     }
 
@@ -76,7 +122,14 @@ public class ProjectTest {
     public void testProjectLocation() {
         Location location = mock(Location.class);
         Project project = ProjectBuilder.aProject().withLocation(location).build();
+        assertEquals(location, project.getLocation());
+    }
 
+    @Test
+    public void testProjectLocationSetter() {
+        Location location = mock(Location.class);
+        Project project = ProjectBuilder.aProject().build();
+        project.setLocation(location);
         assertEquals(location, project.getLocation());
     }
 

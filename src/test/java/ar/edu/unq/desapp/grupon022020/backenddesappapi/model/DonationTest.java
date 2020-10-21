@@ -21,6 +21,14 @@ class DonationTest {
     }
 
     @Test
+    public void testDonationDonorNicknameSetter() {
+        String donorNickname = "Juan2001";
+        Donation donation = DonationBuilder.aDonation().build();
+        donation.setDonorNickname(donorNickname);
+        assertEquals(donorNickname, donation.getDonorNickname());
+    }
+
+    @Test
     public void testDonationProjectName() {
         String projectName = "Conectando San Cristobal";
         Donation donation = DonationBuilder.aDonation().withProjectName(projectName).build();
@@ -28,10 +36,25 @@ class DonationTest {
     }
 
     @Test
+    public void testDonationProjectNameSetter() {
+        String projectName = "Conectando San Cristobal";
+        Donation donation = DonationBuilder.aDonation().build();
+        donation.setProjectName(projectName);
+        assertEquals(projectName, donation.getProjectName());
+    }
+
+    @Test
     public void testDonationAmount() {
         BigDecimal amount = new BigDecimal(2530);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
+        assertEquals(amount, donation.getAmount());
+    }
 
+    @Test
+    public void testDonationAmountSetter() {
+        BigDecimal amount = new BigDecimal(2530);
+        Donation donation = DonationBuilder.aDonation().build();
+        donation.setAmount(amount);
         assertEquals(amount, donation.getAmount());
     }
 
@@ -39,16 +62,29 @@ class DonationTest {
     public void testDonationComment() {
         String comment = "This is a donation";
         Donation donation = DonationBuilder.aDonation().withComment(comment).build();
-
         assertEquals(comment, donation.getComment());
+    }
 
+    @Test
+    public void testDonationCommentSetter() {
+        String comment = "This is a donation";
+        Donation donation = DonationBuilder.aDonation().build();
+        donation.setComment(comment);
+        assertEquals(comment, donation.getComment());
     }
 
     @Test
     public void testDonationDate() {
         LocalDate date = LocalDate.now();
         Donation donation = DonationBuilder.aDonation().withDate(date).build();
+        assertEquals(date, donation.getDate());
+    }
 
+    @Test
+    public void testDonationDateSetter() {
+        LocalDate date = LocalDate.now();
+        Donation donation = DonationBuilder.aDonation().build();
+        donation.setDate(date);
         assertEquals(date, donation.getDate());
     }
 

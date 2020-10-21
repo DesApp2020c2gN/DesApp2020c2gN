@@ -4,7 +4,7 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonorUserRepository;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
 
     @Autowired
-    private DonorUserRepository repository;
+    private UserRepository repository;
     @Value("${admin.name:NONE}")
     private String adminName;
     @Value("${admin.password:NONE}")
@@ -31,11 +30,11 @@ public class UserService {
     }
 
     public DonorUser findById(String id) throws DataNotFoundException {
-        try {
+        if(repository.existsById(id)){
             return this.repository.findById(id).get();
         }
-        catch (NoSuchElementException e){
-            throw  new DataNotFoundException("User " + id + " is not a valid user");
+        else {
+            throw new DataNotFoundException("User " + id + " does not exists");
         }
     }
 
@@ -47,7 +46,11 @@ public class UserService {
                                      String name,
                                      String mail,
                                      String password,
-                                     int money){
+                                     int money) throws DataNotFoundException {
+        if (repository.existsById(nickname)){
+            throw new DataNotFoundException("User " + nickname + " already exists");
+        }
+        //TODO: validate money is zero or a positive number!
         DonorUser donorUser = DonorUserBuilder.aDonorUser().
                 withNickname(nickname).
                 withName(name).
@@ -62,6 +65,7 @@ public class UserService {
     }
 
     public void loginAdmin(String nickname, String password) throws LoginException {
+        //TODO: create test for this method!
         if(!nickname.equals(adminName)){
             throw new LoginException("Nickname is incorrect");
         }
@@ -71,13 +75,10 @@ public class UserService {
     }
 
     public void loginDonorUser(String nickname, String password) throws LoginException {
-        DonorUser donorUser;
-        try {
-            donorUser = findById(nickname);
-        } catch (DataNotFoundException e) {
-            throw  new LoginException("Nickname is incorrect");
+        if(!repository.existsById(nickname)) {
+            throw new LoginException("Nickname belongs to a non existing user");
         }
-        if(!donorUser.getPassword().equals(password)){
+        if(!repository.loginUser(nickname, password)) {
             throw new LoginException("Password is incorrect");
         }
     }

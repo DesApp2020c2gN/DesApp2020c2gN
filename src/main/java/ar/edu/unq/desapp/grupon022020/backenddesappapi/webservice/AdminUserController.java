@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.service.ProjectService;
@@ -32,11 +33,10 @@ public class AdminUserController {
                                        @RequestParam("password") String password) {
         try {
             userService.loginAdmin(nickname, password);
+            return ResponseEntity.ok().body("Admin login successful");
         } catch (LoginException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Admin login failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok().body("Login successful");
-
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.PUT)
@@ -47,14 +47,23 @@ public class AdminUserController {
                                            @RequestParam("startDate") String startDate,
                                            @RequestParam("durationInDays") int durationInDays,
                                            @RequestParam("locationName") String locationName) {
-        // TODO: Check that there is no open project for that location!
-        Project project;
         try {
-            project = projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
-        } catch (InvalidProjectOperationException e) {
+            Project project = projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
+            return new ResponseEntity<>(project, HttpStatus.CREATED);
+        } catch (InvalidProjectOperationException | DataNotFoundException e) {
             return new ResponseEntity<>("Project could not be created: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(project, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/data", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> cancelProject(@RequestParam("name") String name) {
+        try {
+            projectService.cancelProject(name);
+            return ResponseEntity.ok().body("Project " + name + " cancelled");
+        } catch (DataNotFoundException e) {
+            return new ResponseEntity<>("Project could not be cancelled: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

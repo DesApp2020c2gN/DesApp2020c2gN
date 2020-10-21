@@ -60,8 +60,16 @@ public class DonorUser extends User {
         return points;
     }
 
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     public BigDecimal getMoney() {
         return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
     }
 
     public Donation donate(BigDecimal amount, String comment, Project project) throws InvalidDonationException {
@@ -79,7 +87,7 @@ public class DonorUser extends User {
 
     private void validateDonation(Project project, BigDecimal amount) throws InvalidDonationException {
         if (amount.compareTo(this.money) > 0) {
-            throw new InvalidDonationException("User " + this.getName() + " does not have enough money");
+            throw new InvalidDonationException("User " + this.getNickname() + " does not have enough money");
         }
         project.validateDonation();
     }
@@ -96,6 +104,7 @@ public class DonorUser extends User {
     }
 
     public void undoDonation(Donation donation) {
+        //TODO: return points when donation is cancelled!
         this.money = this.money.add(donation.getAmount());
         this.donations.remove(donation);
     }

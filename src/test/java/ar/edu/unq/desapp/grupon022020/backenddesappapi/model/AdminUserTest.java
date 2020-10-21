@@ -1,10 +1,13 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,27 +42,10 @@ class AdminUserTest {
         assertEquals(password, adminUser.getPassword());
     }
 
-    @Test
-    public void testAdminUserSystem() {
-        Manager manager = mock(Manager.class);
-        List<Location> locations = new ArrayList<>();
-        List<Project> projects = new ArrayList<>();
-        List<DonorUser> users = new ArrayList<>();
-        when(manager.getLocations()).thenReturn(locations);
-        when(manager.getOpenProjects()).thenReturn(projects);
-        when(manager.getUsers()).thenReturn(users);
-
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().withSystem(manager).build();
-        assertEquals(locations, adminUser.getLocations());
-        assertEquals(projects, adminUser.getOpenProjects());
-        assertEquals(users, adminUser.getUsers());
-    }
-
 
     @Test
     public void testAdminUserProjectCreation() throws InvalidProjectOperationException {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
-        assertEquals(0, adminUser.getOpenProjects().size());
 
         Location location = mock(Location.class);
         int locationPopulation = 1750;
@@ -72,7 +58,6 @@ class AdminUserTest {
 
         Project newProject = adminUser.createProject(projectName, factor, closurePercentage, startDate, 200, location);
 
-        assertEquals(1, adminUser.getOpenProjects().size());
         assertEquals(projectName, newProject.getName());
         assertEquals(factor, newProject.getFactor());
         assertEquals(closurePercentage, newProject.getClosurePercentage());
@@ -117,34 +102,23 @@ class AdminUserTest {
     }
 
     @Test
-    public void testAdminUserProjectCancellation() throws InvalidProjectOperationException {
+    public void testAdminUserProjectCancellation() throws InvalidProjectOperationException, InvalidDonationException {
         AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         Location location = mock(Location.class);
         String name = "Conectando Tandil";
         LocalDate startDate = LocalDate.parse("2020-12-27");
-        adminUser.createProject(name, 1000, 60, startDate, 200, location);
-
-        Project project = adminUser.getOpenProjects().get(0);
+        DonorUser donor_1 = DonorUserBuilder.aDonorUser().withMoney(BigDecimal.valueOf(1000)).build();
+        DonorUser donor_2 = DonorUserBuilder.aDonorUser().withMoney(BigDecimal.valueOf(1000)).build();
+        List<DonorUser> donorsList = new ArrayList<>();
+        donorsList.add(donor_1); donorsList.add(donor_2);
+        Project project = adminUser.createProject(name, 1000, 60, startDate, 200, location);
+        project.setStartDate(LocalDate.now().minusDays(2));
+        donor_1.donate(BigDecimal.valueOf(100), "Donation 1", project);
         assertEquals(startDate.plusDays(200), project.getFinishDate());
 
-        adminUser.cancelProject(name);
-        assertEquals(startDate.minusDays(1), project.getFinishDate());
-    }
-
-    @Test
-    public void testAdminUserNonExistentProjectCancellation() throws InvalidProjectOperationException {
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
-        Location location = mock(Location.class);
-        String name = "Mar Chiquita 3.0";
-        LocalDate startDate = LocalDate.parse("2020-12-27");
-        adminUser.createProject("Conectando Tandil", 1000, 60, startDate, 200, location);
-
-        try {
-            adminUser.cancelProject(name);
-        } catch (InvalidProjectOperationException e) {
-            String message = "Project " + name + " does not exists";
-            assertEquals(message, e.getMessage());
-        }
+        adminUser.cancelProject(project, donorsList);
+        assertEquals(LocalDate.now().minusDays(3), project.getFinishDate());
+        assertEquals(0, project.getDonations().size());
     }
 
 }
