@@ -62,4 +62,35 @@ class LocationServiceTest {
         }
     }
 
+    @Test
+    public void testLocationServiceCreateLocation() throws DataNotFoundException {
+        MockitoAnnotations.initMocks(this);
+        String name = "Santa Clara";
+        String province = "Buenos Aires";
+        int population = 2300;
+        String state = "Sin iniciar";
+        when(locationRepository.existsById(name)).thenReturn(false);
+        Location createdLocation = locationService.createLocation(name, province, population, state);
+        assertEquals(name, createdLocation.getName());
+        assertEquals(province, createdLocation.getProvince());
+        assertEquals(population, createdLocation.getPopulation());
+        assertEquals(state, createdLocation.getState());
+    }
+
+    @Test
+    public void testLocationServiceCreateLocationForAlreadyExistingLocation() {
+        MockitoAnnotations.initMocks(this);
+        String name = "Santa Clara";
+        String province = "Buenos Aires";
+        int population = 2300;
+        String state = "Sin iniciar";
+        when(locationRepository.existsById(name)).thenReturn(true);
+        try {
+            locationService.createLocation(name, province, population, state);
+        } catch (DataNotFoundException e) {
+            String message = "Location " + name + " already exists";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
 }
