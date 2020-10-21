@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
+
 
 @RestController
 @EnableAutoConfiguration
@@ -64,6 +66,13 @@ public class AdminUserController {
         } catch (DataNotFoundException e) {
             return new ResponseEntity<>("Project could not be cancelled: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping(value = "/data", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> closeFinishedProjects() {
+        projectService.closeFinishedProjects();
+        return ResponseEntity.ok().body("Projects closed for " + LocalDate.now().toString());
     }
 
 }
