@@ -55,6 +55,7 @@ public class DonorUserController {
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.PUT)
+    //TODO: all PUT request should receive the Body as JSON and create the object!
     public ResponseEntity<?> createDonorUser(@RequestParam("nickname") String nickname,
                                 @RequestParam("name") String name,
                                 @RequestParam("mail") String mail,

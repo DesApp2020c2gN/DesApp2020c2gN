@@ -24,6 +24,8 @@ import java.time.LocalDate;
 @RequestMapping("/admin")
 public class AdminUserController {
 
+    //TODO: this controller is not necessary! All methods could be moved to ProjectController!
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -43,6 +45,7 @@ public class AdminUserController {
 
     @RequestMapping(value = "/data", method = RequestMethod.PUT)
     @ResponseBody
+    //TODO: all PUT request should receive the Body as JSON and create the object!
     public ResponseEntity<?> createProject(@RequestParam("name") String name,
                                            @RequestParam("factor") int factor,
                                            @RequestParam("closurePercentage") int closurePercentage,

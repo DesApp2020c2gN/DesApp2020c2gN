@@ -43,6 +43,7 @@ public class LocationController {
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.PUT)
+    //TODO: all PUT request should receive the Body as JSON and create the object!
     public ResponseEntity<?> createLocation(@RequestParam("name") String name,
                                             @RequestParam("province") String province,
                                             @RequestParam("population") int population,

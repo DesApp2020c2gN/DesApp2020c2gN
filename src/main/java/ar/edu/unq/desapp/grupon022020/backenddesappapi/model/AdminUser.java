@@ -8,6 +8,8 @@ import java.util.List;
 
 public class AdminUser extends User {
 
+    //TODO: all the logic in this class may be moved into ProjectService!
+
     public AdminUser(String name, String mail, String password) {
         super(name, mail, password);
     }

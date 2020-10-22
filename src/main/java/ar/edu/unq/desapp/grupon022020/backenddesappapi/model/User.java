@@ -6,6 +6,8 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class User {
 
+    //TODO: if AdminUser is deleted, this class is not required!
+
     @Column
     private String name;
 
