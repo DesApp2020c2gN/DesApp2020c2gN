@@ -160,7 +160,7 @@ class DonorUserTest {
         BigDecimal donationAmount = new BigDecimal(500);
         String comment = "This is my donation";
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(3000);
+        when(project.locationPopulation()).thenReturn(3000);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
@@ -176,7 +176,7 @@ class DonorUserTest {
         BigDecimal donationAmount = new BigDecimal(2000);
         String comment = "This is my donation";
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(3000);
+        when(project.locationPopulation()).thenReturn(3000);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
@@ -192,7 +192,7 @@ class DonorUserTest {
         BigDecimal donationAmount = new BigDecimal(2000);
         String comment = "This is my donation";
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(1700);
+        when(project.locationPopulation()).thenReturn(1700);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(donationAmount, comment, project);
 
@@ -224,7 +224,7 @@ class DonorUserTest {
         assertEquals(0, donorUser.getPoints());
 
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(3300);
+        when(project.locationPopulation()).thenReturn(3300);
         when(project.getFinishDate()).thenReturn(LocalDate.now());
         donorUser.donate(new BigDecimal(500), "Second donation", project);
         assertEquals(0, donorUser.getPoints());

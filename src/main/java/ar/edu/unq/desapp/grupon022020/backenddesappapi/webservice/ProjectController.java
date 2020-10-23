@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.List;
@@ -58,7 +58,7 @@ public class ProjectController {
     public ResponseEntity<?> createProject(@RequestParam("name") @NotBlank String name,
                                            @RequestParam("factor") @Positive int factor,
                                            @RequestParam("closurePercentage") @Min(value=1) @Max(value=100) int closurePercentage,
-                                           @RequestParam("startDate") @Future String startDate,
+                                           @RequestParam("startDate") @Pattern(regexp = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))") String startDate,
                                            @RequestParam("durationInDays") @Positive int durationInDays,
                                            @RequestParam("locationName") @NotBlank String locationName) {
         try {
@@ -89,8 +89,8 @@ public class ProjectController {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    private ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
-        return new ResponseEntity<>("One of the arguments is not valid" + e.getMessage(), HttpStatus.BAD_REQUEST);
+    ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+        return new ResponseEntity<>("One of the arguments is not valid", HttpStatus.BAD_REQUEST);
     }
 
 }

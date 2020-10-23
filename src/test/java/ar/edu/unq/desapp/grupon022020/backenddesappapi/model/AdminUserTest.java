@@ -63,7 +63,7 @@ class AdminUserTest {
         assertEquals(closurePercentage, newProject.getClosurePercentage());
         assertEquals(startDate, newProject.getStartDate());
         assertEquals(startDate.plusDays(200), newProject.getFinishDate());
-        assertEquals(locationPopulation, newProject.getLocationPopulation());
+        assertEquals(locationPopulation, newProject.locationPopulation());
     }
 
     @Test

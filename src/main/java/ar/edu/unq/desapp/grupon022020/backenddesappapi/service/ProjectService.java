@@ -139,7 +139,7 @@ public class ProjectService {
 
     private LocalDate getLastDonationDate(Project project) {
         return project
-                .getLastDonation()
+                .lastDonation()
                 .map(Donation::getDate)
                 .orElse(project.getStartDate());
     }

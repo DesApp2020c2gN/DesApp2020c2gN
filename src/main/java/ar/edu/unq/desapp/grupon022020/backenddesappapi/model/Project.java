@@ -114,7 +114,7 @@ public class Project {
         this.donations.add(donation);
     }
 
-    public int getLocationPopulation() {
+    public int locationPopulation() {
         return this.location.getPopulation();
     }
 
@@ -160,7 +160,7 @@ public class Project {
         return this.donations.stream().map(Donation::getDonorNickname).distinct().collect(Collectors.toList());
     }
     
-    public Optional<Donation> getLastDonation() {
+    public Optional<Donation> lastDonation() {
         return donations.stream().max(Comparator.comparing(Donation::getDate));
     }
 }
