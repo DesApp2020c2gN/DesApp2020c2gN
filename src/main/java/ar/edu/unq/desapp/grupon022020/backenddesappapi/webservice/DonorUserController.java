@@ -51,7 +51,7 @@ public class DonorUserController {
         }
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/donor", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> loginUser(@RequestParam("nickname") @NotBlank String nickname,
                                        @RequestParam("password") @NotBlank String password) {
@@ -60,6 +60,18 @@ public class DonorUserController {
             return ResponseEntity.ok().body("Donor login successful");
         } catch (LoginException e) {
             return new ResponseEntity<>("Donor login failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> loginAdmin(@RequestParam("nickname") @NotBlank String nickname,
+                                        @RequestParam("password") @NotBlank String password) {
+        try {
+            userService.loginAdmin(nickname, password);
+            return ResponseEntity.ok().body("Admin login successful");
+        } catch (LoginException e) {
+            return new ResponseEntity<>("Admin login failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

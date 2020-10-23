@@ -39,6 +39,10 @@ public class ProjectService {
         return this.projectRepository.save(project);
     }
 
+    public List<Project> findAll() {
+        return this.projectRepository.findAll();
+    }
+
     public Project findById(String name) throws DataNotFoundException {
         if(projectRepository.existsById(name)){
             return this.projectRepository.findById(name).get();
@@ -46,10 +50,6 @@ public class ProjectService {
         else {
             throw new DataNotFoundException("Project " + name + " does not exists");
         }
-    }
-
-    public List<Project> findAll() {
-        return this.projectRepository.findAll();
     }
 
     public Project createProject(String name,
