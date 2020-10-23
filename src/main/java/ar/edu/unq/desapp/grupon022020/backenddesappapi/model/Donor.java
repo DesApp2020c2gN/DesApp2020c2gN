@@ -3,12 +3,15 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.Column;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -16,10 +19,25 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
-public class DonorUser extends User {
+public class Donor {
 
     @Id
+    @NotBlank(message = "Nickname cannot be blank")
     private String nickname;
+
+    @Column
+    @NotBlank(message = "Name cannot be blank")
+    private String name;
+
+    @Column
+    @Email
+    @NotBlank(message = "Mail cannot be blank")
+    private String mail;
+
+    @Column
+    @NotBlank(message = "Password cannot be blank")
+    private String password;
+    //TODO: save password as Hash in the database!
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "donorNickname")
     private List<Donation> donations;
@@ -28,13 +46,16 @@ public class DonorUser extends User {
     private int points;
 
     @Column
+    @PositiveOrZero(message = "Money should be zero or positive")
     private BigDecimal money;
 
-    public DonorUser() {};
+    public Donor() {};
 
-    public DonorUser(String name, String nickname, String mail, String password, List<Donation> donations, int points, BigDecimal money) {
-        super(name, mail, password);
+    public Donor(String name, String nickname, String mail, String password, List<Donation> donations, int points, BigDecimal money) {
         this.nickname = nickname;
+        this.name = name;
+        this.mail = mail;
+        this.password = password;
         this.donations = donations;
         this.points = points;
         this.money = money;
@@ -46,6 +67,30 @@ public class DonorUser extends User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Donation> getDonations() {
@@ -99,7 +144,7 @@ public class DonorUser extends User {
         project.receiveDonation(donation);
     }
 
-    public Optional<Donation> getLastDonation() {
+    public Optional<Donation> lastDonation() {
         return donations.stream().max(Comparator.comparing(Donation::getDate));
     }
 

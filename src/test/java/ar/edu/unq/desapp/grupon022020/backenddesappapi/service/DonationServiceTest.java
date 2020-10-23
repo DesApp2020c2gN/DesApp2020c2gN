@@ -1,10 +1,10 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
@@ -82,14 +82,14 @@ public class DonationServiceTest {
     public void testDonationServiceDonate() throws InvalidDonationException, DataNotFoundException {
         MockitoAnnotations.initMocks(this);
         String nickname = "juan123";
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(9999)).build();
+        Donor donor = DonorBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(9999)).build();
         String projectName = "Conectando Cruz Azul";
         Project project = ProjectBuilder.aProject().withName(projectName).build();
         String comment = "Comentario de test";
         int amount = 1200;
         when(userRepository.existsById(nickname)).thenReturn(true);
         when(projectRepository.existsById(projectName)).thenReturn(true);
-        when(userRepository.findById(nickname)).thenReturn(Optional.of(donorUser));
+        when(userRepository.findById(nickname)).thenReturn(Optional.of(donor));
         when(projectRepository.findById(projectName)).thenReturn(Optional.of(project));
         when(donationRepository.save(any())).thenReturn(null);
         Donation createdDonation = donationService.donate(nickname, projectName, comment, amount);
@@ -136,14 +136,14 @@ public class DonationServiceTest {
     public void testDonationServiceDonateWithInsufficientMoney() throws DataNotFoundException {
         MockitoAnnotations.initMocks(this);
         String nickname = "juan123";
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(700)).build();
+        Donor donor = DonorBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(700)).build();
         String projectName = "Conectando Cruz Azul";
         Project project = ProjectBuilder.aProject().withName(projectName).build();
         String comment = "Comentario de test";
         int amount = 1200;
         when(userRepository.existsById(nickname)).thenReturn(true);
         when(projectRepository.existsById(projectName)).thenReturn(true);
-        when(userRepository.findById(nickname)).thenReturn(Optional.of(donorUser));
+        when(userRepository.findById(nickname)).thenReturn(Optional.of(donor));
         when(projectRepository.findById(projectName)).thenReturn(Optional.of(project));
         try {
             donationService.donate(nickname, projectName, comment, amount);
@@ -157,14 +157,14 @@ public class DonationServiceTest {
     public void testDonationServiceDonateToProjectNotStarted() throws DataNotFoundException {
         MockitoAnnotations.initMocks(this);
         String nickname = "juan123";
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(9999)).build();
+        Donor donor = DonorBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(9999)).build();
         String projectName = "Conectando Cruz Azul";
         Project project = ProjectBuilder.aProject().withName(projectName).withStartDate(LocalDate.now().plusDays(7)).build();
         String comment = "Comentario de test";
         int amount = 1200;
         when(userRepository.existsById(nickname)).thenReturn(true);
         when(projectRepository.existsById(projectName)).thenReturn(true);
-        when(userRepository.findById(nickname)).thenReturn(Optional.of(donorUser));
+        when(userRepository.findById(nickname)).thenReturn(Optional.of(donor));
         when(projectRepository.findById(projectName)).thenReturn(Optional.of(project));
         try {
             donationService.donate(nickname, projectName, comment, amount);
@@ -178,14 +178,14 @@ public class DonationServiceTest {
     public void testDonationServiceDonateToProjectAlreadyFinished() throws DataNotFoundException {
         MockitoAnnotations.initMocks(this);
         String nickname = "juan123";
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(9999)).build();
+        Donor donor = DonorBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(9999)).build();
         String projectName = "Conectando Cruz Azul";
         Project project = ProjectBuilder.aProject().withName(projectName).withStartDate(LocalDate.now().minusDays(10)).withDurationInDays(3).build();
         String comment = "Comentario de test";
         int amount = 1200;
         when(userRepository.existsById(nickname)).thenReturn(true);
         when(projectRepository.existsById(projectName)).thenReturn(true);
-        when(userRepository.findById(nickname)).thenReturn(Optional.of(donorUser));
+        when(userRepository.findById(nickname)).thenReturn(Optional.of(donor));
         when(projectRepository.findById(projectName)).thenReturn(Optional.of(project));
         try {
             donationService.donate(nickname, projectName, comment, amount);

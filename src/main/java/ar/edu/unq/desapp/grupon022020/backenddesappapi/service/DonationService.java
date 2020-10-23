@@ -1,13 +1,13 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonationRepository;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.ProjectRepository;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.utils.CommonTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +33,10 @@ public class DonationService {
         return this.donationRepository.save(donation);
     }
 
+    public List<Donation> findAll() {
+        return this.donationRepository.findAll();
+    }
+
     public Donation findById(Integer id) throws DataNotFoundException {
         if(donationRepository.existsById(id)){
             return this.donationRepository.findById(id).get();
@@ -41,10 +44,6 @@ public class DonationService {
         else {
             throw new DataNotFoundException("Donation " + id + " does not exists");
         }
-    }
-
-    public List<Donation> findAll() {
-        return this.donationRepository.findAll();
     }
 
     public Donation donate(String nickname,
@@ -57,11 +56,11 @@ public class DonationService {
         if(!projectRepository.existsById(projectName)){
             throw new DataNotFoundException("Project " + projectName + " does not exist");
         }
+        Donor donor = userRepository.findById(nickname).get();
+        Project project = projectRepository.findById(projectName).get();
         Donation donation;
         try {
-            Optional<DonorUser> donorUser = userRepository.findById(nickname);
-            Optional<Project> project = projectRepository.findById(projectName);
-            donation = donorUser.get().donate(BigDecimal.valueOf(amount), comment, project.get());
+            donation = donor.donate(BigDecimal.valueOf(amount), comment, project);
             save(donation);
         } catch (InvalidDonationException e) {
             throw new InvalidDonationException(e.getMessage());

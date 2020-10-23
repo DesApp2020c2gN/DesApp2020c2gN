@@ -2,13 +2,13 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -39,6 +39,8 @@ public class Project {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
+
+    //TODO: add status variable!
 
     public Project() {}
 
@@ -112,7 +114,7 @@ public class Project {
         this.donations.add(donation);
     }
 
-    public int getLocationPopulation() {
+    public int locationPopulation() {
         return this.location.getPopulation();
     }
 
@@ -158,7 +160,7 @@ public class Project {
         return this.donations.stream().map(Donation::getDonorNickname).distinct().collect(Collectors.toList());
     }
     
-    public Optional<Donation> getLastDonation() {
+    public Optional<Donation> lastDonation() {
         return donations.stream().max(Comparator.comparing(Donation::getDate));
     }
 }
