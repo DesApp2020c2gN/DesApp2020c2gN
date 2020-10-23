@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,48 +26,16 @@ public class UserService {
         return this.repository.save(donorUser);
     }
 
+    public List<DonorUser> findAll() {
+        return this.repository.findAll();
+    }
+
     public DonorUser findById(String id) throws DataNotFoundException {
         if(repository.existsById(id)){
             return this.repository.findById(id).get();
         }
         else {
             throw new DataNotFoundException("User " + id + " does not exists");
-        }
-    }
-
-    public List<DonorUser> findAll() {
-        return this.repository.findAll();
-    }
-
-    public DonorUser createDonorUser(String nickname,
-                                     String name,
-                                     String mail,
-                                     String password,
-                                     int money) throws DataNotFoundException {
-        if (repository.existsById(nickname)){
-            throw new DataNotFoundException("User " + nickname + " already exists");
-        }
-        //TODO: validate money is zero or a positive number!
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().
-                withNickname(nickname).
-                withName(name).
-                withMail(mail).
-                withPassword(password).
-                withMoney(BigDecimal.valueOf(money)).
-                withPoints(0).
-                withDonations(new ArrayList<>()).
-                build();
-        save(donorUser);
-        return donorUser;
-    }
-
-    public void loginAdmin(String nickname, String password) throws LoginException {
-        //TODO: create test for this method!
-        if(!nickname.equals(adminName)){
-            throw new LoginException("Nickname is incorrect");
-        }
-        if(!password.equals(adminPassword)){
-            throw new LoginException("Password is incorrect");
         }
     }
 
@@ -83,4 +48,20 @@ public class UserService {
         }
     }
 
+    public void loginAdmin(String nickname, String password) throws LoginException {
+        //TODO: create test for this method!
+        if(!nickname.equals(adminName)){
+            throw new LoginException("Nickname is incorrect");
+        }
+        if(!password.equals(adminPassword)){
+            throw new LoginException("Password is incorrect");
+        }
+    }
+
+    public void createDonorUser(DonorUser user) throws DataNotFoundException {
+        if (repository.existsById(user.getNickname())){
+            throw new DataNotFoundException("User " + user.getNickname() + " already exists");
+        }
+        save(user);
+    }
 }

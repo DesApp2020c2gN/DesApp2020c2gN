@@ -3,12 +3,10 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.Column;
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -19,6 +17,7 @@ import java.util.Optional;
 public class DonorUser extends User {
 
     @Id
+    @NotNull(message = "Nickname cannot be null")
     private String nickname;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "donorNickname")
@@ -28,6 +27,8 @@ public class DonorUser extends User {
     private int points;
 
     @Column
+    @Min(value = 1, message = "Money should not be less than 1")
+    @Max(value = 1000000, message = "Money should not be greater than 1000000")
     private BigDecimal money;
 
     public DonorUser() {};
@@ -99,7 +100,7 @@ public class DonorUser extends User {
         project.receiveDonation(donation);
     }
 
-    public Optional<Donation> getLastDonation() {
+    public Optional<Donation> lastDonation() {
         return donations.stream().max(Comparator.comparing(Donation::getDate));
     }
 

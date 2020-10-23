@@ -2,6 +2,8 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public abstract class User {
@@ -9,12 +11,16 @@ public abstract class User {
     //TODO: if AdminUser is deleted, this class is not required!
 
     @Column
+    @NotNull(message = "Name cannot be null")
     private String name;
 
     @Column
+    @Email
+    @NotNull(message = "Mail cannot be null")
     private String mail;
 
     @Column
+    @NotNull(message = "Password cannot be null")
     private String password;
     //TODO: save password as Hash in the database!
 

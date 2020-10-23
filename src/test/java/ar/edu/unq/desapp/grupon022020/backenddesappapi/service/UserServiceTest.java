@@ -75,7 +75,14 @@ public class UserServiceTest {
         String password = "456";
         int money = 1570;
         when(userRepository.existsById(nickname)).thenReturn(false);
-        DonorUser donor = userService.createDonorUser(nickname, name, mail, password, money);
+        DonorUser donor = DonorUserBuilder.aDonorUser().
+                withNickname(nickname).
+                withName(name).
+                withMail(mail).
+                withPassword(password).
+                withMoney(BigDecimal.valueOf(money)).
+                build();
+        userService.createDonorUser(donor);
         assertEquals(nickname, donor.getNickname());
         assertEquals(name, donor.getName());
         assertEquals(mail, donor.getMail());
@@ -93,8 +100,15 @@ public class UserServiceTest {
         String password = "456";
         int money = 1570;
         when(userRepository.existsById(nickname)).thenReturn(true);
+        DonorUser donor = DonorUserBuilder.aDonorUser().
+                withNickname(nickname).
+                withName(name).
+                withMail(mail).
+                withPassword(password).
+                withMoney(BigDecimal.valueOf(money)).
+                build();
         try {
-            userService.createDonorUser(nickname, name, mail, password, money);
+            userService.createDonorUser(donor);
         } catch (DataNotFoundException e) {
             String message = "User " + nickname + " already exists";
             assertEquals(message, e.getMessage());

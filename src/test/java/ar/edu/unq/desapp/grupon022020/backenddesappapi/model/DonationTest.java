@@ -91,7 +91,7 @@ class DonationTest {
     @Test
     public void testDonationWithNoPoints() {
         DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.empty());
+        when(donorUser.lastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
         BigDecimal amount = new BigDecimal(500);
@@ -104,7 +104,7 @@ class DonationTest {
     @Test
     public void testDonationWithAmountPoints() {
         DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.empty());
+        when(donorUser.lastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
         BigDecimal amount = new BigDecimal(1500);
@@ -117,7 +117,7 @@ class DonationTest {
     @Test
     public void testDonationWithPopulationPoints() {
         DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.empty());
+        when(donorUser.lastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(1200);
         BigDecimal amount = new BigDecimal(500);
@@ -132,7 +132,7 @@ class DonationTest {
         Donation lastDonation = mock(Donation.class);
         when(lastDonation.getDate()).thenReturn(LocalDate.now());
         DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
+        when(donorUser.lastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
         BigDecimal amount = new BigDecimal(500);
@@ -147,7 +147,7 @@ class DonationTest {
         Donation lastDonation = mock(Donation.class);
         when(lastDonation.getDate()).thenReturn(LocalDate.now());
         DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
+        when(donorUser.lastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(3000);
         BigDecimal amount = new BigDecimal(4000);
@@ -162,7 +162,7 @@ class DonationTest {
         Donation lastDonation = mock(Donation.class);
         when(lastDonation.getDate()).thenReturn(LocalDate.now());
         DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
+        when(donorUser.lastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(900);
         BigDecimal amount = new BigDecimal(700);
@@ -177,7 +177,7 @@ class DonationTest {
         Donation lastDonation = mock(Donation.class);
         when(lastDonation.getDate()).thenReturn(LocalDate.now());
         DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
+        when(donorUser.lastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
         when(project.getLocationPopulation()).thenReturn(900);
         BigDecimal amount = new BigDecimal(5000);

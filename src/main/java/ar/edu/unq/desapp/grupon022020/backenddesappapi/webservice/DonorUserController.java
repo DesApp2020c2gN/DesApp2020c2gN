@@ -8,22 +8,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @EnableAutoConfiguration
 @RequestMapping("/users")
+@Validated
 public class DonorUserController {
 
     @Autowired
     private UserService userService;
+
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> allDonorUsers() {
+        List<DonorUser> list = userService.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @RequestMapping(value = "/{nickname}", method = RequestMethod.GET)
+    public ResponseEntity<?> getDonorUser(@PathVariable("nickname") String nickname) {
+        try {
+            DonorUser donorUser = userService.findById(nickname);
+            return ResponseEntity.ok().body(donorUser);
+        } catch (DataNotFoundException e) {
+            return new ResponseEntity<>("User could not be found: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
@@ -37,35 +54,25 @@ public class DonorUserController {
         }
     }
 
-    @RequestMapping(value = "/data/{nickname}", method = RequestMethod.GET)
-    public ResponseEntity<?> getDonorUser(@PathVariable("nickname") String nickname) {
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<?> createDonorUser(@Valid @RequestBody DonorUser user){
         try {
-            DonorUser donorUser = userService.findById(nickname);
-            return ResponseEntity.ok().body(donorUser);
-        } catch (DataNotFoundException e) {
-            return new ResponseEntity<>("User could not be found: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(value = "/data", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<?> allDonorUsers() {
-        List<DonorUser> list = userService.findAll();
-        return ResponseEntity.ok().body(list);
-    }
-
-    @RequestMapping(value = "/data", method = RequestMethod.PUT)
-    //TODO: all PUT request should receive the Body as JSON and create the object!
-    public ResponseEntity<?> createDonorUser(@RequestParam("nickname") String nickname,
-                                @RequestParam("name") String name,
-                                @RequestParam("mail") String mail,
-                                @RequestParam("password") String password,
-                                @RequestParam("money") int money){
-        try {
-            DonorUser donorUser = userService.createDonorUser(nickname, name, mail, password, money);
-            return new ResponseEntity<>(donorUser, HttpStatus.CREATED);
+            userService.createDonorUser(user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
         } catch (DataNotFoundException e) {
             return new ResponseEntity<>("User could not be created: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<String> handleMethodArgumentNotValidViolationException(MethodArgumentNotValidException e) {
+        return new ResponseEntity<>("At least one of the arguments is not valid", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+        return new ResponseEntity<>("At least one of the arguments is not valid" + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
