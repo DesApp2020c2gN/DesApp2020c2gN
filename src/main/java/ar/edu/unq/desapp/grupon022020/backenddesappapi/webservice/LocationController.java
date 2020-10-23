@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -41,7 +41,7 @@ public class LocationController {
 
     @RequestMapping(value = "/{name}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> getLocation(@PathVariable("name") @NotNull String name) {
+    public ResponseEntity<?> getLocation(@PathVariable("name") @NotBlank String name) {
         try {
             Location location = locationService.findById(name);
             return ResponseEntity.ok().body(location);
