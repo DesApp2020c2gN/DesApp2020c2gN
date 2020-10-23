@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
@@ -22,15 +22,15 @@ public class UserService {
     private String adminPassword;
 
     @Transactional
-    public DonorUser save(DonorUser donorUser) {
-        return this.repository.save(donorUser);
+    public Donor save(Donor donor) {
+        return this.repository.save(donor);
     }
 
-    public List<DonorUser> findAll() {
+    public List<Donor> findAll() {
         return this.repository.findAll();
     }
 
-    public DonorUser findById(String id) throws DataNotFoundException {
+    public Donor findById(String id) throws DataNotFoundException {
         if(repository.existsById(id)){
             return this.repository.findById(id).get();
         }
@@ -58,7 +58,7 @@ public class UserService {
         }
     }
 
-    public void createDonorUser(DonorUser user) throws DataNotFoundException {
+    public void createDonorUser(Donor user) throws DataNotFoundException {
         if (repository.existsById(user.getNickname())){
             throw new DataNotFoundException("User " + user.getNickname() + " already exists");
         }

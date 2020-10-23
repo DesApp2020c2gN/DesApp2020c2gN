@@ -1,13 +1,13 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DonorUserBuilder {
+public class DonorBuilder {
 
     private String name = "default_name";
     private String nickname = "default_nickname";
@@ -17,46 +17,46 @@ public class DonorUserBuilder {
     private int points = 0;
     private BigDecimal money = new BigDecimal(0);
 
-    public static DonorUserBuilder aDonorUser() {
-        return new DonorUserBuilder();
+    public static DonorBuilder aDonorUser() {
+        return new DonorBuilder();
     }
 
-    public DonorUser build() {
-        DonorUser newDonorUser = new DonorUser(name, nickname, mail, password, donations, points, money);
-        return newDonorUser;
+    public Donor build() {
+        Donor newDonor = new Donor(name, nickname, mail, password, donations, points, money);
+        return newDonor;
     }
 
-    public DonorUserBuilder withName(String name) {
+    public DonorBuilder withName(String name) {
         this.name = name;
         return this;
     }
 
-    public DonorUserBuilder withNickname(String nickname) {
+    public DonorBuilder withNickname(String nickname) {
         this.nickname = nickname;
         return this;
     }
 
-    public DonorUserBuilder withMail(String mail) {
+    public DonorBuilder withMail(String mail) {
         this.mail = mail;
         return this;
     }
 
-    public DonorUserBuilder withPassword(String password) {
+    public DonorBuilder withPassword(String password) {
         this.password = password;
         return this;
     }
 
-    public DonorUserBuilder withDonations(List<Donation> donations) {
+    public DonorBuilder withDonations(List<Donation> donations) {
         this.donations = donations;
         return this;
     }
 
-    public DonorUserBuilder withPoints(int points) {
+    public DonorBuilder withPoints(int points) {
         this.points = points;
         return this;
     }
 
-    public DonorUserBuilder withMoney(BigDecimal money) {
+    public DonorBuilder withMoney(BigDecimal money) {
         this.money = money;
         return this;
     }

@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 import org.junit.jupiter.api.Test;
@@ -189,10 +189,10 @@ public class ProjectTest {
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 build();
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9999999)).build();
+        Donor donor = DonorBuilder.aDonorUser().withMoney(new BigDecimal(9999999)).build();
 
-        donorUser.donate(new BigDecimal(2000000), "First donation", project);
-        donorUser.donate(new BigDecimal(2000000), "Second donation", project);
+        donor.donate(new BigDecimal(2000000), "First donation", project);
+        donor.donate(new BigDecimal(2000000), "Second donation", project);
 
         assertTrue(project.hasReachedGoal());
     }
@@ -211,10 +211,10 @@ public class ProjectTest {
                 withFactor(factor).
                 withClosurePercentage(closurePercentage).
                 build();
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withMoney(new BigDecimal(9999999)).build();
+        Donor donor = DonorBuilder.aDonorUser().withMoney(new BigDecimal(9999999)).build();
 
-        donorUser.donate(new BigDecimal(1000000), "First donation", project);
-        donorUser.donate(new BigDecimal(3000000), "Second donation", project);
+        donor.donate(new BigDecimal(1000000), "First donation", project);
+        donor.donate(new BigDecimal(3000000), "Second donation", project);
 
         assertFalse(project.hasReachedGoal());
     }

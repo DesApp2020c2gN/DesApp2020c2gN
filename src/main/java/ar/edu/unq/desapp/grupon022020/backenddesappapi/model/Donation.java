@@ -92,9 +92,9 @@ public class Donation {
         return 500;
     }
 
-    public int calculatePoints(DonorUser donorUser, Project project) {
+    public int calculatePoints(Donor donor, Project project) {
         int currentDonationPoints = 0;
-        Optional<Donation> donorUserLastDonation = donorUser.lastDonation();
+        Optional<Donation> donorUserLastDonation = donor.lastDonation();
 
         if (amount.compareTo(new BigDecimal(1000)) > 0) {
             currentDonationPoints = amount.intValue();

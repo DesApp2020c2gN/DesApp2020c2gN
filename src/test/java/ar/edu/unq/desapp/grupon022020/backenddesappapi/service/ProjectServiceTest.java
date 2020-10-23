@@ -1,9 +1,9 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
@@ -147,9 +147,9 @@ public class ProjectServiceTest {
         MockitoAnnotations.initMocks(this);
         String name = "Conectando Rio Turbio";
         Project project = ProjectBuilder.aProject().withName(name).withStartDate(LocalDate.now()).withDurationInDays(10).build();
-        List<DonorUser> donors = new ArrayList<>();
-        DonorUser donor_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
-        DonorUser donor_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
+        List<Donor> donors = new ArrayList<>();
+        Donor donor_1 = DonorBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
+        Donor donor_2 = DonorBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
         donor_1.donate(BigDecimal.valueOf(200), "Donation 1", project);
         donor_2.donate(BigDecimal.valueOf(200), "Donation 2", project);
         assertEquals(2, project.getDonations().size());
@@ -185,7 +185,7 @@ public class ProjectServiceTest {
     @Test
     public void testProjectServiceGetTopTenDonationStarvedLocations () throws InvalidDonationException {
         MockitoAnnotations.initMocks(this);
-        DonorUser donor = DonorUserBuilder.aDonorUser().withMoney(BigDecimal.valueOf(1000)).build();
+        Donor donor = DonorBuilder.aDonorUser().withMoney(BigDecimal.valueOf(1000)).build();
         Location location_1 = LocationBuilder.aLocation().withName("Rio Turbio").build();
         Location location_2 = LocationBuilder.aLocation().withName("Santa Rita").build();
         Project project_1 = ProjectBuilder.aProject().build();
@@ -219,9 +219,9 @@ public class ProjectServiceTest {
     @Test
     public void testProjectServiceCloseFinishedProjects () throws InvalidDonationException {
         MockitoAnnotations.initMocks(this);
-        DonorUser donor_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
-        DonorUser donor_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
-        List<DonorUser> donorsList = new ArrayList<>();
+        Donor donor_1 = DonorBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
+        Donor donor_2 = DonorBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
+        List<Donor> donorsList = new ArrayList<>();
         donorsList.add(donor_1); donorsList.add(donor_2);
         Project project_1 = ProjectBuilder.aProject().withFactor(100).withClosurePercentage(100).build();
         Project project_2 = ProjectBuilder.aProject().withFactor(1000).withClosurePercentage(100).build();

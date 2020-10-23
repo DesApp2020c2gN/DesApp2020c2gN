@@ -1,9 +1,9 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
@@ -54,16 +54,16 @@ public class InitServiceInMemory {
         locationService.save(location_4);
         locationService.save(location_5);
 
-        DonorUser donorUser_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withName("Juan J").withMail("juan@mail.com").withPassword("123").withMoney(BigDecimal.valueOf(9000)).build();
-        DonorUser donorUser_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withName("Maria M").withMail("maria@mail.com").withPassword("456").withMoney(BigDecimal.valueOf(8000)).build();
-        DonorUser donorUser_3 = DonorUserBuilder.aDonorUser().withNickname("fabian789").withName("Fabian F").withMail("fabian@mail.com").withPassword("789").withMoney(BigDecimal.valueOf(7500)).build();
-        DonorUser donorUser_4 = DonorUserBuilder.aDonorUser().withNickname("julia000").withName("Julia J").withMail("julia@mail.com").withPassword("000").withMoney(BigDecimal.valueOf(1300)).build();
-        DonorUser donorUser_5 = DonorUserBuilder.aDonorUser().withNickname("oscar111").withName("Oscar O").withMail("oscar@mail.com").withPassword("111").withMoney(BigDecimal.valueOf(2450)).build();
-        userService.save(donorUser_1);
-        userService.save(donorUser_2);
-        userService.save(donorUser_3);
-        userService.save(donorUser_4);
-        userService.save(donorUser_5);
+        Donor donor_1 = DonorBuilder.aDonorUser().withNickname("juan123").withName("Juan J").withMail("juan@mail.com").withPassword("123").withMoney(BigDecimal.valueOf(9000)).build();
+        Donor donor_2 = DonorBuilder.aDonorUser().withNickname("maria456").withName("Maria M").withMail("maria@mail.com").withPassword("456").withMoney(BigDecimal.valueOf(8000)).build();
+        Donor donor_3 = DonorBuilder.aDonorUser().withNickname("fabian789").withName("Fabian F").withMail("fabian@mail.com").withPassword("789").withMoney(BigDecimal.valueOf(7500)).build();
+        Donor donor_4 = DonorBuilder.aDonorUser().withNickname("julia000").withName("Julia J").withMail("julia@mail.com").withPassword("000").withMoney(BigDecimal.valueOf(1300)).build();
+        Donor donor_5 = DonorBuilder.aDonorUser().withNickname("oscar111").withName("Oscar O").withMail("oscar@mail.com").withPassword("111").withMoney(BigDecimal.valueOf(2450)).build();
+        userService.save(donor_1);
+        userService.save(donor_2);
+        userService.save(donor_3);
+        userService.save(donor_4);
+        userService.save(donor_5);
 
         Project project_1 = ProjectBuilder.aProject().withName("Conectando Santa Rita").withLocation(location_1).withFactor(50).withClosurePercentage(75).build();
         project_1.setStartDate(LocalDate.now().minusDays(20));
@@ -79,21 +79,21 @@ public class InitServiceInMemory {
         projectService.save(project_3);
 
         try {
-            donorUser_1.donate(BigDecimal.valueOf(1200), "This is my first donation!", project_1);
-            donorUser_1.donate(BigDecimal.valueOf(200), "This is my second donation!", project_1);
-            donorUser_1.donate(BigDecimal.valueOf(123), "This is my third donation!", project_1);
-            donorUser_1.donate(BigDecimal.valueOf(300), "This is my fourth donation!", project_2);
-            donorUser_1.donate(BigDecimal.valueOf(400), "This is my fifth donation!", project_2);
-            donorUser_2.donate(BigDecimal.valueOf(500), "Cool!", project_1);
-            donorUser_2.donate(BigDecimal.valueOf(2000), "Awesome!", project_1);
-            donorUser_3.donate(BigDecimal.valueOf(666), "Whatever", project_3);
-            donorUser_4.donate(BigDecimal.valueOf(120), "Good luck!", project_1);
-            donorUser_5.donate(BigDecimal.valueOf(2300), "Good luck!", project_1);
-            userService.save(donorUser_1);
-            userService.save(donorUser_2);
-            userService.save(donorUser_3);
-            userService.save(donorUser_4);
-            userService.save(donorUser_5);
+            donor_1.donate(BigDecimal.valueOf(1200), "This is my first donation!", project_1);
+            donor_1.donate(BigDecimal.valueOf(200), "This is my second donation!", project_1);
+            donor_1.donate(BigDecimal.valueOf(123), "This is my third donation!", project_1);
+            donor_1.donate(BigDecimal.valueOf(300), "This is my fourth donation!", project_2);
+            donor_1.donate(BigDecimal.valueOf(400), "This is my fifth donation!", project_2);
+            donor_2.donate(BigDecimal.valueOf(500), "Cool!", project_1);
+            donor_2.donate(BigDecimal.valueOf(2000), "Awesome!", project_1);
+            donor_3.donate(BigDecimal.valueOf(666), "Whatever", project_3);
+            donor_4.donate(BigDecimal.valueOf(120), "Good luck!", project_1);
+            donor_5.donate(BigDecimal.valueOf(2300), "Good luck!", project_1);
+            userService.save(donor_1);
+            userService.save(donor_2);
+            userService.save(donor_3);
+            userService.save(donor_4);
+            userService.save(donor_5);
         } catch (InvalidDonationException e) {
             e.printStackTrace();
         }

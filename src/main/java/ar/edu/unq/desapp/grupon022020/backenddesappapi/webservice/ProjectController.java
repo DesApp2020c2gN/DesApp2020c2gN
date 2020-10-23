@@ -83,6 +83,7 @@ public class ProjectController {
     @RequestMapping(value = "/end", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> closeFinishedProjects() {
+        //TODO: add status to Project because this method doesn't work when donation is done on the same day!
         projectService.closeFinishedProjects();
         return ResponseEntity.ok().body("Projects closed for " + LocalDate.now().toString());
     }

@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.service.UserService;
@@ -29,7 +29,7 @@ import java.util.List;
 @EnableAutoConfiguration
 @RequestMapping("/users")
 @Validated
-public class DonorUserController {
+public class UserController {
 
     @Autowired
     private UserService userService;
@@ -37,15 +37,15 @@ public class DonorUserController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> allDonorUsers() {
-        List<DonorUser> list = userService.findAll();
+        List<Donor> list = userService.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @RequestMapping(value = "/{nickname}", method = RequestMethod.GET)
     public ResponseEntity<?> getDonorUser(@PathVariable("nickname") @NotBlank String nickname) {
         try {
-            DonorUser donorUser = userService.findById(nickname);
-            return ResponseEntity.ok().body(donorUser);
+            Donor donor = userService.findById(nickname);
+            return ResponseEntity.ok().body(donor);
         } catch (DataNotFoundException e) {
             return new ResponseEntity<>("User could not be found: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -76,7 +76,7 @@ public class DonorUserController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<?> createDonorUser(@Valid @RequestBody DonorUser user){
+    public ResponseEntity<?> createDonorUser(@Valid @RequestBody Donor user){
         try {
             userService.createDonorUser(user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);

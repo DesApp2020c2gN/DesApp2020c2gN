@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
@@ -33,11 +33,11 @@ public class UserServiceTest {
     @Test
     public void testUserServiceFindAll() {
         MockitoAnnotations.initMocks(this);
-        List<DonorUser> donors = new ArrayList<>();
-        donors.add(DonorUserBuilder.aDonorUser().withNickname("juan123").build());
-        donors.add(DonorUserBuilder.aDonorUser().withNickname("maria456").build());
+        List<Donor> donors = new ArrayList<>();
+        donors.add(DonorBuilder.aDonorUser().withNickname("juan123").build());
+        donors.add(DonorBuilder.aDonorUser().withNickname("maria456").build());
         when(userRepository.findAll()).thenReturn(donors);
-        List<DonorUser> retrievedDonors = userService.findAll();
+        List<Donor> retrievedDonors = userService.findAll();
         assertEquals(donors, retrievedDonors);
         assertEquals(2, retrievedDonors.size());
     }
@@ -46,20 +46,20 @@ public class UserServiceTest {
     public void testUserServiceFindById() throws DataNotFoundException {
         MockitoAnnotations.initMocks(this);
         String nickname = "juan123";
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname(nickname).build();
+        Donor donor = DonorBuilder.aDonorUser().withNickname(nickname).build();
         when(userRepository.existsById(nickname)).thenReturn(true);
-        when(userRepository.findById(nickname)).thenReturn(Optional.of(donorUser));
-        assertEquals(donorUser, userService.findById(nickname));
+        when(userRepository.findById(nickname)).thenReturn(Optional.of(donor));
+        assertEquals(donor, userService.findById(nickname));
     }
 
     @Test
     public void testUserServiceFindByIdForNonExistingUser() {
         MockitoAnnotations.initMocks(this);
         String nickname = "juan123";
-        DonorUser donorUser = DonorUserBuilder.aDonorUser().withNickname(nickname).build();
+        Donor donor = DonorBuilder.aDonorUser().withNickname(nickname).build();
         when(userRepository.existsById(nickname)).thenReturn(false);
         try {
-            assertEquals(donorUser, userService.findById(nickname));
+            assertEquals(donor, userService.findById(nickname));
         } catch (DataNotFoundException e) {
             String message = "User " + nickname + " does not exists";
             assertEquals(message, e.getMessage());
@@ -75,7 +75,7 @@ public class UserServiceTest {
         String password = "456";
         int money = 1570;
         when(userRepository.existsById(nickname)).thenReturn(false);
-        DonorUser donor = DonorUserBuilder.aDonorUser().
+        Donor donor = DonorBuilder.aDonorUser().
                 withNickname(nickname).
                 withName(name).
                 withMail(mail).
@@ -100,7 +100,7 @@ public class UserServiceTest {
         String password = "456";
         int money = 1570;
         when(userRepository.existsById(nickname)).thenReturn(true);
-        DonorUser donor = DonorUserBuilder.aDonorUser().
+        Donor donor = DonorBuilder.aDonorUser().
                 withNickname(nickname).
                 withName(name).
                 withMail(mail).

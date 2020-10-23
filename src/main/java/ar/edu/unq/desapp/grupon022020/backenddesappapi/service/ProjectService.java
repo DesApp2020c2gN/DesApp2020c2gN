@@ -1,11 +1,10 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.AdminUser;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.AdminUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonationRepository;
@@ -66,35 +65,70 @@ public class ProjectService {
         }
         //TODO: add validation in case a project for this location was completed!
         Location location = locationRepository.findById(locationName).get();
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
-        Project project = adminUser.createProject(name, factor, closurePercentage, LocalDate.parse(startDate), durationInDays, location);
+        validateArguments(name, factor, closurePercentage, LocalDate.parse(startDate), durationInDays);
+        Project project = ProjectBuilder.aProject().
+                withName(name).
+                withFactor(factor).
+                withClosurePercentage(closurePercentage).
+                withStartDate(LocalDate.parse(startDate)).
+                withDurationInDays(durationInDays).
+                withLocation(location).
+                build();
         save(project);
         return project;
     }
 
+    private void validateArguments(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays) throws InvalidProjectOperationException {
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new InvalidProjectOperationException("Start day of " + startDate.toString() + " for project " + name + " is not valid");
+        }
+        if (!(factor > 0)) {
+            throw new InvalidProjectOperationException("Project " + name + " must have a positive factor");
+        }
+        if (!(durationInDays > 0)) {
+            throw new InvalidProjectOperationException("Project " + name + " must have a positive duration");
+        }
+        if (!(closurePercentage > 0 && closurePercentage <= 100)) {
+            throw new InvalidProjectOperationException("Project " + name + " must have a percentage between 1 and 100");
+        }
+    }
+
     public void cancelProject(String name) throws DataNotFoundException {
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         if(!projectRepository.existsById(name)){
             throw new DataNotFoundException("Project " + name + " does not exists");
         }
         //TODO: add validation in case the project was completed!
         Project projectToCancel = findById(name);
         List<Donation> donationsToReturn = projectToCancel.getDonations();
-        List<DonorUser> donorsList = donorsList(projectToCancel);
+        List<Donor> donorsList = donorsList(projectToCancel);
         for (Donation donation: donationsToReturn)
         {
             donationRepository.deleteDonation(donation.getId());
         }
-        adminUser.cancelProject(projectToCancel, donorsList);
-        for (DonorUser user: donorsList)
+        cancelProject(projectToCancel, donorsList);
+        for (Donor user: donorsList)
         {
            userRepository.save(user);
         }
         projectRepository.save(projectToCancel);
     }
 
+    public void cancelProject(Project project, List<Donor> donorsList) {
+        project.cancel();
+        returnDonations(project, donorsList);
+    }
+
+    public void returnDonations(Project projectToCancel, List<Donor> donorsList) {
+        List<Donation> donationsToReturn = projectToCancel.getDonations();
+        donationsToReturn.forEach(donation -> getUser(donation.getDonorNickname(), donorsList).undoDonation(donation));
+        projectToCancel.undoDonations();
+    }
+
+    private Donor getUser(String donorNickname, List<Donor> donorsList) {
+        return donorsList.stream().filter(donorUser -> donorUser.getNickname().equals(donorNickname)).findFirst().get();
+    }
+
     public void closeFinishedProjects(){
-        AdminUser adminUser = AdminUserBuilder.anAdminUser().build();
         List<Project> projects = projectRepository.findAll();
         List<Project> finishedProjects = projects.stream().
                 filter(project -> project.getFinishDate().isEqual(LocalDate.now())).
@@ -109,9 +143,9 @@ public class ProjectService {
             {
                 donationRepository.deleteDonation(donation.getId());
             }
-            List<DonorUser> donorsList = donorsList(project);
-            adminUser.returnDonations(project, donorsList);
-            for (DonorUser user: donorsList)
+            List<Donor> donorsList = donorsList(project);
+            returnDonations(project, donorsList);
+            for (Donor user: donorsList)
             {
                 userRepository.save(user);
             }
@@ -129,9 +163,9 @@ public class ProjectService {
         return CommonTools.getFirstTenIfExists(sortedLocations);
     }
 
-    private List<DonorUser> donorsList(Project project){
+    private List<Donor> donorsList(Project project){
         List<String> donorsNicknames = project.donors();
-        List<DonorUser> donorsList = userRepository.findAll().stream().
+        List<Donor> donorsList = userRepository.findAll().stream().
                 filter(donorUser -> donorsNicknames.contains(donorUser.getNickname())).
                 collect(Collectors.toList());
         return donorsList;

@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
@@ -56,11 +56,11 @@ public class DonationService {
         if(!projectRepository.existsById(projectName)){
             throw new DataNotFoundException("Project " + projectName + " does not exist");
         }
-        DonorUser donorUser = userRepository.findById(nickname).get();
+        Donor donor = userRepository.findById(nickname).get();
         Project project = projectRepository.findById(projectName).get();
         Donation donation;
         try {
-            donation = donorUser.donate(BigDecimal.valueOf(amount), comment, project);
+            donation = donor.donate(BigDecimal.valueOf(amount), comment, project);
             save(donation);
         } catch (InvalidDonationException e) {
             throw new InvalidDonationException(e.getMessage());
