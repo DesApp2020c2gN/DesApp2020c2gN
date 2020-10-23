@@ -116,7 +116,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUserServiceLoginDonorUser() throws LoginException {
+    public void testUserServiceLoginDonorUser() {
         MockitoAnnotations.initMocks(this);
         String nickname = "maria456";
         String password = "456";

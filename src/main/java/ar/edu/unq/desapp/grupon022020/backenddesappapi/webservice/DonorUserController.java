@@ -10,10 +10,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -33,7 +44,7 @@ public class DonorUserController {
     }
 
     @RequestMapping(value = "/{nickname}", method = RequestMethod.GET)
-    public ResponseEntity<?> getDonorUser(@PathVariable("nickname") String nickname) {
+    public ResponseEntity<?> getDonorUser(@PathVariable("nickname") @NotNull String nickname) {
         try {
             DonorUser donorUser = userService.findById(nickname);
             return ResponseEntity.ok().body(donorUser);
@@ -44,8 +55,8 @@ public class DonorUserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> loginUser(@RequestParam("nickname") String nickname,
-                                       @RequestParam("password") String password) {
+    public ResponseEntity<?> loginUser(@RequestParam("nickname") @NotNull String nickname,
+                                       @RequestParam("password") @NotNull String password) {
         try {
             userService.loginDonorUser(nickname, password);
             return ResponseEntity.ok().body("Donor login successful");
