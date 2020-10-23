@@ -70,11 +70,17 @@ class LocationServiceTest {
         int population = 2300;
         String state = "Sin iniciar";
         when(locationRepository.existsById(name)).thenReturn(false);
-        Location createdLocation = locationService.createLocation(name, province, population, state);
-        assertEquals(name, createdLocation.getName());
-        assertEquals(province, createdLocation.getProvince());
-        assertEquals(population, createdLocation.getPopulation());
-        assertEquals(state, createdLocation.getState());
+        Location location = LocationBuilder.aLocation().
+                withName(name).
+                withProvince(province).
+                withPopulation(population).
+                withState(state).
+                build();
+        locationService.createLocation(location);
+        assertEquals(name, location.getName());
+        assertEquals(province, location.getProvince());
+        assertEquals(population, location.getPopulation());
+        assertEquals(state, location.getState());
     }
 
     @Test
@@ -85,8 +91,14 @@ class LocationServiceTest {
         int population = 2300;
         String state = "Sin iniciar";
         when(locationRepository.existsById(name)).thenReturn(true);
+        Location location = LocationBuilder.aLocation().
+                withName(name).
+                withProvince(province).
+                withPopulation(population).
+                withState(state).
+                build();
         try {
-            locationService.createLocation(name, province, population, state);
+            locationService.createLocation(location);
         } catch (DataNotFoundException e) {
             String message = "Location " + name + " already exists";
             assertEquals(message, e.getMessage());

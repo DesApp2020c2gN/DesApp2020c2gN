@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @MappedSuperclass
 public abstract class User {
@@ -11,16 +11,16 @@ public abstract class User {
     //TODO: if AdminUser is deleted, this class is not required!
 
     @Column
-    @NotNull(message = "Name cannot be null")
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
     @Column
     @Email
-    @NotNull(message = "Mail cannot be null")
+    @NotBlank(message = "Mail cannot be blank")
     private String mail;
 
     @Column
-    @NotNull(message = "Password cannot be null")
+    @NotBlank(message = "Password cannot be blank")
     private String password;
     //TODO: save password as Hash in the database!
 

@@ -78,12 +78,12 @@ public class DonorUserController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<String> handleMethodArgumentNotValidViolationException(MethodArgumentNotValidException e) {
-        return new ResponseEntity<>("At least one of the arguments is not valid", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("The argument is not valid", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
-        return new ResponseEntity<>("At least one of the arguments is not valid" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("One of the arguments is not valid" + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

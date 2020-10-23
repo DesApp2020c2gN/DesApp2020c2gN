@@ -9,9 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -22,7 +21,7 @@ import java.util.Optional;
 public class DonorUser extends User {
 
     @Id
-    @NotNull(message = "Nickname cannot be null")
+    @NotBlank(message = "Nickname cannot be blank")
     private String nickname;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "donorNickname")
@@ -32,8 +31,7 @@ public class DonorUser extends User {
     private int points;
 
     @Column
-    @Min(value = 1, message = "Money should not be less than 1")
-    @Max(value = 1000000, message = "Money should not be greater than 1000000")
+    @PositiveOrZero(message = "Money should be zero or positive")
     private BigDecimal money;
 
     public DonorUser() {};
