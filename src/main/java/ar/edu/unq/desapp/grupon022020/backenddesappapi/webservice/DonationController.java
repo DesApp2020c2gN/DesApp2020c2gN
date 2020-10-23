@@ -53,7 +53,7 @@ public class DonationController {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+    private ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
         return new ResponseEntity<>("One of the arguments is not valid" + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

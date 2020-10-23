@@ -43,95 +43,35 @@ public class InitServiceInMemory {
     }
 
     private void fireInitialData() {
-        Location location_1 = LocationBuilder.aLocation().
-                withName("Santa Rita").
-                withPopulation(1200).
-                build();
-        Location location_2 = LocationBuilder.aLocation().
-                withName("Rio Tercero").
-                withPopulation(710).
-                build();
-        Location location_3 = LocationBuilder.aLocation().
-                withName("Puerto Iguazu").
-                withPopulation(1530).
-                build();
-        Location location_4 = LocationBuilder.aLocation().
-                withName("Cruz Azul").
-                withPopulation(955).
-                build();
-        Location location_5 = LocationBuilder.aLocation().
-                withName("Santa Clara").
-                withPopulation(780).
-                build();
+        Location location_1 = LocationBuilder.aLocation().withName("Santa Rita").withPopulation(1200).build();
+        Location location_2 = LocationBuilder.aLocation().withName("Rio Tercero").withPopulation(710).build();
+        Location location_3 = LocationBuilder.aLocation().withName("Puerto Iguazu").withPopulation(1530).build();
+        Location location_4 = LocationBuilder.aLocation().withName("Cruz Azul").withPopulation(955).build();
+        Location location_5 = LocationBuilder.aLocation().withName("Santa Clara").withPopulation(780).build();
         locationService.save(location_1);
         locationService.save(location_2);
         locationService.save(location_3);
         locationService.save(location_4);
         locationService.save(location_5);
 
-        DonorUser donorUser_1 = DonorUserBuilder.aDonorUser().
-                withNickname("juan123").
-                withName("Juan J").
-                withMail("juan@mail.com").
-                withPassword("123").
-                withMoney(BigDecimal.valueOf(9000)).
-                build();
-        DonorUser donorUser_2 = DonorUserBuilder.aDonorUser().
-                withNickname("maria456").
-                withName("Maria M").
-                withMail("maria@mail.com").
-                withPassword("456").
-                withMoney(BigDecimal.valueOf(8000)).
-                build();
-        DonorUser donorUser_3 = DonorUserBuilder.aDonorUser().
-                withNickname("fabian789").
-                withName("Fabian F").
-                withMail("fabian@mail.com").
-                withPassword("789").
-                withMoney(BigDecimal.valueOf(7500)).
-                build();
-        DonorUser donorUser_4 = DonorUserBuilder.aDonorUser().
-                withNickname("julia000").
-                withName("Julia J").
-                withMail("julia@mail.com").
-                withPassword("000").
-                withMoney(BigDecimal.valueOf(1300)).
-                build();
-        DonorUser donorUser_5 = DonorUserBuilder.aDonorUser().
-                withNickname("oscar111").
-                withName("Oscar O").
-                withMail("oscar@mail.com").
-                withPassword("111").
-                withMoney(BigDecimal.valueOf(2450)).
-                build();
+        DonorUser donorUser_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withName("Juan J").withMail("juan@mail.com").withPassword("123").withMoney(BigDecimal.valueOf(9000)).build();
+        DonorUser donorUser_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withName("Maria M").withMail("maria@mail.com").withPassword("456").withMoney(BigDecimal.valueOf(8000)).build();
+        DonorUser donorUser_3 = DonorUserBuilder.aDonorUser().withNickname("fabian789").withName("Fabian F").withMail("fabian@mail.com").withPassword("789").withMoney(BigDecimal.valueOf(7500)).build();
+        DonorUser donorUser_4 = DonorUserBuilder.aDonorUser().withNickname("julia000").withName("Julia J").withMail("julia@mail.com").withPassword("000").withMoney(BigDecimal.valueOf(1300)).build();
+        DonorUser donorUser_5 = DonorUserBuilder.aDonorUser().withNickname("oscar111").withName("Oscar O").withMail("oscar@mail.com").withPassword("111").withMoney(BigDecimal.valueOf(2450)).build();
         userService.save(donorUser_1);
         userService.save(donorUser_2);
         userService.save(donorUser_3);
         userService.save(donorUser_4);
         userService.save(donorUser_5);
 
-        Project project_1 = ProjectBuilder.aProject().
-                withName("Conectando Santa Rita").
-                withLocation(location_1).
-                withFactor(50).
-                withClosurePercentage(75).
-                build();
+        Project project_1 = ProjectBuilder.aProject().withName("Conectando Santa Rita").withLocation(location_1).withFactor(50).withClosurePercentage(75).build();
         project_1.setStartDate(LocalDate.now().minusDays(20));
         project_1.setFinishDate(LocalDate.now());
-        Project project_2 = ProjectBuilder.aProject().
-                withName("Conectando Rio Tercero").
-                withLocation(location_2).
-                withFactor(70).
-                withClosurePercentage(90).
-                build();
+        Project project_2 = ProjectBuilder.aProject().withName("Conectando Rio Tercero").withLocation(location_2).withFactor(70).withClosurePercentage(90).build();
         project_2.setStartDate(LocalDate.now().minusDays(30));
         project_2.setFinishDate(LocalDate.now());
-        Project project_3 = ProjectBuilder.aProject().
-                withName("Conectando Puerto Iguazu").
-                withLocation(location_3).
-                withFactor(120).
-                withClosurePercentage(95).
-                build();
+        Project project_3 = ProjectBuilder.aProject().withName("Conectando Puerto Iguazu").withLocation(location_3).withFactor(120).withClosurePercentage(95).build();
         project_3.setStartDate(LocalDate.now().minusDays(40));
         project_3.setFinishDate(LocalDate.now().plusDays(10));
         projectService.save(project_1);
