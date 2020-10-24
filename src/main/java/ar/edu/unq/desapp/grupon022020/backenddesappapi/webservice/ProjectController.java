@@ -25,7 +25,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -79,13 +78,6 @@ public class ProjectController {
         } catch (DataNotFoundException | InvalidProjectOperationException e) {
             return new ResponseEntity<>("Project could not be cancelled: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @RequestMapping(value = "/end", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<?> closeFinishedProjects() {
-        projectService.closeFinishedProjects();
-        return ResponseEntity.ok().body("Projects closed for " + LocalDate.now().toString());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

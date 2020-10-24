@@ -13,7 +13,6 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.LocationRepos
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.ProjectRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,7 +119,6 @@ public class ProjectService {
         return donorsList.stream().filter(donorUser -> donorUser.getNickname().equals(donorNickname)).findFirst().get();
     }
 
-    @Scheduled(cron = "0 55 23 ? * * ")
     public void closeFinishedProjects(){
         List<Project> activeProjects = projectRepository.getProjectsWithStatus(ProjectStatus.ACTIVE.name());
         List<Project> finishingProjects = activeProjects.stream().
