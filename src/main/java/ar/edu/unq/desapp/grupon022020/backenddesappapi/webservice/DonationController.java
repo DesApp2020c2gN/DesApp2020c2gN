@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class DonationController {
     public ResponseEntity<?> donate(@RequestParam("nickname") @NotBlank String nickname,
                        @RequestParam("projectName") @NotBlank String projectName,
                        @RequestParam("comment") @NotBlank String comment,
-                       @RequestParam("amount") @Positive int amount) {
+                       @RequestParam("amount") @NotNull @Positive int amount) {
         try {
             Donation donation = donationService.donate(nickname, projectName, comment, amount);
             return ResponseEntity.ok().body(donation);

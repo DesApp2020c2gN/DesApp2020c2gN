@@ -40,11 +40,12 @@ public class Project {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
-    //TODO: add status variable!
+    @Column
+    private String status;
 
     public Project() {}
 
-    public Project(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, List<Donation> donations, Location location) {
+    public Project(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, List<Donation> donations, Location location, String status) {
         this.name = name;
         this.factor = factor;
         this.closurePercentage = closurePercentage;
@@ -52,6 +53,7 @@ public class Project {
         this.finishDate = startDate.plusDays(durationInDays);
         this.donations = donations;
         this.location = location;
+        this.status = status;
     }
 
     public String getName() {
@@ -110,8 +112,19 @@ public class Project {
         this.location = location;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public void receiveDonation(Donation donation) {
         this.donations.add(donation);
+        if(hasReachedGoal()) {
+            setStatus(ProjectStatus.COMPLETE.name());
+        }
     }
 
     public int locationPopulation() {
@@ -120,6 +133,9 @@ public class Project {
 
     public void validateDonation() throws InvalidDonationException {
         LocalDate today = LocalDate.now();
+        if(!(status.equals(ProjectStatus.ACTIVE.name()))) {
+            throw  new InvalidDonationException("Project " + this.getName() + " is " + getStatus());
+        }
         if (today.isBefore(this.getStartDate())) {
             throw new InvalidDonationException("Project " + this.getName() + " has not started");
         }
@@ -145,7 +161,7 @@ public class Project {
     }
 
     public void cancel() {
-        this.finishDate = getStartDate().minusDays(1);
+        this.status = ProjectStatus.CANCELLED.name();
     }
 
     public void undoDonations() {

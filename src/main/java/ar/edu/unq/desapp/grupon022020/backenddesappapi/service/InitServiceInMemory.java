@@ -71,7 +71,7 @@ public class InitServiceInMemory {
         Project project_2 = ProjectBuilder.aProject().withName("Conectando Rio Tercero").withLocation(location_2).withFactor(70).withClosurePercentage(90).build();
         project_2.setStartDate(LocalDate.now().minusDays(30));
         project_2.setFinishDate(LocalDate.now());
-        Project project_3 = ProjectBuilder.aProject().withName("Conectando Puerto Iguazu").withLocation(location_3).withFactor(120).withClosurePercentage(95).build();
+        Project project_3 = ProjectBuilder.aProject().withName("Conectando Puerto Iguazu").withLocation(location_3).withFactor(3).withClosurePercentage(95).build();
         project_3.setStartDate(LocalDate.now().minusDays(40));
         project_3.setFinishDate(LocalDate.now().plusDays(10));
         projectService.save(project_1);
