@@ -27,6 +27,8 @@ public class InitServiceInMemory {
     @Value("${spring.datasource.driverClassName:NONE}")
     private String className;
 
+    //@Autowired
+    //private ARSATWebService webService;
     @Autowired
     private LocationService locationService;
     @Autowired
@@ -43,11 +45,13 @@ public class InitServiceInMemory {
     }
 
     private void fireInitialData() {
-        Location location_1 = LocationBuilder.aLocation().withName("Santa Rita").withPopulation(1200).build();
-        Location location_2 = LocationBuilder.aLocation().withName("Rio Tercero").withPopulation(710).build();
-        Location location_3 = LocationBuilder.aLocation().withName("Puerto Iguazu").withPopulation(1530).build();
-        Location location_4 = LocationBuilder.aLocation().withName("Cruz Azul").withPopulation(955).build();
-        Location location_5 = LocationBuilder.aLocation().withName("Santa Clara").withPopulation(780).build();
+        //webService.loadLocationsFromARSAT();
+
+        Location location_1 = LocationBuilder.aLocation().withName("Santa Rita").withPopulation(1200).withProvince("Misiones").withState("En Planificación").build();
+        Location location_2 = LocationBuilder.aLocation().withName("Rio Tercero").withPopulation(710).withProvince("Cordoba").withState("En Planificación").build();
+        Location location_3 = LocationBuilder.aLocation().withName("Puerto Iguazu").withPopulation(1530).withProvince("Misiones").withState("En Planificación").build();
+        Location location_4 = LocationBuilder.aLocation().withName("Cipolletti").withPopulation(955).withProvince("Rio Negro").withState("En Planificación").build();
+        Location location_5 = LocationBuilder.aLocation().withName("Santa Clara").withPopulation(780).withProvince("Buenos Aires").withState("En Planificación").build();
         locationService.save(location_1);
         locationService.save(location_2);
         locationService.save(location_3);

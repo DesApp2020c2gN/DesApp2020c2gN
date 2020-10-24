@@ -12,7 +12,6 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonationRepos
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.LocationRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.ProjectRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.utils.CommonTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -146,11 +145,12 @@ public class ProjectService {
     public List<Location> getTopTenDonationStarvedLocations() {
         List<Project> projects = projectRepository.getProjectsWithStatus(ProjectStatus.ACTIVE.name());
         List<Location> sortedLocations =
-                projects.stream()
-                        .sorted(Comparator.comparing(this::getLastDonationDate))
-                        .map(Project::getLocation)
-                        .collect(Collectors.toList());
-        return CommonTools.getFirstTenIfExists(sortedLocations);
+                projects.stream().
+                        sorted(Comparator.comparing(this::getLastDonationDate)).
+                        map(Project::getLocation).
+                        limit(10).
+                        collect(Collectors.toList());
+        return sortedLocations;
     }
 
     private List<Donor> donorsList(Project project){

@@ -8,7 +8,6 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidD
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.DonationRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.ProjectRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.utils.CommonTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,10 +45,7 @@ public class DonationService {
         }
     }
 
-    public Donation donate(String nickname,
-                           String projectName,
-                           String comment,
-                           int amount) throws DataNotFoundException, InvalidDonationException {
+    public Donation donate(String nickname, String projectName, String comment, int amount) throws DataNotFoundException, InvalidDonationException {
         if(!userRepository.existsById(nickname)){
             throw new DataNotFoundException("User " + nickname + " does not exist");
         }
@@ -73,7 +69,8 @@ public class DonationService {
         List<Donation> sortedDonations =
                 donations.stream().
                         sorted(Comparator.comparing(Donation::getAmount).reversed()).
+                        limit(10).
                         collect(Collectors.toList());
-        return CommonTools.getFirstTenIfExists(sortedDonations);
+        return sortedDonations;
     }
 }
