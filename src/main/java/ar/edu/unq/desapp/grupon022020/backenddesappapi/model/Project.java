@@ -2,13 +2,13 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -40,9 +40,12 @@ public class Project {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
+    @Column
+    private String status;
+
     public Project() {}
 
-    public Project(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, List<Donation> donations, Location location) {
+    public Project(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays, List<Donation> donations, Location location, String status) {
         this.name = name;
         this.factor = factor;
         this.closurePercentage = closurePercentage;
@@ -50,6 +53,7 @@ public class Project {
         this.finishDate = startDate.plusDays(durationInDays);
         this.donations = donations;
         this.location = location;
+        this.status = status;
     }
 
     public String getName() {
@@ -108,16 +112,30 @@ public class Project {
         this.location = location;
     }
 
-    public void receiveDonation(Donation donation) {
-        this.donations.add(donation);
+    public String getStatus() {
+        return status;
     }
 
-    public int getLocationPopulation() {
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void receiveDonation(Donation donation) {
+        this.donations.add(donation);
+        if(hasReachedGoal()) {
+            setStatus(ProjectStatus.COMPLETE.name());
+        }
+    }
+
+    public int locationPopulation() {
         return this.location.getPopulation();
     }
 
     public void validateDonation() throws InvalidDonationException {
         LocalDate today = LocalDate.now();
+        if(!(status.equals(ProjectStatus.ACTIVE.name()))) {
+            throw  new InvalidDonationException("Project " + this.getName() + " is " + getStatus());
+        }
         if (today.isBefore(this.getStartDate())) {
             throw new InvalidDonationException("Project " + this.getName() + " has not started");
         }
@@ -143,7 +161,7 @@ public class Project {
     }
 
     public void cancel() {
-        this.finishDate = getStartDate().minusDays(1);
+        this.status = ProjectStatus.CANCELLED.name();
     }
 
     public void undoDonations() {
@@ -158,7 +176,7 @@ public class Project {
         return this.donations.stream().map(Donation::getDonorNickname).distinct().collect(Collectors.toList());
     }
     
-    public Optional<Donation> getLastDonation() {
+    public Optional<Donation> lastDonation() {
         return donations.stream().max(Comparator.comparing(Donation::getDate));
     }
 }

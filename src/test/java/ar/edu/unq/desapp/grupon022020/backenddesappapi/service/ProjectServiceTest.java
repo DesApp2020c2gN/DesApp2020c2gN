@@ -1,9 +1,10 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.DonorUser;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorUserBuilder;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.ProjectStatus;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.LocationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
@@ -92,7 +93,7 @@ public class ProjectServiceTest {
         int durationInDays = 60;
         String locationName = "Rio Turbio";
         Location location = LocationBuilder.aLocation().withName(locationName).build();
-        when(projectRepository.existsOpenProject(locationName, LocalDate.now())).thenReturn(false);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(false);
         when(locationRepository.existsById(locationName)).thenReturn(true);
         when(locationRepository.findById(locationName)).thenReturn(Optional.of(location));
         when(projectRepository.save(any())).thenReturn(null);
@@ -106,24 +107,6 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void testProjectServiceCreateProjectForAlreadyOpenProject() throws DataNotFoundException {
-        MockitoAnnotations.initMocks(this);
-        String name = "Conectando Rio Turbio";
-        int factor = 1300;
-        int closurePercentage = 75;
-        String startDate = LocalDate.now().plusDays(10).toString();
-        int durationInDays = 60;
-        String locationName = "Rio Turbio";
-        when(projectRepository.existsOpenProject(locationName, LocalDate.now())).thenReturn(true);
-        try {
-            projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
-        } catch (InvalidProjectOperationException e) {
-            String message = "There is already an open project for location " + locationName;
-            assertEquals(message, e.getMessage());
-        }
-    }
-
-    @Test
     public void testProjectServiceCreateProjectForNonExistingLocation() throws InvalidProjectOperationException {
         MockitoAnnotations.initMocks(this);
         String name = "Conectando Rio Turbio";
@@ -132,7 +115,7 @@ public class ProjectServiceTest {
         String startDate = LocalDate.now().plusDays(10).toString();
         int durationInDays = 60;
         String locationName = "Rio Turbio";
-        when(projectRepository.existsOpenProject(locationName, LocalDate.now())).thenReturn(false);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(false);
         when(locationRepository.existsById(locationName)).thenReturn(false);
         try {
             projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
@@ -143,13 +126,72 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void testProjectServiceCancelProject() throws DataNotFoundException, InvalidDonationException {
+    public void testProjectServiceCreateProjectForAlreadyOpenProject() throws DataNotFoundException {
+        MockitoAnnotations.initMocks(this);
+        String name = "Conectando Rio Turbio";
+        int factor = 1300;
+        int closurePercentage = 75;
+        String startDate = LocalDate.now().plusDays(10).toString();
+        int durationInDays = 60;
+        String locationName = "Rio Turbio";
+        when(locationRepository.existsById(locationName)).thenReturn(true);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(true);
+        try {
+            projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
+        } catch (InvalidProjectOperationException e) {
+            String message = "There is already an open project for location " + locationName;
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testProjectServiceCreateProjectForAlreadyCompletedProject() throws DataNotFoundException {
+        MockitoAnnotations.initMocks(this);
+        String name = "Conectando Santa Clara";
+        int factor = 1300;
+        int closurePercentage = 75;
+        String startDate = LocalDate.now().plusDays(10).toString();
+        int durationInDays = 60;
+        String locationName = "Conectando Santa Clara";
+        when(locationRepository.existsById(locationName)).thenReturn(true);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(false);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.COMPLETE.name())).thenReturn(true);
+        try {
+            projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
+        } catch (InvalidProjectOperationException e) {
+            String message = "There is already a complete project for location " + locationName;
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testProjectServiceCreateProjectForInvalidStartDate() throws DataNotFoundException {
+        MockitoAnnotations.initMocks(this);
+        String name = "Conectando Santa Clara";
+        int factor = 1300;
+        int closurePercentage = 75;
+        String startDate = LocalDate.now().minusDays(10).toString();
+        int durationInDays = 60;
+        String locationName = "Conectando Santa Clara";
+        when(locationRepository.existsById(locationName)).thenReturn(true);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(false);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.COMPLETE.name())).thenReturn(false);
+        try {
+            projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
+        } catch (InvalidProjectOperationException e) {
+            String message = "Start day of " + startDate + " for project " + name + " is not valid";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testProjectServiceCancelProject() throws DataNotFoundException, InvalidDonationException, InvalidProjectOperationException {
         MockitoAnnotations.initMocks(this);
         String name = "Conectando Rio Turbio";
         Project project = ProjectBuilder.aProject().withName(name).withStartDate(LocalDate.now()).withDurationInDays(10).build();
-        List<DonorUser> donors = new ArrayList<>();
-        DonorUser donor_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
-        DonorUser donor_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
+        List<Donor> donors = new ArrayList<>();
+        Donor donor_1 = DonorBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
+        Donor donor_2 = DonorBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
         donor_1.donate(BigDecimal.valueOf(200), "Donation 1", project);
         donor_2.donate(BigDecimal.valueOf(200), "Donation 2", project);
         assertEquals(2, project.getDonations().size());
@@ -166,11 +208,11 @@ public class ProjectServiceTest {
         assertEquals(0, project.getDonations().size());
         assertEquals(0, project.numberOfDonors());
         assertEquals(BigDecimal.valueOf(0), project.totalAmountDonations());
-        assertEquals(LocalDate.now().minusDays(1), project.getFinishDate());
+        assertEquals(ProjectStatus.CANCELLED.name(), project.getStatus());
     }
 
     @Test
-    public void testProjectServiceCancelProjectForNonExistingProject () {
+    public void testProjectServiceCancelProjectForNonExistingProject () throws InvalidProjectOperationException {
         MockitoAnnotations.initMocks(this);
         String name = "Conectando Rio Turbio";
         when(projectRepository.existsById(name)).thenReturn(false);
@@ -183,9 +225,25 @@ public class ProjectServiceTest {
     }
 
     @Test
+    public void testProjectServiceCancelProjectForNonActiveProject () throws DataNotFoundException {
+        MockitoAnnotations.initMocks(this);
+        String name = "Conectando Rio Turbio";
+        String status = ProjectStatus.INCOMPLETE.name();
+        Project project = ProjectBuilder.aProject().withName(name).withStatus(status).build();
+        when(projectRepository.existsById(name)).thenReturn(true);
+        when(projectRepository.findById(name)).thenReturn(Optional.of(project));
+        try {
+            projectService.cancelProject(name);
+        } catch (InvalidProjectOperationException e) {
+            String message = "Project " + name + " already has status " + status;
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
     public void testProjectServiceGetTopTenDonationStarvedLocations () throws InvalidDonationException {
         MockitoAnnotations.initMocks(this);
-        DonorUser donor = DonorUserBuilder.aDonorUser().withMoney(BigDecimal.valueOf(1000)).build();
+        Donor donor = DonorBuilder.aDonorUser().withMoney(BigDecimal.valueOf(1000)).build();
         Location location_1 = LocationBuilder.aLocation().withName("Rio Turbio").build();
         Location location_2 = LocationBuilder.aLocation().withName("Santa Rita").build();
         Project project_1 = ProjectBuilder.aProject().build();
@@ -207,7 +265,7 @@ public class ProjectServiceTest {
         projectList.add(project_4); projectList.add(project_5); projectList.add(project_6);
         projectList.add(project_7); projectList.add(project_8); projectList.add(project_9);
         projectList.add(project_10); projectList.add(project_11); projectList.add(project_12);
-        when(projectRepository.findAll()).thenReturn(projectList);
+        when(projectRepository.getProjectsWithStatus(ProjectStatus.ACTIVE.name())).thenReturn(projectList);
         project_7.getDonations().get(0).setDate(LocalDate.now().minusDays(100));
         project_11.getDonations().get(0).setDate(LocalDate.now().plusDays(100));
         List<Location> locations = projectService.getTopTenDonationStarvedLocations();
@@ -219,9 +277,9 @@ public class ProjectServiceTest {
     @Test
     public void testProjectServiceCloseFinishedProjects () throws InvalidDonationException {
         MockitoAnnotations.initMocks(this);
-        DonorUser donor_1 = DonorUserBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
-        DonorUser donor_2 = DonorUserBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
-        List<DonorUser> donorsList = new ArrayList<>();
+        Donor donor_1 = DonorBuilder.aDonorUser().withNickname("juan123").withMoney(BigDecimal.valueOf(1000)).build();
+        Donor donor_2 = DonorBuilder.aDonorUser().withNickname("maria456").withMoney(BigDecimal.valueOf(1000)).build();
+        List<Donor> donorsList = new ArrayList<>();
         donorsList.add(donor_1); donorsList.add(donor_2);
         Project project_1 = ProjectBuilder.aProject().withFactor(100).withClosurePercentage(100).build();
         Project project_2 = ProjectBuilder.aProject().withFactor(1000).withClosurePercentage(100).build();
@@ -230,12 +288,12 @@ public class ProjectServiceTest {
         List<Project> projectList = new ArrayList<>();
         projectList.add(project_1); projectList.add(project_2);
         projectList.add(project_3); projectList.add(project_4);
-        donor_1.donate(BigDecimal.valueOf(500), "Donation 1", project_1);
+        donor_1.donate(BigDecimal.valueOf(99), "Donation 1", project_1);
         donor_2.donate(BigDecimal.valueOf(500), "Donation 2", project_1);
         donor_1.donate(BigDecimal.valueOf(100), "Donation 3", project_2);
         donor_2.donate(BigDecimal.valueOf(100), "Donation 4", project_2);
         donor_1.donate(BigDecimal.valueOf(200), "Donation 5", project_3);
-        when(projectRepository.findAll()).thenReturn(projectList);
+        when(projectRepository.getProjectsWithStatus(ProjectStatus.ACTIVE.name())).thenReturn(projectList);
         when(userRepository.findAll()).thenReturn(donorsList);
         when(donationRepository.findAll()).thenReturn(null);
         project_1.setStartDate(LocalDate.now().minusDays(10));

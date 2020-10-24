@@ -92,14 +92,14 @@ public class Donation {
         return 500;
     }
 
-    public int calculatePoints(DonorUser donorUser, Project project) {
+    public int calculatePoints(Donor donor, Project project) {
         int currentDonationPoints = 0;
-        Optional<Donation> donorUserLastDonation = donorUser.getLastDonation();
+        Optional<Donation> donorUserLastDonation = donor.lastDonation();
 
         if (amount.compareTo(new BigDecimal(1000)) > 0) {
             currentDonationPoints = amount.intValue();
         }
-        if (project.getLocationPopulation() < 2000) {
+        if (project.locationPopulation() < 2000) {
             currentDonationPoints = amount.intValue() * 2;
         }
         LocalDate lastDate = donorUserLastDonation.map(Donation::getDate).orElse(null);

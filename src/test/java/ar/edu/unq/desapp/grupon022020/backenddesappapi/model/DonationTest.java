@@ -90,40 +90,40 @@ class DonationTest {
 
     @Test
     public void testDonationWithNoPoints() {
-        DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.empty());
+        Donor donor = mock(Donor.class);
+        when(donor.lastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(3000);
+        when(project.locationPopulation()).thenReturn(3000);
         BigDecimal amount = new BigDecimal(500);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
-        int points = donation.calculatePoints(donorUser, project);
+        int points = donation.calculatePoints(donor, project);
         assertEquals(0, points);
     }
 
     @Test
     public void testDonationWithAmountPoints() {
-        DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.empty());
+        Donor donor = mock(Donor.class);
+        when(donor.lastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(3000);
+        when(project.locationPopulation()).thenReturn(3000);
         BigDecimal amount = new BigDecimal(1500);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
-        int points = donation.calculatePoints(donorUser, project);
+        int points = donation.calculatePoints(donor, project);
         assertEquals(amount.intValue(), points);
     }
 
     @Test
     public void testDonationWithPopulationPoints() {
-        DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.empty());
+        Donor donor = mock(Donor.class);
+        when(donor.lastDonation()).thenReturn(Optional.empty());
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(1200);
+        when(project.locationPopulation()).thenReturn(1200);
         BigDecimal amount = new BigDecimal(500);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
-        int points = donation.calculatePoints(donorUser, project);
+        int points = donation.calculatePoints(donor, project);
         assertEquals(amount.multiply(new BigDecimal(2)).intValue(), points);
     }
 
@@ -131,14 +131,14 @@ class DonationTest {
     public void testDonationWithLastDonationPoints() {
         Donation lastDonation = mock(Donation.class);
         when(lastDonation.getDate()).thenReturn(LocalDate.now());
-        DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
+        Donor donor = mock(Donor.class);
+        when(donor.lastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(3000);
+        when(project.locationPopulation()).thenReturn(3000);
         BigDecimal amount = new BigDecimal(500);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
-        int points = donation.calculatePoints(donorUser, project);
+        int points = donation.calculatePoints(donor, project);
         assertEquals(donation.pointsFromLastDonationOnSameMonth(), points);
     }
 
@@ -146,14 +146,14 @@ class DonationTest {
     public void testDonationWithAmountAndLastDonationPoints() {
         Donation lastDonation = mock(Donation.class);
         when(lastDonation.getDate()).thenReturn(LocalDate.now());
-        DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
+        Donor donor = mock(Donor.class);
+        when(donor.lastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(3000);
+        when(project.locationPopulation()).thenReturn(3000);
         BigDecimal amount = new BigDecimal(4000);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
-        int points = donation.calculatePoints(donorUser, project);
+        int points = donation.calculatePoints(donor, project);
         assertEquals(amount.add(new BigDecimal(donation.pointsFromLastDonationOnSameMonth())).intValue(), points);
     }
 
@@ -161,14 +161,14 @@ class DonationTest {
     public void testDonationWithPopulationAndLastDonationPoints() {
         Donation lastDonation = mock(Donation.class);
         when(lastDonation.getDate()).thenReturn(LocalDate.now());
-        DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
+        Donor donor = mock(Donor.class);
+        when(donor.lastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(900);
+        when(project.locationPopulation()).thenReturn(900);
         BigDecimal amount = new BigDecimal(700);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
-        int points = donation.calculatePoints(donorUser, project);
+        int points = donation.calculatePoints(donor, project);
         assertEquals((amount.multiply(new BigDecimal(2))).add(new BigDecimal(donation.pointsFromLastDonationOnSameMonth())).intValue(), points);
     }
 
@@ -176,14 +176,14 @@ class DonationTest {
     public void testDonationWithAmountAndPopulationAndLastDonationPoints() {
         Donation lastDonation = mock(Donation.class);
         when(lastDonation.getDate()).thenReturn(LocalDate.now());
-        DonorUser donorUser = mock(DonorUser.class);
-        when(donorUser.getLastDonation()).thenReturn(Optional.of(lastDonation));
+        Donor donor = mock(Donor.class);
+        when(donor.lastDonation()).thenReturn(Optional.of(lastDonation));
         Project project = mock(Project.class);
-        when(project.getLocationPopulation()).thenReturn(900);
+        when(project.locationPopulation()).thenReturn(900);
         BigDecimal amount = new BigDecimal(5000);
         Donation donation = DonationBuilder.aDonation().withAmount(amount).build();
 
-        int points = donation.calculatePoints(donorUser, project);
+        int points = donation.calculatePoints(donor, project);
         assertEquals((amount.multiply(new BigDecimal(2))).add(new BigDecimal(donation.pointsFromLastDonationOnSameMonth())).intValue(), points);
     }
 
