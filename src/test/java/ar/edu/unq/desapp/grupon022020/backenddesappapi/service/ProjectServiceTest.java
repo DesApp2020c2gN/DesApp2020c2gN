@@ -288,6 +288,12 @@ public class ProjectServiceTest {
         List<Project> projectList = new ArrayList<>();
         projectList.add(project_1); projectList.add(project_2);
         projectList.add(project_3); projectList.add(project_4);
+
+        assertEquals(ProjectStatus.ACTIVE.name(), project_1.getStatus());
+        assertEquals(ProjectStatus.ACTIVE.name(), project_2.getStatus());
+        assertEquals(ProjectStatus.ACTIVE.name(), project_3.getStatus());
+        assertEquals(ProjectStatus.ACTIVE.name(), project_4.getStatus());
+
         donor_1.donate(BigDecimal.valueOf(99), "Donation 1", project_1);
         donor_2.donate(BigDecimal.valueOf(500), "Donation 2", project_1);
         donor_1.donate(BigDecimal.valueOf(100), "Donation 3", project_2);
@@ -304,15 +310,27 @@ public class ProjectServiceTest {
         project_3.setFinishDate(LocalDate.now().plusDays(10));
         project_4.setStartDate(LocalDate.now().minusDays(10));
         project_4.setFinishDate(LocalDate.now().plusDays(10));
+
+        assertEquals(ProjectStatus.COMPLETE.name(), project_1.getStatus());
         assertEquals(2, project_1.getDonations().size());
+        assertEquals(ProjectStatus.ACTIVE.name(), project_2.getStatus());
         assertEquals(2, project_2.getDonations().size());
+        assertEquals(ProjectStatus.COMPLETE.name(), project_3.getStatus());
         assertEquals(1, project_3.getDonations().size());
+        assertEquals(ProjectStatus.ACTIVE.name(), project_4.getStatus());
         assertEquals(0, project_4.getDonations().size());
+
         projectService.closeFinishedProjects();
+
+        assertEquals(ProjectStatus.COMPLETE.name(), project_1.getStatus());
         assertEquals(2, project_1.getDonations().size());
+        assertEquals(ProjectStatus.INCOMPLETE.name(), project_2.getStatus());
         assertEquals(0, project_2.getDonations().size());
+        assertEquals(ProjectStatus.COMPLETE.name(), project_3.getStatus());
         assertEquals(1, project_3.getDonations().size());
+        assertEquals(ProjectStatus.ACTIVE.name(), project_4.getStatus());
         assertEquals(0, project_4.getDonations().size());
+
         assertTrue(project_1.hasReachedGoal());
         assertFalse(project_2.hasReachedGoal());
         assertTrue(project_3.hasReachedGoal());

@@ -45,10 +45,7 @@ public class DonationService {
         }
     }
 
-    public Donation donate(String nickname,
-                           String projectName,
-                           String comment,
-                           int amount) throws DataNotFoundException, InvalidDonationException {
+    public Donation donate(String nickname, String projectName, String comment, int amount) throws DataNotFoundException, InvalidDonationException {
         if(!userRepository.existsById(nickname)){
             throw new DataNotFoundException("User " + nickname + " does not exist");
         }
