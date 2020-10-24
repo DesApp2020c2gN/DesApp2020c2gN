@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,6 +47,7 @@ public class Donor {
     private int points;
 
     @Column
+    @NotNull
     @PositiveOrZero(message = "Money should be zero or positive")
     private BigDecimal money;
 

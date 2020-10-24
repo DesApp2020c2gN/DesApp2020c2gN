@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.ProjectStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,13 +19,14 @@ public class ProjectBuilder {
     private int durationInDays = 1;
     private List<Donation> donations = new ArrayList<>();
     private Location location = LocationBuilder.aLocation().build();
+    private String status = ProjectStatus.ACTIVE.name();
 
     public static ProjectBuilder aProject() {
         return new ProjectBuilder();
     }
 
     public Project build() {
-        Project newProject = new Project(name, factor, closurePercentage, startDate, durationInDays, donations, location);
+        Project newProject = new Project(name, factor, closurePercentage, startDate, durationInDays, donations, location, status);
         return newProject;
     }
 
@@ -60,6 +62,11 @@ public class ProjectBuilder {
 
     public ProjectBuilder withLocation(Location location) {
         this.location = location;
+        return this;
+    }
+
+    public ProjectBuilder withStatus(String status) {
+        this.status = status;
         return this;
     }
 }

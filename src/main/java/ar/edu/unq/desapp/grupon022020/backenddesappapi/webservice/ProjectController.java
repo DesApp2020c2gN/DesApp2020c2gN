@@ -22,6 +22,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
@@ -56,10 +57,10 @@ public class ProjectController {
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> createProject(@RequestParam("name") @NotBlank String name,
-                                           @RequestParam("factor") @Positive int factor,
-                                           @RequestParam("closurePercentage") @Min(value=1) @Max(value=100) int closurePercentage,
-                                           @RequestParam("startDate") @Pattern(regexp = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))") String startDate,
-                                           @RequestParam("durationInDays") @Positive int durationInDays,
+                                           @RequestParam("factor") @NotNull @Positive int factor,
+                                           @RequestParam("closurePercentage") @NotNull @Min(value=1) @Max(value=100) int closurePercentage,
+                                           @RequestParam("startDate") @NotBlank @Pattern(regexp = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))") String startDate,
+                                           @RequestParam("durationInDays") @NotNull @Positive int durationInDays,
                                            @RequestParam("locationName") @NotBlank String locationName) {
         try {
             Project project = projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
@@ -75,7 +76,7 @@ public class ProjectController {
         try {
             projectService.cancelProject(name);
             return ResponseEntity.ok().body("Project " + name + " cancelled");
-        } catch (DataNotFoundException e) {
+        } catch (DataNotFoundException | InvalidProjectOperationException e) {
             return new ResponseEntity<>("Project could not be cancelled: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -83,7 +84,6 @@ public class ProjectController {
     @RequestMapping(value = "/end", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> closeFinishedProjects() {
-        //TODO: add status to Project because this method doesn't work when donation is done on the same day!
         projectService.closeFinishedProjects();
         return ResponseEntity.ok().body("Projects closed for " + LocalDate.now().toString());
     }

@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.ProjectStatus;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
@@ -51,21 +52,18 @@ public class ProjectService {
         }
     }
 
-    public Project createProject(String name,
-                                 int factor,
-                                 int closurePercentage,
-                                 String startDate,
-                                 int durationInDays,
-                                 String locationName) throws InvalidProjectOperationException, DataNotFoundException {
-        if(projectRepository.existsOpenProject(locationName, LocalDate.now())){
-            throw new InvalidProjectOperationException("There is already an open project for location " + locationName);
-        }
+    public Project createProject(String name, int factor, int closurePercentage, String startDate, int durationInDays, String locationName) throws InvalidProjectOperationException, DataNotFoundException {
         if(!locationRepository.existsById(locationName)){
             throw new DataNotFoundException("There is no location with name " + locationName);
         }
-        //TODO: add validation in case a project for this location was completed!
+        if(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())){
+            throw new InvalidProjectOperationException("There is already an open project for location " + locationName);
+        }
+        if(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.COMPLETE.name())){
+            throw new InvalidProjectOperationException("There is already a complete project for location " + locationName);
+        }
+        validateStartDate(name, LocalDate.parse(startDate));
         Location location = locationRepository.findById(locationName).get();
-        validateArguments(name, factor, closurePercentage, LocalDate.parse(startDate), durationInDays);
         Project project = ProjectBuilder.aProject().
                 withName(name).
                 withFactor(factor).
@@ -73,32 +71,26 @@ public class ProjectService {
                 withStartDate(LocalDate.parse(startDate)).
                 withDurationInDays(durationInDays).
                 withLocation(location).
+                withStatus(ProjectStatus.ACTIVE.name()).
                 build();
         save(project);
         return project;
     }
 
-    private void validateArguments(String name, int factor, int closurePercentage, LocalDate startDate, int durationInDays) throws InvalidProjectOperationException {
+    private void validateStartDate(String name, LocalDate startDate) throws InvalidProjectOperationException {
         if (startDate.isBefore(LocalDate.now())) {
             throw new InvalidProjectOperationException("Start day of " + startDate.toString() + " for project " + name + " is not valid");
         }
-        if (!(factor > 0)) {
-            throw new InvalidProjectOperationException("Project " + name + " must have a positive factor");
-        }
-        if (!(durationInDays > 0)) {
-            throw new InvalidProjectOperationException("Project " + name + " must have a positive duration");
-        }
-        if (!(closurePercentage > 0 && closurePercentage <= 100)) {
-            throw new InvalidProjectOperationException("Project " + name + " must have a percentage between 1 and 100");
-        }
     }
 
-    public void cancelProject(String name) throws DataNotFoundException {
+    public void cancelProject(String name) throws DataNotFoundException, InvalidProjectOperationException {
         if(!projectRepository.existsById(name)){
             throw new DataNotFoundException("Project " + name + " does not exists");
         }
-        //TODO: add validation in case the project was completed!
         Project projectToCancel = findById(name);
+        if(!projectToCancel.getStatus().equals(ProjectStatus.ACTIVE.name())){
+            throw new InvalidProjectOperationException("Project " + name + " already has status " + projectToCancel.getStatus());
+        }
         List<Donation> donationsToReturn = projectToCancel.getDonations();
         List<Donor> donorsList = donorsList(projectToCancel);
         for (Donation donation: donationsToReturn)
@@ -129,14 +121,11 @@ public class ProjectService {
     }
 
     public void closeFinishedProjects(){
-        List<Project> projects = projectRepository.findAll();
-        List<Project> finishedProjects = projects.stream().
-                filter(project -> project.getFinishDate().isEqual(LocalDate.now())).
+        List<Project> activeProjects = projectRepository.getProjectsWithStatus(ProjectStatus.ACTIVE.name());
+        List<Project> finishingProjects = activeProjects.stream().
+                filter(project -> project.getFinishDate().isEqual(LocalDate.now()) && !project.hasReachedGoal()).
                 collect(Collectors.toList());
-        List<Project> incompleteProjects = finishedProjects.stream().
-                filter(project -> !project.hasReachedGoal()).
-                collect(Collectors.toList());
-        for (Project project: incompleteProjects)
+        for (Project project: finishingProjects)
         {
             List<Donation> donationsToReturn = project.getDonations();
             for (Donation donation: donationsToReturn)
@@ -145,6 +134,7 @@ public class ProjectService {
             }
             List<Donor> donorsList = donorsList(project);
             returnDonations(project, donorsList);
+            project.setStatus(ProjectStatus.INCOMPLETE.name());
             for (Donor user: donorsList)
             {
                 userRepository.save(user);
@@ -154,7 +144,7 @@ public class ProjectService {
     }
 
     public List<Location> getTopTenDonationStarvedLocations() {
-        List<Project> projects = projectRepository.findAll();
+        List<Project> projects = projectRepository.getProjectsWithStatus(ProjectStatus.ACTIVE.name());
         List<Location> sortedLocations =
                 projects.stream()
                         .sorted(Comparator.comparing(this::getLastDonationDate))

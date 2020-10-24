@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.ProjectStatus;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonationBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.DonorBuilder;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.builder.ProjectBuilder;
@@ -149,6 +150,28 @@ public class DonationServiceTest {
             donationService.donate(nickname, projectName, comment, amount);
         } catch (InvalidDonationException e) {
             String message = "User " + nickname + " does not have enough money";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDonationServiceDonateToProjectNotActive() throws DataNotFoundException {
+        MockitoAnnotations.initMocks(this);
+        String nickname = "juan123";
+        Donor donor = DonorBuilder.aDonorUser().withNickname(nickname).withMoney(BigDecimal.valueOf(9999)).build();
+        String projectName = "Conectando Cruz Azul";
+        String status = ProjectStatus.COMPLETE.name();
+        Project project = ProjectBuilder.aProject().withName(projectName).withStatus(status).build();
+        String comment = "Comentario de test";
+        int amount = 1200;
+        when(userRepository.existsById(nickname)).thenReturn(true);
+        when(projectRepository.existsById(projectName)).thenReturn(true);
+        when(userRepository.findById(nickname)).thenReturn(Optional.of(donor));
+        when(projectRepository.findById(projectName)).thenReturn(Optional.of(project));
+        try {
+            donationService.donate(nickname, projectName, comment, amount);
+        } catch (InvalidDonationException e) {
+            String message = "Project " + projectName + " is " + status;
             assertEquals(message, e.getMessage());
         }
     }

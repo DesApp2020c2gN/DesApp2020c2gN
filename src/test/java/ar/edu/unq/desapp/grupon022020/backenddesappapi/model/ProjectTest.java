@@ -96,6 +96,22 @@ public class ProjectTest {
     }
 
     @Test
+    public void testProjectStatus() {
+        String status = ProjectStatus.ACTIVE.name();
+        Project project = ProjectBuilder.aProject().withStatus(status).build();
+        assertEquals(status, project.getStatus());
+    }
+
+    @Test
+    public void testProjectStatusSetter() {
+        String status = ProjectStatus.ACTIVE.name();
+        Project project = ProjectBuilder.aProject().withStatus(status).build();
+        String newStatus = ProjectStatus.COMPLETE.name();
+        project.setStatus(newStatus);
+        assertEquals(newStatus, project.getStatus());
+    }
+
+    @Test
     public void testProjectDonationList() {
         List<Donation> donations = new ArrayList<>();
         Donation donation_1 = mock(Donation.class);
