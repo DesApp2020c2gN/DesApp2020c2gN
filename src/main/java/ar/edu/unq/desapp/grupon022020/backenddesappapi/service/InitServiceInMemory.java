@@ -27,8 +27,8 @@ public class InitServiceInMemory {
     @Value("${spring.datasource.driverClassName:NONE}")
     private String className;
 
-    //@Autowired
-    //private ARSATWebService webService;
+    @Autowired
+    private ARSATWebService webService;
     @Autowired
     private LocationService locationService;
     @Autowired
@@ -45,7 +45,7 @@ public class InitServiceInMemory {
     }
 
     private void fireInitialData() {
-        //webService.loadLocationsFromARSAT();
+        webService.loadLocationsFromARSAT();
 
         Location location_1 = LocationBuilder.aLocation().withName("Santa Rita").withPopulation(1200).withProvince("Misiones").withState("En Planificación").build();
         Location location_2 = LocationBuilder.aLocation().withName("Rio Tercero").withPopulation(710).withProvince("Cordoba").withState("En Planificación").build();
