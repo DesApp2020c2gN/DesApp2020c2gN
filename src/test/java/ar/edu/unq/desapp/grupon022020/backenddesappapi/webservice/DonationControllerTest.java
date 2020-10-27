@@ -85,7 +85,6 @@ public class DonationControllerTest {
         String projectName = "Conectando Santa Rita";
         String comment = "First donation";
         int value = 1230;
-        BigDecimal amount = BigDecimal.valueOf(value);
         String message = "User " + nickname + " does not exist";
         doThrow(new DataNotFoundException(message)).when(donationService).donate(nickname, projectName, comment, value);
         ResponseEntity<String> httpResponse = (ResponseEntity<String>) donationController.donate(nickname, projectName, comment, value);
