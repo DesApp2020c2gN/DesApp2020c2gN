@@ -52,16 +52,7 @@ public class ProjectService {
     }
 
     public Project createProject(String name, int factor, int closurePercentage, String startDate, int durationInDays, String locationName) throws InvalidProjectOperationException, DataNotFoundException {
-        if(!locationRepository.existsById(locationName)){
-            throw new DataNotFoundException("There is no location with name " + locationName);
-        }
-        if(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())){
-            throw new InvalidProjectOperationException("There is already an open project for location " + locationName);
-        }
-        if(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.COMPLETE.name())){
-            throw new InvalidProjectOperationException("There is already a complete project for location " + locationName);
-        }
-        validateStartDate(name, LocalDate.parse(startDate));
+        validateProjectCreation(name, LocalDate.parse(startDate), locationName);
         Location location = locationRepository.findById(locationName).get();
         Project project = ProjectBuilder.aProject().
                 withName(name).
@@ -76,7 +67,19 @@ public class ProjectService {
         return project;
     }
 
-    private void validateStartDate(String name, LocalDate startDate) throws InvalidProjectOperationException {
+    private void validateProjectCreation(String name, LocalDate startDate, String locationName) throws InvalidProjectOperationException, DataNotFoundException {
+        if(!locationRepository.existsById(locationName)){
+            throw new DataNotFoundException("There is no location with name " + locationName);
+        }
+        if(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())){
+            throw new InvalidProjectOperationException("There is already an open project for location " + locationName);
+        }
+        if(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.COMPLETE.name())){
+            throw new InvalidProjectOperationException("There is already a complete project for location " + locationName);
+        }
+        if(projectRepository.existsById(name)){
+            throw new InvalidProjectOperationException("There is already a project with name " + name);
+        }
         if (startDate.isBefore(LocalDate.now())) {
             throw new InvalidProjectOperationException("Start day of " + startDate.toString() + " for project " + name + " is not valid");
         }
