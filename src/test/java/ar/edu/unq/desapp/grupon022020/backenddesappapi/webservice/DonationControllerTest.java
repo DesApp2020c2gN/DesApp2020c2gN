@@ -68,8 +68,8 @@ public class DonationControllerTest {
     @Test
     public void testDonationControllerDonateContent() throws InvalidDonationException, DataNotFoundException {
         String nickname = "maria456";
-        String projectName = "Conectando Santa Rita";
-        String comment = "First donation";
+        String projectName = "Conectando Mercedes";
+        String comment = "My donation";
         int value = 1230;
         BigDecimal amount = BigDecimal.valueOf(value);
         Donation donation = DonationBuilder.aDonation().withDonorNickname(nickname).withProjectName(projectName).withComment(comment).withAmount(amount).build();

@@ -75,7 +75,6 @@ public class ProjectControllerTest {
     @Test
     public void testProjectControllerGetProjectException() throws DataNotFoundException {
         String projectName = "Conectando Santa Clara";
-        Project project = ProjectBuilder.aProject().withName(projectName).build();
         String message = "Project " + projectName + " does not exists";
         doThrow(new DataNotFoundException(message)).when(projectService).findById(projectName);
         ResponseEntity<String> httpResponse = (ResponseEntity<String>) projectController.getProject(projectName);
@@ -86,12 +85,12 @@ public class ProjectControllerTest {
 
     @Test
     public void testProjectControllerCreateProjectStatus() throws DataNotFoundException, InvalidProjectOperationException {
-        String projectName = "Conectando Santa Clara";
+        String projectName = "Conectando San Justo";
         int factor = 20;
         int closurePercentage = 75;
-        String startDate = "2020-12-15";
+        String startDate = "2020-05-17";
         int durationInDays = 40;
-        String locationName = "Conectando Tandil";
+        String locationName = "San Justo";
         Project project = ProjectBuilder.aProject().withName(projectName)
                 .withFactor(factor)
                 .withClosurePercentage(closurePercentage)
@@ -106,12 +105,12 @@ public class ProjectControllerTest {
 
     @Test
     public void testProjectControllerCreateProjectContent() throws DataNotFoundException, InvalidProjectOperationException {
-        String projectName = "Conectando Santa Clara";
+        String projectName = "Conectando Tandil";
         int factor = 20;
         int closurePercentage = 75;
         String startDate = "2020-12-15";
         int durationInDays = 40;
-        String locationName = "Conectando Tandil";
+        String locationName = "Tandil";
         Project project = ProjectBuilder.aProject().withName(projectName)
                 .withFactor(factor)
                 .withClosurePercentage(closurePercentage)
@@ -127,12 +126,12 @@ public class ProjectControllerTest {
 
     @Test
     public void testProjectControllerCreateProjectException() throws DataNotFoundException, InvalidProjectOperationException {
-        String projectName = "Conectando Santa Clara";
+        String projectName = "Conectando Urquiza";
         int factor = 20;
         int closurePercentage = 75;
-        String startDate = "2020-12-15";
+        String startDate = "2020-03-04";
         int durationInDays = 40;
-        String locationName = "Conectando Tandil";
+        String locationName = "Conectando Urquiza";
         String message = "There is no location with name " + locationName;
         doThrow(new DataNotFoundException(message)).when(projectService).createProject(projectName, factor, closurePercentage, startDate, durationInDays, locationName);
         ResponseEntity<String> httpResponse = (ResponseEntity<String>) projectController.createProject(projectName, factor, closurePercentage, startDate, durationInDays, locationName);
