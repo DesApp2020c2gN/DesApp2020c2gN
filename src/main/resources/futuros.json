@@ -1,0 +1,114 @@
+{
+  "headers": [
+    "ID Sitio",
+    "Sub-Traza",
+    "Localidad",
+    "Provincia",
+    "Departamento",
+    "Poblacion Censo 2010",
+    "Fecha Real de Conexión",
+    "Estado",
+    "Traza"
+  ],
+  "data": [
+    [
+      "1102",
+      "SAN PEDRO - BERNARDO DE IRIGOYEN",
+      "Dos Hermanas",
+      "Misiones",
+      "Gral. Manuel Belgrano",
+      "2231",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ],
+    [
+      "2555",
+      "SAN PEDRO - BERNARDO DE IRIGOYEN",
+      "Piñalito Sur",
+      "Misiones",
+      "San Pedro",
+      "123",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ],
+    [
+      "1631",
+      "BERNARDO DE IRIGOYEN - ANDRESITO",
+      "Integracion",
+      "Misiones",
+      "Gral. Manuel Belgrano",
+      "218",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ],
+    [
+      "2554",
+      "BERNARDO DE IRIGOYEN - ANDRESITO",
+      "Piñalito Norte",
+      "Misiones",
+      "Gral. Manuel Belgrano",
+      "204",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ],
+    [
+      "2664",
+      "BERNARDO DE IRIGOYEN - ANDRESITO",
+      "Puerto Deseado",
+      "Misiones",
+      "Gral. Manuel Belgrano",
+      "204",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ],
+    [
+      "1388",
+      "SAN VICENTE - SAN PEDRO",
+      "Fracran",
+      "Misiones",
+      "Guaraní",
+      "512",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ],
+    [
+      "2671",
+      "COLONIA WANDA - PUERTO IGUAZU",
+      "Puerto Libertad",
+      "Misiones",
+      "Iguazú",
+      "6445",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ],
+    [
+      "2665",
+      "COLONIA WANDA - PUERTO IGUAZU",
+      "Puerto Esperanza",
+      "Misiones",
+      "Iguazú",
+      "16998",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ],
+    [
+      "3759",
+      "ARISTOBULO DEL VALLE - SAN VICENTE",
+      "2 de Mayo",
+      "Misiones",
+      "Cainguás",
+      "6829",
+      "",
+      "En Planificación",
+      "SAN JOSE - PUERTO IGUAZU"
+    ]
+  ]
+}
