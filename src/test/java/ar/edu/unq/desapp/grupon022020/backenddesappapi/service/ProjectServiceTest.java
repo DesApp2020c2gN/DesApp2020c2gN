@@ -136,6 +136,7 @@ public class ProjectServiceTest {
         String locationName = "Rio Turbio";
         when(locationRepository.existsById(locationName)).thenReturn(true);
         when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(true);
+        when(projectRepository.existsById(name)).thenReturn(false);
         try {
             projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
         } catch (InvalidProjectOperationException e) {
@@ -156,10 +157,32 @@ public class ProjectServiceTest {
         when(locationRepository.existsById(locationName)).thenReturn(true);
         when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(false);
         when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.COMPLETE.name())).thenReturn(true);
+        when(projectRepository.existsById(name)).thenReturn(false);
         try {
             projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
         } catch (InvalidProjectOperationException e) {
             String message = "There is already a complete project for location " + locationName;
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testProjectServiceCreateProjectForAlreadyUsedProjectName() throws DataNotFoundException {
+        MockitoAnnotations.initMocks(this);
+        String name = "Conectando Paraiso";
+        int factor = 1300;
+        int closurePercentage = 75;
+        String startDate = LocalDate.now().plusDays(10).toString();
+        int durationInDays = 60;
+        String locationName = "Paraiso";
+        when(locationRepository.existsById(locationName)).thenReturn(true);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(false);
+        when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.COMPLETE.name())).thenReturn(false);
+        when(projectRepository.existsById(name)).thenReturn(true);
+        try {
+            projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
+        } catch (InvalidProjectOperationException e) {
+            String message = "There is already a project with name " + name;
             assertEquals(message, e.getMessage());
         }
     }
@@ -176,6 +199,7 @@ public class ProjectServiceTest {
         when(locationRepository.existsById(locationName)).thenReturn(true);
         when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.ACTIVE.name())).thenReturn(false);
         when(projectRepository.existsProjectForLocationWithStatus(locationName, ProjectStatus.COMPLETE.name())).thenReturn(false);
+        when(projectRepository.existsById(name)).thenReturn(false);
         try {
             projectService.createProject(name, factor, closurePercentage, startDate, durationInDays, locationName);
         } catch (InvalidProjectOperationException e) {

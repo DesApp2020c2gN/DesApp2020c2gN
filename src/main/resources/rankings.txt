@@ -49,3 +49,12 @@ BIGGEST DONATIONS RANKING FOR 2020-10-24
  Donation: 2 Amount: 200.00 Donor: juan123 Project: Conectando Santa Rita
  Donation: 3 Amount: 123.00 Donor: juan123 Project: Conectando Santa Rita
  Donation: 9 Amount: 120.00 Donor: julia000 Project: Conectando Santa Rita
+ 
+STARVED LOCATIONS RANKING FOR 2020-10-26
+ Location: Puerto Iguazu
+ Location: Cipolletti
+ Location: Rio Tercero
+ 
+BIGGEST DONATIONS RANKING FOR 2020-10-26
+ Donation: 8 Amount: 666.00 Donor: fabian789 Project: Conectando Puerto Iguazu
+ Donation: 11 Amount: 40.00 Donor: horacio321 Project: Conectando Puerto Iguazu
