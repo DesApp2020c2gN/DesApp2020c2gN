@@ -1,4 +1,27 @@
 ---------------------------------------------------------------------
+TAG entrega-2.0
+---------------------------------------------------------------------
+NEW FEATURES
+* Backend layers implementation
+ - WebServices (endpoints)
+ - Services
+ - Persistence with H2
+ - Scheduled methods
+ - Loading of fake data at startup
+ - Loading of Locations from ARSAT
+* Model refactor
+ - AdminUser class removed
+ - Manager class removed
+* Unit Testing
+* Coverage of 90%
+* Swagger integration
+
+NOTES
+* Email must be sent when projects are complete or donations are returned
+* Points should be returned when donation is cancelled
+* User password needs to be saved as hash
+
+---------------------------------------------------------------------
 TAG entrega-1.0
 ---------------------------------------------------------------------
 NEW FEATURES
