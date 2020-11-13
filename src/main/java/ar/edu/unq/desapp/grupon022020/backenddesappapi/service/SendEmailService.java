@@ -20,14 +20,16 @@ public class SendEmailService {
 
     @Autowired
     private JavaMailSender emailSender;
+    @Value("${spring.mail.username:NONE}")
+    private String senderUsername;
+    /*
     @Value("${spring.mail.host:NONE}")
     private String host;
     @Value("${spring.mail.port:NONE}")
     private int port;
-    @Value("${spring.mail.username:NONE}")
-    private String senderUsername;
     @Value("${spring.mail.password:NONE}")
     private String senderPassword;
+    */
 
     public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
