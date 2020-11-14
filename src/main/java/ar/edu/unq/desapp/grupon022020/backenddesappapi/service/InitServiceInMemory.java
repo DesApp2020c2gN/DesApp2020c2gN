@@ -45,6 +45,14 @@ public class InitServiceInMemory {
     }
 
     private void fireInitialData() {
+        /*
+        emailService.sendSimpleMessage("argentinaconectada2020@gmail.com", "Prueba 1", "Prueba de email sin adjunto");
+        try {
+            emailService.sendMessageWithAttachment("argentinaconectada2020@gmail.com", "Prueba 2", "Prueba de email con adjunto", "./src/main/resources/rankings.txt", "Rankings.txt");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        */
         webService.loadLocationsFromARSAT();
 
         Location location_1 = LocationBuilder.aLocation().withName("Santa Rita").withPopulation(1200).withProvince("Misiones").withState("En Planificación").build();
