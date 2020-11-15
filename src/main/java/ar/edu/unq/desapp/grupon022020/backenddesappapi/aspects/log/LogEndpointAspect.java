@@ -3,13 +3,17 @@ package ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -34,13 +38,26 @@ public class LogEndpointAspect {
 
     @Around("@annotation(LogExecutionArguments)")
     public Object logExecutionArguments(ProceedingJoinPoint joinPoint) throws Throwable {
-        List<Object> args = Arrays.asList(joinPoint.getArgs());
-        String arguments = (String) args.stream().reduce("", (previous, arg) -> previous + " " + arg.toString());
-        String logMessage = "Method " + joinPoint.getSignature().getName() +
-                " called with arguments " + "[" + arguments + "]";
-        logger.info(logMessage);
+        logger.info("Method " + joinPoint.getSignature().getName() + " called with arguments:");
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        List<Parameter> parameters = Arrays.asList(method.getParameters());
+        List<Object> arguments = Arrays.asList(joinPoint.getArgs());
+        logArguments(parameters, arguments);
         Object proceed = joinPoint.proceed();
         return proceed;
+    }
+
+    private void logArguments(List<Parameter> parameters, List<Object> arguments) {
+        Iterator it1 = parameters.iterator();
+        Iterator it2 = arguments.iterator();
+        while(it1.hasNext() && it2.hasNext()) {
+            Parameter parameter = (Parameter) it1.next();
+            Object argument = it2.next();
+            logger.info("TYPE: " + parameter.getType().getSimpleName() +
+                    " | NAME: " + parameter.getName() +
+                    " | VALUE:  " + argument.toString());
+        }
     }
 
     private void getExecutionTime(ProceedingJoinPoint joinPoint, String operation) {
