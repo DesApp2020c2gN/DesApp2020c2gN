@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.LogExecutionArguments;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.LogExecutionTime;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionArguments;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionTime;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
