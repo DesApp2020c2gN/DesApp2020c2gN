@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
@@ -31,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -47,6 +49,8 @@ public class ProjectServiceTest {
     private UserRepository userRepository;
     @Mock
     private DonationRepository donationRepository;
+    @Mock
+    private DonationService donationService;
 
     @Test
     public void testProjectServiceFindAll() {
@@ -326,6 +330,7 @@ public class ProjectServiceTest {
         when(projectRepository.getProjectsWithStatus(ProjectStatus.ACTIVE.name())).thenReturn(projectList);
         when(userRepository.findAll()).thenReturn(donorsList);
         when(donationRepository.findAll()).thenReturn(null);
+        doAnswer(InvocationOnMock::callRealMethod).when(donationService).returnDonation(any(), any());
         project_1.setStartDate(LocalDate.now().minusDays(10));
         project_1.setFinishDate(LocalDate.now());
         project_2.setStartDate(LocalDate.now().minusDays(10));

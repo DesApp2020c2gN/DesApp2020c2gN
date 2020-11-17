@@ -66,11 +66,11 @@ public class InitServiceInMemory {
         locationService.save(location_4);
         locationService.save(location_5);
 
-        Donor donor_1 = DonorBuilder.aDonorUser().withNickname("juan123").withName("Juan J").withMail("juan@mail.com").withPassword("123").withMoney(BigDecimal.valueOf(9000)).build();
-        Donor donor_2 = DonorBuilder.aDonorUser().withNickname("maria456").withName("Maria M").withMail("maria@mail.com").withPassword("456").withMoney(BigDecimal.valueOf(8000)).build();
-        Donor donor_3 = DonorBuilder.aDonorUser().withNickname("fabian789").withName("Fabian F").withMail("fabian@mail.com").withPassword("789").withMoney(BigDecimal.valueOf(7500)).build();
-        Donor donor_4 = DonorBuilder.aDonorUser().withNickname("julia000").withName("Julia J").withMail("julia@mail.com").withPassword("000").withMoney(BigDecimal.valueOf(1300)).build();
-        Donor donor_5 = DonorBuilder.aDonorUser().withNickname("oscar111").withName("Oscar O").withMail("oscar@mail.com").withPassword("111").withMoney(BigDecimal.valueOf(2450)).build();
+        Donor donor_1 = DonorBuilder.aDonorUser().withNickname("juan123").withName("Juan J").withMail("argentinaconectada2020@gmail.com").withPassword("123").withMoney(BigDecimal.valueOf(9000)).build();
+        Donor donor_2 = DonorBuilder.aDonorUser().withNickname("maria456").withName("Maria M").withMail("argentinaconectada2020@gmail.com").withPassword("456").withMoney(BigDecimal.valueOf(8000)).build();
+        Donor donor_3 = DonorBuilder.aDonorUser().withNickname("fabian789").withName("Fabian F").withMail("argentinaconectada2020@gmail.com").withPassword("789").withMoney(BigDecimal.valueOf(7500)).build();
+        Donor donor_4 = DonorBuilder.aDonorUser().withNickname("julia000").withName("Julia J").withMail("argentinaconectada2020@gmail.com").withPassword("000").withMoney(BigDecimal.valueOf(1300)).build();
+        Donor donor_5 = DonorBuilder.aDonorUser().withNickname("oscar111").withName("Oscar O").withMail("argentinaconectada2020@gmail.com").withPassword("111").withMoney(BigDecimal.valueOf(2450)).build();
         userService.save(donor_1);
         userService.save(donor_2);
         userService.save(donor_3);
