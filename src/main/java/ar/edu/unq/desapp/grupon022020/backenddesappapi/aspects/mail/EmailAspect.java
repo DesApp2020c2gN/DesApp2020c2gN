@@ -38,28 +38,27 @@ public class EmailAspect {
 
     }
     @Before("methodStarterServicePointcut()")
-    public void mailReturnedDonationBefore() throws Throwable {
-        System.out.println("Before");
+    public void mailReturnedDonationBefore() {
+        logger.warn("Rankings will be generated for current day!!!");
     }
 
     @After("methodStarterServicePointcut()")
     public void mailRankings() throws Throwable {
-        logger.warn("Entering mailReturnedDonation method!!!");
+        logger.warn("Rankings will be sent to all donors!!!");
         List<Donor> donorList = userService.findAll();
         for (Donor donor: donorList)
         {
             emailService.sendMessageWithAttachment(donor.getMail(),
-                    "Rankings of " + LocalDate.now().toString(),
+                    "Rankings del " + LocalDate.now().toString(),
                     "Hola " + donor.getName() + ", ya estan los rankings del dia " + LocalDate.now().toString(),
                     "./src/main/resources/rankings.txt",
-                    "Rankings of " + LocalDate.now().toString() + ".txt");
+                    "Rankings del " + LocalDate.now().toString() + ".txt");
         }
-        System.out.println("After");
     }
 
     @Around("@annotation(MailReturnedDonation)")
-    public Object mailReturnedDonation(ProceedingJoinPoint joinPoint) throws Throwable {
-        logger.warn("Entering mailReturnedDonation method!!!");
+    public Object mailReturnedDonation(ProceedingJoinPoint joinPoint) {
+        logger.warn("A donation has to be returned to its donor!!!");
         List<Object> arguments = Arrays.asList(joinPoint.getArgs());
         Donation donation = (Donation) arguments.get(0);
         Donor donor = (Donor) arguments.get(1);
