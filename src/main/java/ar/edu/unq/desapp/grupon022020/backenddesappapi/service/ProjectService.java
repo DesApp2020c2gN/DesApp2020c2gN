@@ -1,8 +1,5 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionArguments;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionTime;
-import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.mail.MailReturnedDonation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
@@ -16,7 +13,6 @@ import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.LocationRepos
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.ProjectRepository;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
