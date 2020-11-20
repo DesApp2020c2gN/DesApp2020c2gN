@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
 @RunWith(ArchUnitRunner.class)
 public class AppArchitectureTest {
@@ -41,4 +43,55 @@ public class AppArchitectureTest {
                 .should().beAnnotatedWith(Repository.class);
         myRule.check(importedClasses);
     }
+
+    @Test
+    public void testControllersPackage() {
+        JavaClasses importedClasses = new ClassFileImporter().importPackages("ar.edu.unq.desapp.grupon022020.backenddesappapi");
+        ArchRule myRule = classes()
+                .that().haveSimpleNameEndingWith("Controller")
+                .should().resideInAPackage("ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice");
+        myRule.check(importedClasses);
+    }
+
+    @Test
+    public void testServicesPackage() {
+        JavaClasses importedClasses = new ClassFileImporter().importPackages("ar.edu.unq.desapp.grupon022020.backenddesappapi");
+        ArchRule myRule = classes()
+                .that().haveSimpleNameEndingWith("Service")
+                .should().resideInAPackage("ar.edu.unq.desapp.grupon022020.backenddesappapi.service");
+        myRule.check(importedClasses);
+    }
+
+    @Test
+    public void testRepositoriesPackage() {
+        JavaClasses importedClasses = new ClassFileImporter().importPackages("ar.edu.unq.desapp.grupon022020.backenddesappapi");
+        ArchRule myRule = classes()
+                .that().haveSimpleNameEndingWith("Repository")
+                .should().resideInAPackage("ar.edu.unq.desapp.grupon022020.backenddesappapi.persistence");
+        myRule.check(importedClasses);
+    }
+
+    @Test
+    public void testIndependentModelClasses() {
+        JavaClasses importedClasses = new ClassFileImporter().importPackages("ar.edu.unq.desapp.grupon022020.backenddesappapi");
+        ArchRule myRule = noClasses()
+                .that().resideInAPackage("..model..")
+                .should().dependOnClassesThat().resideInAnyPackage("..webservice..", "..service..", "..backenddesappapi.persistence..", "..aspects..");
+        myRule.check(importedClasses);
+    }
+
+    @Test
+    public void testArchitectureLayers() {
+        JavaClasses importedClasses = new ClassFileImporter().importPackages("ar.edu.unq.desapp.grupon022020.backenddesappapi");
+        ArchRule myRule = layeredArchitecture()
+                .layer("Controller").definedBy("..webservice..")
+                .layer("Service").definedBy("..service..")
+                .layer("Persistence").definedBy("..persistence..")
+                .layer("Aspect").definedBy("..aspects..")
+                .whereLayer("Controller").mayNotBeAccessedByAnyLayer()
+                .whereLayer("Service").mayOnlyBeAccessedByLayers("Controller", "Aspect")
+                .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service");
+        myRule.check(importedClasses);
+    }
+
 }
