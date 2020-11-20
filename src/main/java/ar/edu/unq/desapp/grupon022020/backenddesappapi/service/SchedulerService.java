@@ -28,28 +28,28 @@ public class SchedulerService {
     @Scheduled(cron = "0 59 23 ? * 7 ")
     public void generateRankings(){
         List<Location> locationsRanking = projectService.getTopTenDonationStarvedLocations();
-        write("\n" + "STARVED LOCATIONS RANKING FOR " + LocalDate.now().toString() + "\n");
+        StringBuilder locationsMessage = new StringBuilder("\n" + "STARVED LOCATIONS RANKING FOR " + LocalDate.now().toString() + "\n");
         for (Location location: locationsRanking)
         {
-            write("Location: " + location.getName() + "\n");
+            locationsMessage.append(" Location: ").append(location.getName()).append("\n");
         }
         List<Donation> donationsRanking = donationService.getTopTenBiggestDonations();
-        write("\n" + "BIGGEST DONATIONS RANKING FOR " + LocalDate.now().toString() + "\n");
+        StringBuilder donationsMessage = new StringBuilder("\n" + "BIGGEST DONATIONS RANKING FOR " + LocalDate.now().toString() + "\n");
         for (Donation donation: donationsRanking)
         {
-            write("Donation: " + donation.getId());
-            write("Amount: " + donation.getAmount());
-            write("Donor: " + donation.getDonorNickname());
-            write("Project: " + donation.getProjectName() + "\n");
+            donationsMessage.append(" Donation: ").append(donation.getId());
+            donationsMessage.append(" Amount: ").append(donation.getAmount());
+            donationsMessage.append(" Donor: ").append(donation.getDonorNickname());
+            donationsMessage.append(" Project: ").append(donation.getProjectName()).append("\n");
         }
+        write(locationsMessage.toString() + donationsMessage.toString());
     }
 
     public void write(String message) {
         String fileName = "./src/main/resources/rankings.txt";
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-            writer.append(' ');
-            writer.append(message);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
+            writer.append(' ' + message);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

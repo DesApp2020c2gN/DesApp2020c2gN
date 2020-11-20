@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionArguments;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionTime;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Location;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.service.LocationService;
@@ -32,6 +34,7 @@ public class LocationController {
     @Autowired
     private LocationService locationService;
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> allLocations() {
@@ -39,6 +42,7 @@ public class LocationController {
         return ResponseEntity.ok().body(list);
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(value = "/{name}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getLocation(@PathVariable("name") @NotBlank String name) {
@@ -50,6 +54,7 @@ public class LocationController {
         }
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> createLocation(@Valid @RequestBody Location location) {
         try {

@@ -32,6 +32,8 @@ public class ProjectService {
     private UserRepository userRepository;
     @Autowired
     private DonationRepository donationRepository;
+    @Autowired
+    private DonationService donationService;
 
     @Transactional
     public Project save(Project project) {
@@ -86,35 +88,39 @@ public class ProjectService {
     }
 
     public void cancelProject(String name) throws DataNotFoundException, InvalidProjectOperationException {
-        if(!projectRepository.existsById(name)){
-            throw new DataNotFoundException("Project " + name + " does not exists");
-        }
         Project projectToCancel = findById(name);
-        if(!projectToCancel.getStatus().equals(ProjectStatus.ACTIVE.name())){
-            throw new InvalidProjectOperationException("Project " + name + " already has status " + projectToCancel.getStatus());
-        }
+        validateProjectCancellation(projectToCancel);
         List<Donation> donationsToReturn = projectToCancel.getDonations();
         List<Donor> donorsList = donorsList(projectToCancel);
+        revertDonations(donationsToReturn, projectToCancel, donorsList);
+    }
+
+    private void validateProjectCancellation(Project project) throws DataNotFoundException, InvalidProjectOperationException {
+        if(!projectRepository.existsById(project.getName())){
+            throw new DataNotFoundException("Project " + project.getName() + " does not exists");
+        }
+        if(!project.getStatus().equals(ProjectStatus.ACTIVE.name())){
+            throw new InvalidProjectOperationException("Project " + project.getName() + " already has status " + project.getStatus());
+        }
+    }
+
+    private void revertDonations(List<Donation> donationsToReturn, Project projectToCancel, List<Donor> donorsList) {
         for (Donation donation: donationsToReturn)
         {
             donationRepository.deleteDonation(donation.getId());
         }
-        cancelProject(projectToCancel, donorsList);
+        projectToCancel.cancel();
+        returnDonations(projectToCancel, donorsList);
         for (Donor user: donorsList)
         {
-           userRepository.save(user);
+            userRepository.save(user);
         }
         projectRepository.save(projectToCancel);
     }
 
-    public void cancelProject(Project project, List<Donor> donorsList) {
-        project.cancel();
-        returnDonations(project, donorsList);
-    }
-
-    public void returnDonations(Project projectToCancel, List<Donor> donorsList) {
+    private void returnDonations(Project projectToCancel, List<Donor> donorsList) {
         List<Donation> donationsToReturn = projectToCancel.getDonations();
-        donationsToReturn.forEach(donation -> getUser(donation.getDonorNickname(), donorsList).undoDonation(donation));
+        donationsToReturn.forEach(donation -> donationService.returnDonation(donation, getUser(donation.getDonorNickname(), donorsList)));
         projectToCancel.undoDonations();
     }
 
@@ -122,7 +128,7 @@ public class ProjectService {
         return donorsList.stream().filter(donorUser -> donorUser.getNickname().equals(donorNickname)).findFirst().get();
     }
 
-    public void closeFinishedProjects(){
+    public void closeFinishedProjects() {
         List<Project> activeProjects = projectRepository.getProjectsWithStatus(ProjectStatus.ACTIVE.name());
         List<Project> finishingProjects = activeProjects.stream().
                 filter(project -> project.getFinishDate().isEqual(LocalDate.now()) && !project.hasReachedGoal()).

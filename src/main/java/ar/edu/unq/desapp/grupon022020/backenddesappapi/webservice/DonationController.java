@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionArguments;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionTime;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidDonationException;
@@ -32,6 +34,7 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> allDonations() {
@@ -39,6 +42,7 @@ public class DonationController {
         return ResponseEntity.ok().body(list);
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> donate(@RequestParam("nickname") @NotBlank String nickname,
                        @RequestParam("projectName") @NotBlank String projectName,
