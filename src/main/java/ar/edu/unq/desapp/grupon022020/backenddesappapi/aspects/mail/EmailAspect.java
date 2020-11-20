@@ -57,19 +57,20 @@ public class EmailAspect {
     }
 
     @Around("@annotation(MailReturnedDonation)")
-    public Object mailReturnedDonation(ProceedingJoinPoint joinPoint) {
+    public Object mailReturnedDonation(ProceedingJoinPoint joinPoint) throws Throwable {
         logger.warn("A donation has to be returned to its donor!!!");
         List<Object> arguments = Arrays.asList(joinPoint.getArgs());
         Donation donation = (Donation) arguments.get(0);
         Donor donor = (Donor) arguments.get(1);
         String email = donor.getMail();
+        Object proceed = joinPoint.proceed();
         logger.warn("We are about to send mail to " + email + "!!!");
         emailService.sendSimpleMessage(email,
                 "Se te ha devuelto una donacion!",
                 "Hola " + donor.getName() + ", solo queriamos avisarte que se te ha devuelto a " +
                         "tu cuenta una donacion de $" + donation.getAmount() + " que realizaste al " +
                         "proyecto " + donation.getProjectName() + " el dia " + donation.getDate());
-        return joinPoint;
+        return proceed;
 
     }
 
