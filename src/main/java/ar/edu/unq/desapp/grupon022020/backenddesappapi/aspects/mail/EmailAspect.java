@@ -35,7 +35,7 @@ public class EmailAspect {
 
     @Pointcut("execution(* ar.edu.unq.desapp.grupon022020.backenddesappapi.service.SchedulerService.generateRankings())")
     public void methodStarterServicePointcut(){
-
+        // Method is empty
     }
     @Before("methodStarterServicePointcut()")
     public void mailReturnedDonationBefore() {

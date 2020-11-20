@@ -22,7 +22,7 @@ import java.util.List;
 public class LogEndpointAspect {
 
     Logger logger = LoggerFactory.getLogger(LogEndpointAspect.class);
-    
+
     @Around("@annotation(LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
