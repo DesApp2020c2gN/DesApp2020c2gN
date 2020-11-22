@@ -177,4 +177,13 @@ public class ProjectService {
                 .orElse(project.getStartDate());
     }
 
+    public List<Project> findAllEndingThisMonth() {
+        List<Project> allProjects = this.findAll();
+        List<Project> filteredProjects = allProjects.stream().
+                filter(project -> project.getStatus() == ProjectStatus.ACTIVE.name() &&
+                        project.getFinishDate().getYear() == LocalDate.now().getYear() &&
+                        project.getFinishDate().getMonth() == LocalDate.now().getMonth()).
+                collect(Collectors.toList());
+        return filteredProjects;
+    }
 }

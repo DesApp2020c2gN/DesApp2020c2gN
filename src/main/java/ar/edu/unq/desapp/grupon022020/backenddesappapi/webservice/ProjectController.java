@@ -47,6 +47,14 @@ public class ProjectController {
     }
 
     @LogExecutionTime @LogExecutionArguments
+    @RequestMapping(path="/ending", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> allProjectsEndingThisMonth() {
+        List<Project> list = projectService.findAllEndingThisMonth();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(value = "/{name}", method = RequestMethod.GET)
     public ResponseEntity<?> getProject(@PathVariable("name") @NotBlank String name) {
         try {
