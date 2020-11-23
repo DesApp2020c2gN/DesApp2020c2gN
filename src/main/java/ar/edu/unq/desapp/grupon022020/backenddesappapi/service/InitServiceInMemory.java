@@ -58,6 +58,9 @@ public class InitServiceInMemory {
         Location location_8 = LocationBuilder.aLocation().withName("Lago Puelo").withPopulation(654).withProvince("Chubut").withState("En Planificación").build();
         Location location_9 = LocationBuilder.aLocation().withName("Trevelin").withPopulation(580).withProvince("Chubut").withState("En Planificación").build();
         Location location_10 = LocationBuilder.aLocation().withName("General Campos").withPopulation(1180).withProvince("Entre Rios").withState("En Planificación").build();
+        Location location_11 = LocationBuilder.aLocation().withName("La Adela").withPopulation(1234).withProvince("La Pampa").withState("En Planificación").build();
+        Location location_12 = LocationBuilder.aLocation().withName("Rancul").withPopulation(879).withProvince("La Pampa").withState("En Planificación").build();
+        Location location_13 = LocationBuilder.aLocation().withName("Parera").withPopulation(723).withProvince("La Pampa").withState("En Planificación").build();
 
         locationService.save(location_1);
         locationService.save(location_2);
@@ -69,6 +72,9 @@ public class InitServiceInMemory {
         locationService.save(location_8);
         locationService.save(location_9);
         locationService.save(location_10);
+        locationService.save(location_11);
+        locationService.save(location_12);
+        locationService.save(location_13);
 
         Donor donor_1 = DonorBuilder.aDonorUser().withNickname("juan123").withName("Juan J").withMail("argentinaconectada2020@gmail.com").withPassword("123").withMoney(BigDecimal.valueOf(9000)).build();
         Donor donor_2 = DonorBuilder.aDonorUser().withNickname("maria456").withName("Maria M").withMail("argentinaconectada2020@gmail.com").withPassword("456").withMoney(BigDecimal.valueOf(8000)).build();
@@ -116,6 +122,16 @@ public class InitServiceInMemory {
         Project project_10 = ProjectBuilder.aProject().withName("General Campos conectadisimo").withLocation(location_10).withFactor(10).withClosurePercentage(39).build();
         project_10.setStartDate(LocalDate.now().minusDays(50));
         project_10.setFinishDate(LocalDate.now().plusDays(67));
+        Project project_11 = ProjectBuilder.aProject().withName("El futuro de La Adela").withLocation(location_11).withFactor(21).withClosurePercentage(48).build();
+        project_11.setStartDate(LocalDate.now().minusDays(5));
+        project_11.setFinishDate(LocalDate.now().plusDays(3));
+        Project project_12 = ProjectBuilder.aProject().withName("Rancul 2.0").withLocation(location_12).withFactor(34).withClosurePercentage(51).build();
+        project_12.setStartDate(LocalDate.now().minusDays(7));
+        project_12.setFinishDate(LocalDate.now().plusDays(2));
+        Project project_13 = ProjectBuilder.aProject().withName("Yo ayudo a Parera").withLocation(location_13).withFactor(19).withClosurePercentage(66).build();
+        project_13.setStartDate(LocalDate.now().minusDays(9));
+        project_13.setFinishDate(LocalDate.now().plusDays(1));
+
         projectService.save(project_1);
         projectService.save(project_2);
         projectService.save(project_3);
@@ -126,6 +142,9 @@ public class InitServiceInMemory {
         projectService.save(project_8);
         projectService.save(project_9);
         projectService.save(project_10);
+        projectService.save(project_11);
+        projectService.save(project_12);
+        projectService.save(project_13);
 
         try {
             donor_1.donate(BigDecimal.valueOf(1200), "Esta es mi primera donación!", project_1);
@@ -137,7 +156,14 @@ public class InitServiceInMemory {
             donor_2.donate(BigDecimal.valueOf(2000), "Ayudando un poco...", project_1);
             donor_3.donate(BigDecimal.valueOf(666), "Pronto donaré más", project_3);
             donor_4.donate(BigDecimal.valueOf(120), "Buena suerte!", project_1);
-            donor_5.donate(BigDecimal.valueOf(2300), "Buena suerte para todos!", project_1);
+            donor_4.donate(BigDecimal.valueOf(90), "Puedo donar", project_11);
+            donor_4.donate(BigDecimal.valueOf(25), "Me sobra un poco", project_12);
+            donor_4.donate(BigDecimal.valueOf(57), "Un poco mas", project_12);
+            donor_5.donate(BigDecimal.valueOf(70), "Buena suerte para todos!", project_1);
+            donor_5.donate(BigDecimal.valueOf(50), "Ayudando", project_11);
+            donor_5.donate(BigDecimal.valueOf(25), "Yo conozco Rancul", project_12);
+            donor_5.donate(BigDecimal.valueOf(25), "Mi tia vive en Parera", project_13);
+            donor_5.donate(BigDecimal.valueOf(75), "Mi tio tambien vive en Parera", project_13);
             userService.save(donor_1);
             userService.save(donor_2);
             userService.save(donor_3);
