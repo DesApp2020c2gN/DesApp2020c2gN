@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------
+TAG entrega-3.0
+---------------------------------------------------------------------
+NEW FEATURES
+* Logging for endpoint methods
+ - Timestamp
+ - Method
+ - Parameters
+ - Execution time
+* Sending of emails to inform donor of returned donation
+* Sending of daily email for rankings
+* Use of aspect oriented programming for cross-cutting requirements
+* Architecture testing
+* More initial data loaded
+
+NOTES
+* Points should be returned when donation is cancelled
+* User password needs to be saved as hash
+
+---------------------------------------------------------------------
 TAG entrega-2.0
 ---------------------------------------------------------------------
 NEW FEATURES
