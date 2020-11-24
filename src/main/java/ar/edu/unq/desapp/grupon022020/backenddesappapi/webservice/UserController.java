@@ -85,6 +85,18 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/loginbymail", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> loginByMail(@RequestParam("mail") @NotBlank String mail) {
+        try {
+            return ResponseEntity.ok().body(userService.loginByMail(mail));
+        } catch (LoginException e) {
+            return new ResponseEntity<>("User login failed: " + e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User login failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<String> handleMethodArgumentNotValidViolationException(MethodArgumentNotValidException e) {

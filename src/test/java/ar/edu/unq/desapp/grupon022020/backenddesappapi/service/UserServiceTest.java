@@ -14,6 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -153,6 +154,16 @@ public class UserServiceTest {
             String message = "Password is incorrect";
             assertEquals(message, e.getMessage());
         }
+    }
+
+    @Test
+    public void testUserLoginByMail() throws DataNotFoundException {
+        MockitoAnnotations.initMocks(this);
+        String nickname = "juan123";
+        String mail = "juan@mail.com";
+        Donor donor = DonorBuilder.aDonorUser().withNickname(nickname).withMail(mail).build();
+        when(userRepository.findAll()).thenReturn(new ArrayList<Donor>(Arrays.asList(donor)));
+        assertDoesNotThrow(() -> userService.loginByMail(mail));
     }
 
 }

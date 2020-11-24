@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -63,5 +64,15 @@ public class UserService {
             throw new DataNotFoundException("User " + user.getNickname() + " already exists");
         }
         save(user);
+    }
+
+    public Donor loginByMail(String mail) throws LoginException {
+        Optional<Donor> donor = this.findAll().stream().filter(user -> user.getMail().equals(mail)).findAny();
+        if (donor.isPresent()) {
+            return donor.get();
+        }
+        else {
+            throw new LoginException("Unregistered user");
+        }
     }
 }
