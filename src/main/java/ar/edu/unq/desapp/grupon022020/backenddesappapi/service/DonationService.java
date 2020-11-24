@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.service;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.mail.MailReturnedDonation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donation;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
@@ -43,6 +44,11 @@ public class DonationService {
         else {
             throw new DataNotFoundException("Donation " + id + " does not exists");
         }
+    }
+
+    @MailReturnedDonation
+    public void returnDonation(Donation donation, Donor user) {
+        user.undoDonation(donation);
     }
 
     public Donation donate(String nickname, String projectName, String comment, int amount) throws DataNotFoundException, InvalidDonationException {

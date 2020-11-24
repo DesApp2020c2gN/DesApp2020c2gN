@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionArguments;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionTime;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Donor;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.LoginException;
@@ -34,6 +36,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> allDonorUsers() {
@@ -41,6 +44,7 @@ public class UserController {
         return ResponseEntity.ok().body(list);
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(value = "/{nickname}", method = RequestMethod.GET)
     public ResponseEntity<?> getDonorUser(@PathVariable("nickname") @NotBlank String nickname) {
         try {
@@ -51,6 +55,7 @@ public class UserController {
         }
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(value = "/donor", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> loginUser(@RequestParam("nickname") @NotBlank String nickname,
@@ -63,6 +68,7 @@ public class UserController {
         }
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> loginAdmin(@RequestParam("nickname") @NotBlank String nickname,
@@ -75,6 +81,7 @@ public class UserController {
         }
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> createDonorUser(@Valid @RequestBody Donor user){
         try {
@@ -82,6 +89,18 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         } catch (DataNotFoundException e) {
             return new ResponseEntity<>("User could not be created: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/loginbymail", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> loginByMail(@RequestParam("mail") @NotBlank String mail) {
+        try {
+            return ResponseEntity.ok().body(userService.loginByMail(mail));
+        } catch (LoginException e) {
+            return new ResponseEntity<>("User login failed: " + e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User login failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
