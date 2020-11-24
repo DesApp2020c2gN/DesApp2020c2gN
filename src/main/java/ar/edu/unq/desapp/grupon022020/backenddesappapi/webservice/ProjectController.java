@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupon022020.backenddesappapi.webservice;
 
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionArguments;
+import ar.edu.unq.desapp.grupon022020.backenddesappapi.aspects.log.LogExecutionTime;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.Project;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.DataNotFoundException;
 import ar.edu.unq.desapp.grupon022020.backenddesappapi.model.exceptions.InvalidProjectOperationException;
@@ -36,6 +38,7 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> allProjects() {
@@ -43,6 +46,15 @@ public class ProjectController {
         return ResponseEntity.ok().body(list);
     }
 
+    @LogExecutionTime @LogExecutionArguments
+    @RequestMapping(path="/ending", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> allProjectsEndingThisMonth() {
+        List<Project> list = projectService.findAllEndingThisMonth();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(value = "/{name}", method = RequestMethod.GET)
     public ResponseEntity<?> getProject(@PathVariable("name") @NotBlank String name) {
         try {
@@ -53,6 +65,7 @@ public class ProjectController {
         }
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> createProject(@RequestParam("name") @NotBlank String name,
@@ -69,6 +82,7 @@ public class ProjectController {
         }
     }
 
+    @LogExecutionTime @LogExecutionArguments
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> cancelProject(@RequestParam("name") @NotBlank String name) {

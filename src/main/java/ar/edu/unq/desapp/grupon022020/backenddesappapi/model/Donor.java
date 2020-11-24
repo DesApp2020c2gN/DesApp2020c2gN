@@ -155,4 +155,14 @@ public class Donor {
         this.money = this.money.add(donation.getAmount());
         this.donations.remove(donation);
     }
+
+    @Override
+    public String toString() {
+        return "[Nickname: " + this.nickname +
+                " | Name: " + this.name +
+                " | Mail: " + this.mail +
+                " | Password: " + this.password +
+                " | Money: " + this.money +
+                " | Points: " + this.points + "]";
+    }
 }
